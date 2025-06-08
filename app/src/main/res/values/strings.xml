@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="expenses">Расходы</string>
+    <string name="incomes">Доходы</string>
+    <string name="count">Счет</string>
+    <string name="articles">Статьи</string>
+    <string name="settings">Настройки</string>
 </resources>
