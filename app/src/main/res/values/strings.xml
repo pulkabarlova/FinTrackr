@@ -15,5 +15,7 @@
     <string name="find_article">Найти статью</string>
     <!-- incomes screen -->
     <string name="all">Всего</string>
-
+    <!-- count screen -->
+    <string name="balance">Баланс</string>
+    <string name="currency">Валюта</string>
 </resources>

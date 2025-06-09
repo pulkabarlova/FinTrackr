@@ -135,7 +135,7 @@ fun ArticleItem(title: String) {
 @Preview(name = "Light Mode", showSystemUi = true)
 // @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
-fun SettingsLoggedScreenPreview() {
+fun Preview() {
     FinTrackrTheme {
         ArticlesScreen(navController = NavController(LocalContext.current))
     }

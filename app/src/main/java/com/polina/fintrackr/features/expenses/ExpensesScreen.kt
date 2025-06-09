@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -144,11 +145,11 @@ fun ExpensesNavItem(title: String, onClick: () -> Unit = {}) {
             style = MaterialTheme.typography.bodyLarge
         )
         Icon(
-            painter = painterResource(R.drawable.arrow_right),
+            imageVector = Icons.Default.KeyboardArrowRight,
             contentDescription = null,
             modifier = Modifier
-                .padding(vertical = 7.dp)
-                .padding(10.dp)
+                .padding(start = 12.dp)
+
         )
     }
 }
@@ -182,7 +183,7 @@ fun ExpensesSingleItem(value: String) {
 
 @Preview(name = "Light Mode", showSystemUi = true)
 @Composable
-fun SettingsLoggedScreenPreview() {
+fun Preview() {
     FinTrackrTheme {
         ExpensesScreen(navController = NavController(LocalContext.current))
     }

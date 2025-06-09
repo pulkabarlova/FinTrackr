@@ -130,7 +130,7 @@ fun SettingSwitchItem(title: String, checked: Boolean, onCheckedChange: (Boolean
 @Preview(name = "Light Mode", showSystemUi = true)
 // @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
-fun SettingsLoggedScreenPreview() {
+fun Preview() {
     FinTrackrTheme {
         SettingsScreen(navController = NavController(LocalContext.current))
     }
