@@ -1,5 +1,6 @@
 package com.polina.fintrackr.core.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -11,13 +12,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun BottomNavBar(navController: NavController) {
-    NavigationBar(modifier = Modifier) {
+    NavigationBar() {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         NavBarItems.BarItems.forEach {
@@ -31,7 +35,9 @@ fun BottomNavBar(navController: NavController) {
                     )
                 },
                 label = {
-                    Text(text = stringResource(it.title))
+                    Text(text = stringResource(it.title), maxLines = 1,
+                        fontStyle = MaterialTheme.typography.labelSmall.fontStyle,
+                        overflow = TextOverflow.Ellipsis)
                 },
                 onClick = {
                     navController.navigate(it.route) {
