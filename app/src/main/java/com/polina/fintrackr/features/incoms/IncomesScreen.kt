@@ -37,7 +37,6 @@ import com.polina.fintrackr.core.ui.AppScaffold
 
 @Composable
 fun IncomesScreen(navController: NavController) {
-    Text("Incomes")
     AppScaffold(
         navController = navController,
         content = { paddingValues -> Content(paddingValues = paddingValues, value = "10000$") },
@@ -98,7 +97,7 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, val
         }
 
         FloatingActionButton(
-            onClick = { /* TODO: Handle click */ },
+            onClick = {},
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape,
