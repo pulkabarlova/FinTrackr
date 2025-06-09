@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -90,18 +91,20 @@ fun SettingNavItem(title: String, onClick: () -> Unit = {}) {
             .border(
                 width = 0.5.dp,
                 color = Color.Gray,
-            )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             style = MaterialTheme.typography.bodyLarge
         )
+        Spacer(modifier = Modifier.weight(1f))
         Icon(
             painter = painterResource(R.drawable.arrow_right),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)
+                .padding(10.dp)
         )
     }
 }
@@ -110,21 +113,16 @@ fun SettingNavItem(title: String, onClick: () -> Unit = {}) {
 fun SettingSwitchItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp,horizontal = 16.dp)
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            ),
-
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
-            modifier = Modifier.weight(0.9f),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             style = MaterialTheme.typography.bodyLarge
         )
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Spacer(modifier = Modifier.weight(1f))
+        Switch(checked = checked, onCheckedChange = onCheckedChange, Modifier.padding(end = 7.dp))
     }
 }
 

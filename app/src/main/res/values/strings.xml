@@ -6,4 +6,11 @@
     <string name="count">Счет</string>
     <string name="articles">Статьи</string>
     <string name="settings">Настройки</string>
+    <!-- top bar -->
+    <string name="my_expenses">Мои расходы</string>
+    <string name="my_incomes">Мои доходы</string>
+    <string name="my_count">Мой счет</string>
+    <string name="my_articles">Мои статьи</string>
+    <!-- articles screen -->
+    <string name="find_article">Найти статью</string>
 </resources>
