@@ -34,13 +34,16 @@ import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.ListItem
+import com.polina.fintrackr.core.ui.ListItemUi
 
 @Composable
 fun SettingsScreen(navController: NavController) {
     AppScaffold(
-        topBar = {TopBar()},
+        topBar = { TopBar() },
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues) }) }
+        content = { paddingValues -> Content(paddingValues = paddingValues) })
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,23 +51,26 @@ fun TopBar() {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,),
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        ),
         title = {
             Text(
                 text = stringResource(id = R.string.settings),
                 color = MaterialTheme.colorScheme.onPrimary
-            ) }
+            )
+        }
     )
 }
 
 @Composable
 fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
-    LazyColumn (
+    LazyColumn(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(paddingValues)){
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(paddingValues)
+    ) {
         item {
             SettingSwitchItem(
                 title = "Текст",
@@ -72,40 +78,17 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
                 onCheckedChange = { }
             )
         }
-        item { SettingNavItem("Текст") }
-        item { SettingNavItem("Текст") }
-        item { SettingNavItem("Текст") }
-        item { SettingNavItem("Текст") }
-        item { SettingNavItem("Текст") }
-        item { SettingNavItem("Текст") }
-        item { SettingNavItem("Текст") }
-    }
-}
-
-@Composable
-fun SettingNavItem(title: String, onClick: () -> Unit = {}) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = title,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            painter = painterResource(R.drawable.arrow_right),
-            contentDescription = null,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)
-                .padding(10.dp)
-        )
+        repeat(7) {
+            item {
+                ListItemUi(
+                    item = ListItem(
+                        title = "Текст",
+                        trailingIcon = R.drawable.arrow_right
+                    ),
+                    onClick = { }
+                )
+            }
+        }
     }
 }
 
@@ -113,7 +96,8 @@ fun SettingNavItem(title: String, onClick: () -> Unit = {}) {
 fun SettingSwitchItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .border(0.5.dp, MaterialTheme.colorScheme.surfaceContainer),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

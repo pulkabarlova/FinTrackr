@@ -35,6 +35,8 @@ import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.ListItem
+import com.polina.fintrackr.core.ui.ListItemUi
 
 
 @Composable
@@ -90,8 +92,17 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            CountBalanceItem("1000$")
-            CountCurrencyItem("$")
+            ListItemUi(ListItem(title = stringResource(R.string.balance),
+                leadingIcon = R.drawable.money_icon,
+                trailingText = "-679 000 ₽",
+                trailingIcon = Icons.Default.KeyboardArrowRight,),
+                onClick = {},
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
+            ListItemUi(ListItem(title = stringResource(R.string.currency),
+                trailingText = "₽",
+                trailingIcon = Icons.Default.KeyboardArrowRight,),
+                onClick = {},
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
         }
 
         FloatingActionButton(
@@ -109,77 +120,6 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
                 tint = Color.White
             )
         }
-    }
-}
-
-@Composable
-fun CountCurrencyItem(value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            )
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(R.string.currency),
-            modifier = Modifier.padding(vertical = 6.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = value,
-            modifier = Modifier.padding(vertical = 6.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowRight,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(start = 12.dp)
-        )
-    }
-}
-
-@Composable
-fun CountBalanceItem(value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            )
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.money_icon),
-            contentDescription = "article_icon",
-            tint = Color.Unspecified
-        )
-        Text(
-            text = stringResource(R.string.balance),
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = value,
-            modifier = Modifier.padding(vertical = 6.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowRight,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(start = 12.dp)
-        )
     }
 }
 

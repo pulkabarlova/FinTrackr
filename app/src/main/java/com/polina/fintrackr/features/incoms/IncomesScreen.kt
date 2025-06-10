@@ -34,6 +34,8 @@ import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.ListItem
+import com.polina.fintrackr.core.ui.ListItemUi
 
 
 @Composable
@@ -91,9 +93,20 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, val
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            item { IncomesSingleItem(value) }
+            item { ListItemUi(ListItem(title = stringResource(R.string.all),
+                trailingText = "600 000₽",),
+                onClick = {},
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) }
             repeat(2) {
-                item { IncomesNavItem("Текст") }
+                item { ListItemUi(
+                    item = ListItem(
+                        title = "Текст",
+                        trailingText = "50 000 ₽",
+                        trailingIcon = Icons.Default.KeyboardArrowRight
+                    ),
+                    onClick = {  }
+                )
+                }
             }
         }
 
@@ -112,66 +125,6 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, val
                 tint = Color.White
             )
         }
-    }
-}
-
-@Composable
-fun IncomesNavItem(title: String, onClick: () -> Unit = {}) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            )
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = title,
-            modifier = Modifier.padding(vertical = 12.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = title,
-            modifier = Modifier.padding(vertical = 12.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowRight,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(start = 12.dp)
-        )
-    }
-}
-
-@Composable
-fun IncomesSingleItem(value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            )
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(R.string.all),
-            modifier = Modifier.padding(vertical = 6.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = value,
-            modifier = Modifier.padding(vertical = 6.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
     }
 }
 

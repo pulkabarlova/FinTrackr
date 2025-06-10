@@ -33,6 +33,8 @@ import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.ListItem
+import com.polina.fintrackr.core.ui.ListItemUi
 
 @Composable
 fun ArticlesScreen(navController: NavController) {
@@ -65,7 +67,7 @@ fun CustomSearchBar() {
         value = "",
         onValueChange = {},
         placeholder = {
-            Text(modifier = Modifier.padding(4.dp), text = stringResource(R.string.find_article))
+            Text(modifier = Modifier.padding(2.dp), text = stringResource(R.string.find_article))
         },
         trailingIcon = {
             Icon(
@@ -74,7 +76,8 @@ fun CustomSearchBar() {
             )
         },
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .border(0.5.dp, MaterialTheme.colorScheme.surfaceContainer),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -93,6 +96,7 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(paddingValues)
+
     ) {
         CustomSearchBar()
         LazyColumn(
@@ -101,34 +105,10 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             repeat(9) {
-                item { ArticleItem("Текст") }
+                item { ListItemUi(ListItem(title = "Текст",
+                    leadingIcon = R.drawable.home_icon),) }
             }
         }
-    }
-}
-
-@Composable
-fun ArticleItem(title: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 0.5.dp,
-                color = Color.Gray,
-            )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.home_icon),
-            contentDescription = "article_icon",
-            tint = Color.Unspecified
-        )
-        Text(
-            text = title,
-            modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 12.dp),
-            style = MaterialTheme.typography.bodyLarge
-        )
     }
 }
 
