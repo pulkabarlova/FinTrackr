@@ -75,6 +75,12 @@ fun ListItemUi(
                     modifier = iconModifier,
                     tint = Color.Unspecified,
                 )
+                is Int -> Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    modifier = iconModifier,
+                    tint = Color.Unspecified,
+                )
             }
             Spacer(modifier = Modifier.width(16.dp))
         }

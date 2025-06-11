@@ -1,15 +1,11 @@
-package com.polina.fintrackr.features.incoms
+package com.polina.fintrackr.features.count.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -22,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,16 +33,17 @@ import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
+import com.polina.fintrackr.features.expenses.ui.getMockExpenses
+import com.polina.fintrackr.features.incoms.domain.Count
 
 
 @Composable
-fun IncomesScreen(navController: NavController) {
+fun CountScreen(navController: NavController) {
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, value = "10000$") },
+        content = { Content(paddingValues = it) },
         topBar = { TopBar() })
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
@@ -62,14 +60,14 @@ fun TopBar() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.my_incomes),
+                    text = stringResource(id = R.string.my_count),
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.align(Alignment.Center)
                 )
 
                 Icon(
-                    painter = painterResource(R.drawable.trailing_icon),
+                    painter = painterResource(R.drawable.addit_icon),
                     contentDescription = "trailing_icon",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
@@ -80,34 +78,30 @@ fun TopBar() {
 
     )
 }
-
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, value: String) {
+fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            item { ListItemUi(ListItem(title = stringResource(R.string.all),
-                trailingText = "600 000₽",),
+            val mockCount = remember { Count(name = "Баланс", currency = "₽", balance = "-679 000") }
+            ListItemUi(ListItem(title = stringResource(R.string.balance),
+                leadingIcon = R.drawable.money_icon,
+                trailingText = mockCount.balance + " " + mockCount.currency,
+                trailingIcon = Icons.Default.KeyboardArrowRight,),
                 onClick = {},
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) }
-            repeat(2) {
-                item { ListItemUi(
-                    item = ListItem(
-                        title = "Текст",
-                        trailingText = "50 000 ₽",
-                        trailingIcon = Icons.Default.KeyboardArrowRight
-                    ),
-                    onClick = {  }
-                )
-                }
-            }
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
+            ListItemUi(ListItem(title = stringResource(R.string.currency),
+                trailingText = mockCount.currency,
+                trailingIcon = Icons.Default.KeyboardArrowRight,),
+                onClick = {},
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
         }
 
         FloatingActionButton(
@@ -129,9 +123,10 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, val
 }
 
 @Preview(name = "Light Mode", showSystemUi = true)
+// @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
 fun Preview() {
     FinTrackrTheme {
-        IncomesScreen(navController = NavController(LocalContext.current))
+        CountScreen(navController = NavController(LocalContext.current))
     }
 }

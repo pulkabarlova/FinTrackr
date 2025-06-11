@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.polina.fintrackr.core.navigation.NavRoutes
 import com.polina.fintrackr.features.articles.ArticlesScreen
-import com.polina.fintrackr.features.count.CountScreen
+import com.polina.fintrackr.features.count.ui.CountScreen
 import com.polina.fintrackr.features.expenses.ui.ExpensesScreen
-import com.polina.fintrackr.features.incoms.IncomesScreen
+import com.polina.fintrackr.features.incoms.ui.IncomesScreen
 import com.polina.fintrackr.features.settings.SettingsScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)

@@ -43,7 +43,13 @@ fun ExpensesScreen(navController: NavController) {
     val mockSumExpenses = remember { SumExpenses(sum = 10000, currency = "₽") }
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, mockExpenses, mockSumExpenses) },
+        content = { paddingValues ->
+            Content(
+                paddingValues = paddingValues,
+                mockExpenses,
+                mockSumExpenses
+            )
+        },
         topBar = { TopBar() })
 }
 
@@ -164,7 +170,8 @@ fun getMockExpenses(): List<Expense> {
             trailText = "45 000",
             currency = "₽",
             iconTag = "АЖ"
-        ))
+        )
+    )
 }
 
 @Preview(name = "Light Mode", showSystemUi = true)

@@ -1,12 +1,7 @@
-package com.polina.fintrackr.features.count
+package com.polina.fintrackr.features.incoms.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,12 +35,13 @@ import com.polina.fintrackr.core.ui.ListItemUi
 
 
 @Composable
-fun CountScreen(navController: NavController) {
+fun IncomesScreen(navController: NavController) {
     AppScaffold(
         navController = navController,
-        content = {Content(paddingValues = it) },
+        content = { paddingValues -> Content(paddingValues = paddingValues, value = "10000$") },
         topBar = { TopBar() })
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar() {
@@ -62,14 +58,14 @@ fun TopBar() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.my_expenses),
+                    text = stringResource(id = R.string.my_incomes),
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.align(Alignment.Center)
                 )
 
                 Icon(
-                    painter = painterResource(R.drawable.addit_icon),
+                    painter = painterResource(R.drawable.trailing_icon),
                     contentDescription = "trailing_icon",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
@@ -80,29 +76,34 @@ fun TopBar() {
 
     )
 }
+
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
+fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, value: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            ListItemUi(ListItem(title = stringResource(R.string.balance),
-                leadingIcon = R.drawable.money_icon,
-                trailingText = "-679 000 ₽",
-                trailingIcon = Icons.Default.KeyboardArrowRight,),
+            item { ListItemUi(ListItem(title = stringResource(R.string.all),
+                trailingText = "600 000₽",),
                 onClick = {},
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
-            ListItemUi(ListItem(title = stringResource(R.string.currency),
-                trailingText = "₽",
-                trailingIcon = Icons.Default.KeyboardArrowRight,),
-                onClick = {},
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) }
+            repeat(2) {
+                item { ListItemUi(
+                    item = ListItem(
+                        title = "Текст",
+                        trailingText = "50 000 ₽",
+                        trailingIcon = Icons.Default.KeyboardArrowRight
+                    ),
+                    onClick = {  }
+                )
+                }
+            }
         }
 
         FloatingActionButton(
@@ -124,10 +125,9 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
 }
 
 @Preview(name = "Light Mode", showSystemUi = true)
-// @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
 fun Preview() {
     FinTrackrTheme {
-        CountScreen(navController = NavController(LocalContext.current))
+        IncomesScreen(navController = NavController(LocalContext.current))
     }
 }
