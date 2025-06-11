@@ -1,15 +1,12 @@
-package com.polina.fintrackr.features.expenses
+package com.polina.fintrackr.features.expenses.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -22,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,13 +34,16 @@ import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
+import com.polina.fintrackr.features.expenses.domain.Expense
+import com.polina.fintrackr.features.expenses.domain.SumExpenses
 
 @Composable
 fun ExpensesScreen(navController: NavController) {
-    Text("Expenses")
+    val mockExpenses = remember { getMockExpenses() }
+    val mockSumExpenses = remember { SumExpenses(sum = 10000, currency = "₽") }
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, value = "10000$") },
+        content = { paddingValues -> Content(paddingValues = paddingValues, mockExpenses, mockSumExpenses) },
         topBar = { TopBar() })
 }
 
@@ -82,7 +83,11 @@ fun TopBar() {
 }
 
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, value: String) {
+fun Content(
+    paddingValues: androidx.compose.foundation.layout.PaddingValues,
+    expenses: List<Expense>,
+    sumExpenses: SumExpenses
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -93,20 +98,26 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, val
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            item { ListItemUi(ListItem(title = stringResource(R.string.all),
-                trailingText = "600 000₽",),
-                onClick = {},
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)) }
-            repeat(12) {
-                item { ListItemUi(
+            item {
+                ListItemUi(
+                    ListItem(
+                        title = stringResource(R.string.all),
+                        trailingText = sumExpenses.sum.toString() + " " + sumExpenses.currency,
+                    ),
+                    onClick = {},
+                    modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                )
+            }
+            items(items = expenses) { expense ->
+                ListItemUi(
                     item = ListItem(
-                        title = "Текст",
-                        leadingIcon = R.drawable.home_icon,
-                        trailingText = "1000 ₽",
+                        title = expense.title,
+                        leadingIcon = expense.iconTag,
+                        trailingText = expense.trailText + " " + expense.currency,
                         trailingIcon = Icons.Default.KeyboardArrowRight
                     ),
-                    onClick = {  }
-                ) }
+                    onClick = { }
+                )
             }
         }
 
@@ -126,6 +137,34 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, val
             )
         }
     }
+}
+
+fun getMockExpenses(): List<Expense> {
+    return listOf(
+        Expense(
+            title = "Аренда",
+            trailText = "45 000",
+            currency = "₽",
+            iconTag = "A"
+        ),
+        Expense(
+            title = "Продукты домой",
+            trailText = "45 000",
+            currency = "₽",
+            iconTag = "ПД"
+        ),
+        Expense(
+            title = "Аренда",
+            trailText = "45 000",
+            currency = "₽",
+            iconTag = "А"
+        ),
+        Expense(
+            title = "Аренда жилья",
+            trailText = "45 000",
+            currency = "₽",
+            iconTag = "АЖ"
+        ))
 }
 
 @Preview(name = "Light Mode", showSystemUi = true)
