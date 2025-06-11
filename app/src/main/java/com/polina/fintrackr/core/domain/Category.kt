@@ -1,6 +1,6 @@
-package com.polina.fintrackr.features.articles.domain
+package com.polina.fintrackr.core.domain
 
-data class Article(
+data class Category(
     val id: Int=0,
     val name: String="",
     val emoji: String="\uD83C\uDFE0",

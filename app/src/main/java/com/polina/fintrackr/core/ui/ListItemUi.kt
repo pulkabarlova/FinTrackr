@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -62,7 +60,7 @@ fun ListItemUi(
                     ) {
                         Text(
                             text = icon,
-                            //style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyMedium,
                             maxLines = 1,
                             fontSize = 10.sp,//оставлю как в фигме
                             //modifier = Modifier.padding(4.dp)
@@ -89,15 +87,11 @@ fun ListItemUi(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = item.title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                style = MaterialTheme.typography.bodyLarge,)
             item.subtitle?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    style = MaterialTheme.typography.bodySmall,)
             }
         }
         // TRAILING TEXT+ICON
@@ -105,7 +99,6 @@ fun ListItemUi(
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(end = 8.dp)
             )
         }
@@ -115,12 +108,12 @@ fun ListItemUi(
                 is Int -> Icon(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    tint = Color.Unspecified
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 is ImageVector -> Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color.Unspecified
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             }
         }

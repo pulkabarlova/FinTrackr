@@ -36,7 +36,7 @@ fun BottomNavBar(navController: NavController) {
                 },
                 label = {
                     Text(text = stringResource(it.title), maxLines = 1,
-                        fontSize = 11.sp,
+                        style = MaterialTheme.typography.bodySmall,
                         overflow = TextOverflow.Ellipsis)
                 },
                 onClick = {

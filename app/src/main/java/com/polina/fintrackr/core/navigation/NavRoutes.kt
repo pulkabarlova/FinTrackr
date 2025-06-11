@@ -8,5 +8,5 @@ sealed class NavRoutes (
     data object Count : NavRoutes("count")
     data object Articles : NavRoutes("articles")
     data object Settings : NavRoutes("settings")
-
+    data object Splash : NavRoutes("splash")
 }

@@ -30,6 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
+import com.polina.fintrackr.core.domain.Category
+import com.polina.fintrackr.core.domain.Transaction
+import com.polina.fintrackr.core.generateMockData
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
 import com.polina.fintrackr.core.ui.ListItem
@@ -39,8 +42,8 @@ import com.polina.fintrackr.features.expenses.domain.SumExpenses
 
 @Composable
 fun ExpensesScreen(navController: NavController) {
-    val mockExpenses = remember { getMockExpenses() }
-    val mockSumExpenses = remember { SumExpenses(sum = 10000, currency = "₽") }
+    val mockExpenses = remember { getMockTransactions() }
+    val mockSumExpenses = remember { mockExpenses.map { it.amount }.sum() }
     AppScaffold(
         navController = navController,
         content = { paddingValues ->
@@ -70,7 +73,6 @@ fun TopBar() {
             ) {
                 Text(
                     text = stringResource(id = R.string.my_expenses),
-                    color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -78,7 +80,7 @@ fun TopBar() {
                 Icon(
                     painter = painterResource(R.drawable.trailing_icon),
                     contentDescription = "trailing_icon",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                 )
@@ -91,8 +93,8 @@ fun TopBar() {
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    expenses: List<Expense>,
-    sumExpenses: SumExpenses
+    expenses: List<Transaction>,
+    sumExpenses: Int
 ) {
     Box(
         modifier = Modifier
@@ -108,7 +110,7 @@ fun Content(
                 ListItemUi(
                     ListItem(
                         title = stringResource(R.string.all),
-                        trailingText = sumExpenses.sum.toString() + " " + sumExpenses.currency,
+                        trailingText = sumExpenses.toString() + " ₽",
                     ),
                     onClick = {},
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -117,9 +119,9 @@ fun Content(
             items(items = expenses) { expense ->
                 ListItemUi(
                     item = ListItem(
-                        title = expense.title,
-                        leadingIcon = expense.iconTag,
-                        trailingText = expense.trailText + " " + expense.currency,
+                        title = expense.category.name,
+                        leadingIcon = expense.category.emoji,
+                        trailingText = expense.amount.toString() + " ₽",
                         trailingIcon = Icons.Default.KeyboardArrowRight
                     ),
                     onClick = { }
@@ -145,33 +147,11 @@ fun Content(
     }
 }
 
-fun getMockExpenses(): List<Expense> {
-    return listOf(
-        Expense(
-            title = "Аренда",
-            trailText = "45 000",
-            currency = "₽",
-            iconTag = "A"
-        ),
-        Expense(
-            title = "Продукты домой",
-            trailText = "45 000",
-            currency = "₽",
-            iconTag = "ПД"
-        ),
-        Expense(
-            title = "Аренда",
-            trailText = "45 000",
-            currency = "₽",
-            iconTag = "А"
-        ),
-        Expense(
-            title = "Аренда жилья",
-            trailText = "45 000",
-            currency = "₽",
-            iconTag = "АЖ"
-        )
-    )
+
+fun getMockTransactions(): List<Transaction> {
+    val transactions = generateMockData()
+    val expenseTransactions = transactions.filter { !it.category.isIncome }
+    return expenseTransactions
 }
 
 @Preview(name = "Light Mode", showSystemUi = true)

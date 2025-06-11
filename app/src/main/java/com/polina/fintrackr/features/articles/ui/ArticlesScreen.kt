@@ -25,17 +25,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
+import com.polina.fintrackr.core.domain.Category
+import com.polina.fintrackr.core.generateMockData
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
-import com.polina.fintrackr.features.articles.domain.Article
-import com.polina.fintrackr.features.expenses.ui.getMockExpenses
 
 @Composable
 fun ArticlesScreen(navController: NavController) {
@@ -57,7 +58,8 @@ fun TopBar() {
         title = {
             Text(
                 text = stringResource(id = R.string.my_articles),
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.titleLarge
             )
         }
     )
@@ -69,7 +71,9 @@ fun CustomSearchBar() {
         value = "",
         onValueChange = {},
         placeholder = {
-            Text(modifier = Modifier.padding(2.dp), text = stringResource(R.string.find_article))
+            Text(modifier = Modifier.padding(2.dp), text = stringResource(R.string.find_article)
+            , style = MaterialTheme.typography.labelLarge
+            )
         },
         trailingIcon = {
             Icon(
@@ -94,7 +98,7 @@ fun CustomSearchBar() {
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    mockArticles: List<Article>
+    mockArticles: List<Category>
 ) {
     Column(
         modifier = Modifier
@@ -121,12 +125,10 @@ fun Content(
     }
 }
 
-fun getMockArticles(): List<Article> {
-    return listOf(
-        Article(name = "Аренда", emoji = "\uD83C\uDFE0"),
-        Article(name = "Любимка", emoji = "\uD83E\uDE77"),
-        Article(name = "Продукты", emoji = "\uD83C\uDF6C"),
-    )
+fun getMockArticles(): List<Category> {
+    val transactions = generateMockData()
+    val article = transactions.filter { !it.category.isIncome }.map { it.category }.distinct()
+    return article
 }
 
 @Preview(name = "Light Mode", showSystemUi = true)

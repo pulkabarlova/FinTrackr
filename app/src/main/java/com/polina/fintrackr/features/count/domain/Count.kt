@@ -1,4 +1,4 @@
-package com.polina.fintrackr.features.incoms.domain
+package com.polina.fintrackr.features.count.domain
 
 data class Count(
     val id: Int = 1,

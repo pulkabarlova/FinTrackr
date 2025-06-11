@@ -33,8 +33,7 @@ import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
-import com.polina.fintrackr.features.expenses.ui.getMockExpenses
-import com.polina.fintrackr.features.incoms.domain.Count
+import com.polina.fintrackr.features.count.domain.Count
 
 
 @Composable
@@ -61,7 +60,6 @@ fun TopBar() {
             ) {
                 Text(
                     text = stringResource(id = R.string.my_count),
-                    color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -69,7 +67,7 @@ fun TopBar() {
                 Icon(
                     painter = painterResource(R.drawable.addit_icon),
                     contentDescription = "trailing_icon",
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                 )
