@@ -34,36 +34,25 @@ import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.AppTopBar
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
 
 @Composable
 fun SettingsScreen(navController: NavController) {
     AppScaffold(
-        topBar = { TopBar() },
+        topBar = { AppTopBar(R.string.settings) },
         navController = navController,
         content = { paddingValues -> Content(paddingValues = paddingValues) })
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar() {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        title = {
-            Text(
-                text = stringResource(id = R.string.settings),
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-    )
-}
-
 @Composable
 fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
+    val setItems = listOf(
+        R.string.theme, R.string.colour, R.string.sounds,
+        R.string.haptiki, R.string.password, R.string.synchronization,
+        R.string.language, R.string.about
+    )
     LazyColumn(
         modifier =
         Modifier
@@ -73,16 +62,17 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
     ) {
         item {
             SettingSwitchItem(
-                title = "Текст",
+                title = stringResource(setItems[0]),
                 checked = false,
-                onCheckedChange = { }
+                onCheckedChange = { },
             )
         }
-        repeat(7) {
+
+        for (i in 1..6) {
             item {
                 ListItemUi(
                     item = ListItem(
-                        title = "Текст",
+                        title = stringResource(setItems[i]),
                         trailingIcon = R.drawable.arrow_right
                     ),
                     onClick = { }
@@ -97,12 +87,13 @@ fun SettingSwitchItem(title: String, checked: Boolean, onCheckedChange: (Boolean
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(0.5.dp, MaterialTheme.colorScheme.surfaceContainer),
+            .border(0.5.dp, MaterialTheme.colorScheme.surfaceContainer)
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp),
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.weight(1f))

@@ -11,6 +11,7 @@ import com.polina.fintrackr.core.ui.SplashScreen
 import com.polina.fintrackr.features.articles.ui.ArticlesScreen
 import com.polina.fintrackr.features.count.ui.CountScreen
 import com.polina.fintrackr.features.expenses.ui.ExpensesScreen
+import com.polina.fintrackr.features.history.ui.HistoryScreen
 import com.polina.fintrackr.features.incoms.ui.IncomesScreen
 import com.polina.fintrackr.features.settings.SettingsScreen
 
@@ -40,6 +41,9 @@ fun AppUi() {
             }
             composable(NavRoutes.Settings.route) {
                 SettingsScreen(navController)
+            }
+            composable(NavRoutes.History.route) {
+                HistoryScreen(navController)
             }
         }
     }

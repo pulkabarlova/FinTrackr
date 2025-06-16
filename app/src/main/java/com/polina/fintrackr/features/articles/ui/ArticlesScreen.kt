@@ -35,6 +35,7 @@ import com.polina.fintrackr.core.domain.Category
 import com.polina.fintrackr.core.generateMockData
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.AppTopBar
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
 
@@ -44,25 +45,7 @@ fun ArticlesScreen(navController: NavController) {
     AppScaffold(
         navController = navController,
         content = { paddingValues -> Content(paddingValues = paddingValues, mockArticles) },
-        topBar = { TopBar() })
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar() {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        title = {
-            Text(
-                text = stringResource(id = R.string.my_articles),
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-    )
+        topBar = { AppTopBar( R.string.my_articles) })
 }
 
 @Composable

@@ -62,7 +62,7 @@ fun ListItemUi(
                             text = icon,
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 1,
-                            fontSize = 10.sp,//оставлю как в фигме
+                            fontSize = 18.sp,//оставлю как в фигме
                             //modifier = Modifier.padding(4.dp)
                         )
                     }
@@ -87,6 +87,7 @@ fun ListItemUi(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = item.title,
+                Modifier.padding(8.dp),
                 style = MaterialTheme.typography.bodyLarge,)
             item.subtitle?.let {
                 Text(

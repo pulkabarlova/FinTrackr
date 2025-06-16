@@ -18,4 +18,18 @@
     <!-- count screen -->
     <string name="balance">Баланс</string>
     <string name="currency">Валюта</string>
+    <!-- history screen -->
+    <string name="history">Моя история</string>
+    <string name="start">Начало</string>
+    <string name="end">Конец</string>
+    <string name="summ">Сумма</string>
+    <!-- settings screen -->
+    <string name="theme">Тёмная тема</string>
+    <string name="colour">Основной цвет</string>
+    <string name="sounds">Звуки</string>
+    <string name="haptiki">Хаптики</string>
+    <string name="password">Код пароль</string>
+    <string name="synchronization">Синхронизация</string>
+    <string name="language">Язык</string>
+    <string name="about">О программе</string>
 </resources>

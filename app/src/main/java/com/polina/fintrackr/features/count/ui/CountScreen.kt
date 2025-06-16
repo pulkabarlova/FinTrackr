@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +32,7 @@ import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.AppScaffold
+import com.polina.fintrackr.core.ui.AppTopBar
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
 import com.polina.fintrackr.features.count.domain.Count
@@ -41,40 +43,7 @@ fun CountScreen(navController: NavController) {
     AppScaffold(
         navController = navController,
         content = { Content(paddingValues = it) },
-        topBar = { TopBar() })
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar() {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        title = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(id = R.string.my_count),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                Icon(
-                    painter = painterResource(R.drawable.addit_icon),
-                    contentDescription = "trailing_icon",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                )
-            }
-        }
-
-    )
+        topBar = { AppTopBar(R.string.my_count, R.drawable.addit_icon,) })
 }
 @Composable
 fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
@@ -106,6 +75,7 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
             onClick = {},
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
+            elevation = FloatingActionButtonDefaults.elevation(0.dp),
             shape = CircleShape,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
