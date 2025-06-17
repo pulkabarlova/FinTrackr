@@ -1,7 +1,7 @@
 package com.polina.fintrackr.core
 
-import com.polina.fintrackr.core.domain.Category
-import com.polina.fintrackr.core.domain.Transaction
+import com.polina.fintrackr.core.domain.model.category.Category
+import com.polina.fintrackr.core.domain.model.transaction.Transaction
 
 fun generateMockData():List<Transaction> {
     val categories = listOf(
@@ -21,45 +21,29 @@ fun generateMockData():List<Transaction> {
             category = categories[0],
             amount = 100000,
             transactionDate = "",
-            comment = "Зарплата за июнь"
+            comment = "Зарплата за июнь",
+            createdAt = "",
+            updatedAt = ""
         ),
         Transaction(
             id = 2,
             account = "",
             category = categories[1],
-            amount = 5000,
-            transactionDate = ""
-        ),
+            amount = 500,
+            transactionDate = "",
+            comment = "Вкусняшки",
+            createdAt = "",
+            updatedAt = ""
+    ),
         Transaction(
             id = 3,
             account = "",
             category = categories[2],
-            amount = 25000,
-            transactionDate = ""
-        ),
-        Transaction(
-            id = 4,
-            account = "",
-            category = categories[3],
-            amount = 15000
-        ),
-        Transaction(
-            id = 5,
-            account = "",
-            category = categories[4],
-            amount = 15000
-        ),
-        Transaction(
-            id = 6,
-            account = "",
-            category = categories[5],
-            amount = 100000
-        ),
-        Transaction(
-            id = 7,
-            account = "",
-            category = categories[6],
-            amount = 6000
+            amount = 10000,
+            transactionDate = "",
+            comment = "Аренда",
+            createdAt = "",
+            updatedAt = ""
         ),
     )
     return transactions

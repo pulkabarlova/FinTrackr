@@ -35,7 +35,7 @@ import com.polina.fintrackr.core.ui.AppScaffold
 import com.polina.fintrackr.core.ui.AppTopBar
 import com.polina.fintrackr.core.ui.ListItem
 import com.polina.fintrackr.core.ui.ListItemUi
-import com.polina.fintrackr.features.count.domain.Count
+import com.polina.fintrackr.features.count.domain.AccountModel
 
 
 @Composable
@@ -57,7 +57,7 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            val mockCount = remember { Count(name = "Баланс", currency = "₽", balance = "-679 000") }
+            val mockCount = remember { AccountModel(name = "Баланс", currency = "₽", balance = "-679 000") }
             ListItemUi(ListItem(title = stringResource(R.string.balance),
                 leadingIcon = R.drawable.money_icon,
                 trailingText = mockCount.balance + " " + mockCount.currency,
