@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.polina.fintrackr.core.navigation.NavRoutes
-import com.polina.fintrackr.core.ui.SplashScreen
+import com.polina.fintrackr.core.ui.navigation.entities.NavRoutes
+import com.polina.fintrackr.core.ui.components.SplashScreen
 import com.polina.fintrackr.features.articles.ui.ArticlesScreen
 import com.polina.fintrackr.features.count.ui.CountScreen
 import com.polina.fintrackr.features.expenses.ui.ExpensesScreen

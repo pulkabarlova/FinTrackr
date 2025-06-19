@@ -1,6 +1,6 @@
 package com.polina.fintrackr.core.data.dto.account
 
-import com.polina.fintrackr.core.domain.model.account.AccountHistory
+import com.polina.fintrackr.core.data.dto.model.account.AccountHistory
 
 data class AccountHistoryResponse(
     val accountId: Int,

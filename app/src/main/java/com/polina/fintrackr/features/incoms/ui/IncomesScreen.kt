@@ -25,13 +25,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
-import com.polina.fintrackr.core.domain.model.transaction.Transaction
-import com.polina.fintrackr.core.generateMockData
-import com.polina.fintrackr.core.theme.FinTrackrTheme
-import com.polina.fintrackr.core.ui.AppScaffold
-import com.polina.fintrackr.core.ui.AppTopBar
-import com.polina.fintrackr.core.ui.ListItem
-import com.polina.fintrackr.core.ui.ListItemUi
+import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
+import com.polina.fintrackr.core.ui.generateMockData
+import com.polina.fintrackr.core.ui.theme.FinTrackrTheme
+import com.polina.fintrackr.core.ui.components.AppScaffold
+import com.polina.fintrackr.core.ui.components.AppTopBar
+import com.polina.fintrackr.core.ui.components.ListItem
+import com.polina.fintrackr.core.ui.components.ListItemUi
 
 
 @Composable
