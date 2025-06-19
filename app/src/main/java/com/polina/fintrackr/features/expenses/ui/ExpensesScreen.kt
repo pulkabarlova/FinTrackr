@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
@@ -32,18 +33,26 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
+import com.polina.fintrackr.features.expenses.domain.ExpenseModel
+import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
+import java.util.Currency
 
 @Composable
-fun ExpensesScreen(navController: NavController) {
-    val mockExpenses = remember { getMockTransactions() }
-    val mockSumExpenses = remember { mockExpenses.map { it.amount }.sum() }
+fun ExpensesScreen(
+    navController: NavController,
+    viewModel: TransactionViewModel = hiltViewModel()
+) {
+    val expenses = viewModel.expenses
+    val totalExpenses = viewModel.totalExpenses
+    val currency = viewModel.expenses.firstOrNull()?.currency ?: " ₽"
     AppScaffold(
         navController = navController,
         content = { paddingValues ->
             Content(
                 paddingValues = paddingValues,
-                mockExpenses,
-                mockSumExpenses
+                expenses,
+                totalExpenses,
+                currency
             )
         },
         topBar = {
@@ -58,8 +67,9 @@ fun ExpensesScreen(navController: NavController) {
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    expenses: List<Transaction>,
-    sumExpenses: Int
+    expenses: List<ExpenseModel>,
+    sumExpenses: Double,
+    currency: String
 ) {
     Box(
         modifier = Modifier
@@ -75,22 +85,24 @@ fun Content(
                 ListItemUi(
                     ListItem(
                         title = stringResource(R.string.all),
-                        trailingText = sumExpenses.toString() + " ₽",
+                        trailingText = sumExpenses.toString() + currency,
                     ),
                     onClick = {},
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
-            items(items = expenses) { expense ->
-                ListItemUi(
-                    item = ListItem(
-                        title = expense.category.name,
-                        leadingIcon = expense.category.emoji,
-                        trailingText = expense.amount.toString() + " ₽",
-                        trailingIcon = Icons.Default.KeyboardArrowRight
-                    ),
-                    onClick = { }
-                )
+            if (expenses.isNotEmpty()) {
+                items(items = expenses) { expense ->
+                    ListItemUi(
+                        item = ListItem(
+                            title = expense.title,
+                            leadingIcon = expense.emoji,
+                            trailingText = expense.amount.toString() + expense.currency,
+                            trailingIcon = Icons.Default.KeyboardArrowRight
+                        ),
+                        onClick = { }
+                    )
+                }
             }
         }
 

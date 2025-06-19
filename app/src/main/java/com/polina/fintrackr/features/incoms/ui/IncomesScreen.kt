@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
@@ -32,19 +33,23 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
+import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
+import com.polina.fintrackr.features.incoms.domain.IncomeModel
 
 
 @Composable
-fun IncomesScreen(navController: NavController) {
-    val mockIncomes = remember { getMockIncomes() }
-    val mockSumIncomes = remember { mockIncomes.map { it.amount }.sum() }
+fun IncomesScreen(navController: NavController, viewModel: TransactionViewModel = hiltViewModel()) {
+    val incomes = viewModel.incomes
+    val totalIncome = viewModel.totalIncomes
+    val currency = incomes.firstOrNull()?.currency ?: " ₽"
     AppScaffold(
         navController = navController,
         content = { paddingValues ->
             Content(
                 paddingValues = paddingValues,
-                mockIncomes,
-                mockSumIncomes
+                incomes,
+                totalIncome,
+                currency
             )
         },
         topBar = {
@@ -58,8 +63,9 @@ fun IncomesScreen(navController: NavController) {
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    mockIncomes: List<Transaction>,
-    mockSumIncomes: Int
+    incomes: List<IncomeModel>,
+    totalIncome: Double,
+    currency: String
 ) {
     Box(
         modifier = Modifier
@@ -75,21 +81,23 @@ fun Content(
                 ListItemUi(
                     ListItem(
                         title = stringResource(R.string.all),
-                        trailingText = mockSumIncomes.toString() + " ₽",
+                        trailingText = totalIncome.toString() + currency,
                     ),
                     onClick = {},
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
-            items(items = mockIncomes) { income ->
-                ListItemUi(
-                    item = ListItem(
-                        title = income.category.name,
-                        trailingText = income.amount.toString() + " ₽",
-                        trailingIcon = Icons.Default.KeyboardArrowRight
-                    ),
-                    onClick = { }
-                )
+            if (incomes.isNotEmpty()) {
+                items(items = incomes) { income ->
+                    ListItemUi(
+                        item = ListItem(
+                            title = income.title,
+                            trailingText = income.amount.toString() + income.currency,
+                            trailingIcon = Icons.Default.KeyboardArrowRight
+                        ),
+                        onClick = { }
+                    )
+                }
             }
         }
 

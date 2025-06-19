@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.ui.components
+package com.polina.fintrackr.features.splash.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -16,19 +16,25 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
+import com.polina.fintrackr.features.splash.domain.SplashViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController, viewModel: SplashViewModel = hiltViewModel()) {
     val alpha = remember { Animatable(0f) }
 
-    LaunchedEffect(Unit) {
-        alpha.animateTo(1f, animationSpec = tween(1000))
-        delay(1500)
-        navController.navigate("expenses"){
-            popUpTo("splash") { inclusive = true }
+    val initialized = viewModel.accountInitialized.value
+
+    LaunchedEffect(initialized) {
+        if (initialized == true) {
+            alpha.animateTo(1f, animationSpec = tween(1000))
+            delay(500)
+            navController.navigate("expenses") {
+                popUpTo("splash") { inclusive = true }
+            }
         }
     }
     Box(

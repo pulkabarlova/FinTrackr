@@ -1,8 +1,14 @@
 package com.polina.fintrackr.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.polina.fintrackr.BuildConfig
+import com.polina.fintrackr.core.data.network.AccountApiService
+import com.polina.fintrackr.core.data.repositories.AccountRepository
+import com.polina.fintrackr.core.data.repositories.TransactionRepository
+import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
+import com.polina.fintrackr.core.data.use_case.TransactionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,4 +36,28 @@ object AppModule {
     fun provideToken(): String {
         return BuildConfig.API_KEY
     }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): android.content.SharedPreferences {
+        return context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    fun provideGetAndSaveAccountUseCase(
+        accountRepository: AccountRepository,
+        sharedPreferences: SharedPreferences
+    ): GetAndSaveAccountUseCase {
+        return GetAndSaveAccountUseCase(accountRepository, sharedPreferences)
+    }
+
+    @Provides
+    fun provideTransactionUseCase(
+        transactionRepository: TransactionRepository,
+        sharedPreferences: SharedPreferences
+    ): TransactionUseCase {
+        return TransactionUseCase(transactionRepository, sharedPreferences)
+    }
+
+
 }

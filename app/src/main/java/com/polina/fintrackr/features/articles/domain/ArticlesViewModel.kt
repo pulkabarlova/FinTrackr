@@ -9,7 +9,9 @@ import com.polina.fintrackr.core.data.mapper.toCategoryModel
 import com.polina.fintrackr.core.data.repositories.AccountRepository
 import com.polina.fintrackr.core.data.repositories.CategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,11 +23,15 @@ class ArticlesViewModel @Inject constructor(
     suspend fun getCategories() {
         val response = categoryRepository.getCategories()
         if (response.isSuccessful) {
-            _categories.value = response.body()?.toCategoryModel()?: emptyList()
+            _categories.value = response.body()?.toCategoryModel() ?: emptyList()
         }
     }
 
     init {
-        viewModelScope.launch { getCategories() }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                getCategories()
+            }
+        }
     }
 }

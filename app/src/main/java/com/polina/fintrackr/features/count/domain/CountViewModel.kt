@@ -8,29 +8,27 @@ import androidx.lifecycle.viewModelScope
 import com.polina.fintrackr.core.data.dto.model.account.Account
 import com.polina.fintrackr.core.data.mapper.toAccountModel
 import com.polina.fintrackr.core.data.repositories.AccountRepository
+import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class CountViewModel @Inject constructor(
-    private val accountRepository: AccountRepository
+    private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase
 ) : ViewModel() {
     private val _account = mutableStateOf<AccountModel>(AccountModel())
     var account: State<AccountModel> = _account
-    private suspend fun getAccounts() {
-        val response: Response<List<Account>> = accountRepository.getAccounts()
-        if (response.isSuccessful){
-            response.body()?.firstOrNull()?.let { accountDto ->
-                _account.value = accountDto.toAccountModel()
-            }
-        }
-    }
 
     init {
-        viewModelScope.launch {
-            getAccounts()
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = getAndSaveAccountUseCase()
+            result?.let {
+                _account.value = it
+            }
         }
     }
 }
