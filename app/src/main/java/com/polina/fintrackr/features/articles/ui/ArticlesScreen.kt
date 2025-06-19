@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import com.polina.fintrackr.core.data.dto.model.category.Category
@@ -34,14 +35,20 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
+import com.polina.fintrackr.features.articles.domain.ArticlesViewModel
+import com.polina.fintrackr.features.articles.domain.CategoryModel
+import com.polina.fintrackr.features.count.domain.CountViewModel
 
 @Composable
-fun ArticlesScreen(navController: NavController) {
-    val mockArticles = remember { getMockArticles() }
+fun ArticlesScreen(
+    navController: NavController,
+    viewModel: ArticlesViewModel = hiltViewModel()
+) {
+    val countState = viewModel.categories.value
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, mockArticles) },
-        topBar = { AppTopBar( R.string.my_articles) })
+        content = { paddingValues -> Content(paddingValues = paddingValues, countState) },
+        topBar = { AppTopBar(R.string.my_articles) })
 }
 
 @Composable
@@ -50,8 +57,10 @@ fun CustomSearchBar() {
         value = "",
         onValueChange = {},
         placeholder = {
-            Text(modifier = Modifier.padding(2.dp), text = stringResource(R.string.find_article)
-            , style = MaterialTheme.typography.labelLarge
+            Text(
+                modifier = Modifier.padding(2.dp),
+                text = stringResource(R.string.find_article),
+                style = MaterialTheme.typography.labelLarge
             )
         },
         trailingIcon = {
@@ -77,7 +86,7 @@ fun CustomSearchBar() {
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    mockArticles: List<Category>
+    countState: List<CategoryModel>
 ) {
     Column(
         modifier = Modifier
@@ -92,7 +101,7 @@ fun Content(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            items(items = mockArticles) { article ->
+            items(items = countState) { article ->
                 ListItemUi(
                     ListItem(
                         title = article.name,
@@ -104,11 +113,6 @@ fun Content(
     }
 }
 
-fun getMockArticles(): List<Category> {
-    val transactions = generateMockData()
-    val article = transactions.filter { !it.category.isIncome }.map { it.category }.distinct()
-    return article
-}
 
 @Preview(name = "Light Mode", showSystemUi = true)
 // @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)

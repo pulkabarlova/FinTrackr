@@ -41,14 +41,13 @@ fun CountScreen(navController: NavController,
                 viewModel: CountViewModel = hiltViewModel()){
     AppScaffold(
         navController = navController,
-        content = { Content(paddingValues = it) },
+        content = { Content(paddingValues = it, viewModel) },
         topBar = { AppTopBar(R.string.my_count, R.drawable.addit_icon,) })
-    LaunchedEffect(Unit) {
-        Log.d("hhhh", "DFDF${viewModel.accounts}")
-    }
+
 }
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
+fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, viewModel: CountViewModel) {
+    val accountState = viewModel.account.value
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -59,15 +58,14 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            val mockCount = remember { AccountModel(name = "Баланс", currency = "₽", balance = "-679 000") }
             ListItemUi(ListItem(title = stringResource(R.string.balance),
                 leadingIcon = R.drawable.money_icon,
-                trailingText = mockCount.balance + " " + mockCount.currency,
+                trailingText = accountState.balance + " " + accountState.currency,
                 trailingIcon = Icons.Default.KeyboardArrowRight,),
                 onClick = {},
                 modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
             ListItemUi(ListItem(title = stringResource(R.string.currency),
-                trailingText = mockCount.currency,
+                trailingText = accountState.currency,
                 trailingIcon = Icons.Default.KeyboardArrowRight,),
                 onClick = {},
                 modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))

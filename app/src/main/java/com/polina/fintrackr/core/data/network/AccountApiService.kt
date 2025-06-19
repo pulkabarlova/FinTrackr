@@ -12,7 +12,7 @@ import retrofit2.http.PUT
 
 interface AccountApiService {
     @GET("accounts")
-    suspend fun getAccounts(): List<Account>
+    suspend fun getAccounts(): Response<List<Account>>
 
     @POST("accounts")
     suspend fun createAccount(@Body account: AccountCreateRequest): Response<AccountResponse>
