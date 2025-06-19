@@ -9,5 +9,6 @@ sealed class NavRoutes(
     data object Articles : NavRoutes("articles")
     data object Settings : NavRoutes("settings")
     data object Splash : NavRoutes("splash")
-    data object History : NavRoutes("history")
+    data object HistoryExpenses : NavRoutes("history_expenses")
+    data object HistoryIncomes : NavRoutes("history_incomes")
 }

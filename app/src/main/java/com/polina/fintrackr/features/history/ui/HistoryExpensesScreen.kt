@@ -1,4 +1,4 @@
-package com.polina.fintrackr.features.expenses.ui
+package com.polina.fintrackr.features.history.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -6,69 +6,60 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
-import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
-import com.polina.fintrackr.core.ui.generateMockData
 import com.polina.fintrackr.core.ui.theme.FinTrackrTheme
 import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
+import com.polina.fintrackr.core.ui.navigation.entities.NavRoutes
 import com.polina.fintrackr.features.expenses.domain.ExpenseModel
 import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
-import java.util.Currency
 
 @Composable
-fun ExpensesScreen(
+fun HistoryExpensesScreen(
     navController: NavController,
     viewModel: TransactionViewModel = hiltViewModel()
 ) {
     val expenses = viewModel.expenses
-    val totalExpenses = viewModel.totalExpenses
     val currency = viewModel.expenses.firstOrNull()?.currency ?: " ₽"
+    val beginDt = viewModel.formatDateTime(expenses.firstOrNull()?.createdAt)
+    val beginDate = beginDt.first
+    val beginTim = beginDt.second
+    val endDt = viewModel.formatDateTime(expenses.lastOrNull()?.createdAt)
+    val endDate = endDt.first
+    val endTime = endDt.second
+    val sum = viewModel.totalExpenses
+
     AppScaffold(
         navController = navController,
-        content = { paddingValues ->
-            Content(
-                paddingValues = paddingValues,
-                expenses,
-                totalExpenses,
-                currency
-            )
-        },
+        content = { paddingValues -> Content(paddingValues, beginDate, beginTim, endDate, endTime, sum, expenses,currency)},
         topBar = {
-            AppTopBar(
-                R.string.my_expenses,
-                R.drawable.trailing_icon,
-                onTrailingIconClick = { navController.navigate("history_expenses") })
+            AppTopBar(R.string.history, R.drawable.texthistory,
+                {}, Icons.Default.KeyboardArrowLeft, {navController.popBackStack()})
         })
 }
-
 
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
+    beginDate: String,
+    beginTim: String,
+    endDate: String,
+    endTime: String,
+    sum: Double,
     expenses: List<ExpenseModel>,
-    sumExpenses: Double,
     currency: String
 ) {
     Box(
@@ -84,8 +75,28 @@ fun Content(
             item {
                 ListItemUi(
                     ListItem(
-                        title = stringResource(R.string.all),
-                        trailingText = sumExpenses.toString() + currency,
+                        title = stringResource(R.string.start),
+                        trailingText = "$beginDate $beginTim",
+                    ),
+                    onClick = {},
+                    modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                )
+            }
+            item {
+                ListItemUi(
+                    ListItem(
+                        title = stringResource(R.string.end),
+                        trailingText = "$endDate $endTime",
+                    ),
+                    onClick = {},
+                    modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                )
+            }
+            item {
+                ListItemUi(
+                    ListItem(
+                        title = stringResource(R.string.summ),
+                        trailingText = sum.toString() + currency,
                     ),
                     onClick = {},
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
@@ -105,37 +116,14 @@ fun Content(
                 }
             }
         }
-
-        FloatingActionButton(
-            onClick = {},
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            shape = CircleShape,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp),
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "",
-                tint = Color.White
-            )
-        }
     }
 }
 
-
-fun getMockTransactions(): List<Transaction> {
-    val transactions = generateMockData()
-    val expenseTransactions = transactions.filter { !it.category.isIncome }
-    return expenseTransactions
-}
 
 @Preview(name = "Light Mode", showSystemUi = true)
 @Composable
 fun Preview() {
     FinTrackrTheme {
-        ExpensesScreen(navController = NavController(LocalContext.current))
+        HistoryExpensesScreen(navController = NavController(LocalContext.current))
     }
 }

@@ -56,7 +56,7 @@ fun IncomesScreen(navController: NavController, viewModel: TransactionViewModel 
             AppTopBar(
                 R.string.my_incomes,
                 R.drawable.trailing_icon,
-                onTrailingIconClick = { navController.navigate("history") })
+                onTrailingIconClick = { navController.navigate("history_incomes") })
         })
 }
 
