@@ -18,10 +18,18 @@ class SplashViewModel @Inject constructor(
     private val _accountInitialized = mutableStateOf<Boolean?>(null)
     val accountInitialized: State<Boolean?> = _accountInitialized
 
+    private val _errorMessage = mutableStateOf<String?>(null)
+    val errorMessage: State<String?> = _errorMessage
+
     init {
         viewModelScope.launch {
-            val accountId = appInitUseCase.ensureAccountInitialized()
-            _accountInitialized.value = accountId != null
+            val result = appInitUseCase.ensureAccountInitialized()
+            result.onSuccess {
+                _accountInitialized.value = true
+            }.onFailure {
+                _errorMessage.value = it.message
+                _accountInitialized.value = false
+            }
         }
     }
 }

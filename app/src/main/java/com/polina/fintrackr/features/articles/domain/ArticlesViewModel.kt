@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.polina.fintrackr.core.data.dto.model.account.Category
 import com.polina.fintrackr.core.data.mapper.toCategoryModel
+import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.data.repositories.AccountRepository
 import com.polina.fintrackr.core.data.repositories.CategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,18 +21,35 @@ class ArticlesViewModel @Inject constructor(
 ) : ViewModel() {
     private val _categories = mutableStateOf<List<CategoryModel>>(emptyList())
     val categories: State<List<CategoryModel>> = _categories
-    suspend fun getCategories() {
-        val response = categoryRepository.getCategories()
-        if (response.isSuccessful) {
-            _categories.value = response.body()?.toCategoryModel() ?: emptyList()
+    private val _error = mutableStateOf<String?>(null)
+    val error: State<String?> = _error
+
+    fun getCategories() {
+        viewModelScope.launch {
+            _error.value = null
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    categoryRepository.getCategories()
+                }
+                if (response.isSuccessful) {
+                    _categories.value = response.body()?.toCategoryModel() ?: emptyList()
+                    _error.value = null
+                } else {
+                    throw NetworkException()
+                }
+            } catch (e: NetworkException) {
+                _error.value = "Ошибка при выходе в сеть, проверьте соединение}"
+            } catch (e: Exception) {
+                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
+            }
         }
     }
 
     init {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                getCategories()
-            }
-        }
+        getCategories()
+    }
+
+    fun clearError() {
+        _error.value = null
     }
 }

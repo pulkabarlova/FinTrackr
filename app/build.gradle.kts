@@ -89,5 +89,7 @@ dependencies {
     implementation(libs.converter.gson)
     //coroutines
     implementation(libs.kotlinx.coroutines.android)
+    //splash
+    implementation(libs.androidx.core.splashscreen)
 
 }

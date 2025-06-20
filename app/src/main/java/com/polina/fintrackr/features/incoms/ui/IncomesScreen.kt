@@ -1,5 +1,6 @@
 package com.polina.fintrackr.features.incoms.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +45,16 @@ fun IncomesScreen(navController: NavController, viewModel: TransactionViewModel 
     val incomes = viewModel.incomes
     val totalIncome = viewModel.totalIncomes
     val currency = incomes.firstOrNull()?.currency ?: " ₽"
+    val error = viewModel.error.value
+    val context = LocalContext.current
+
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearError()
+        }
+    }
+
     AppScaffold(
         navController = navController,
         content = { paddingValues ->
@@ -119,13 +132,6 @@ fun Content(
         }
     }
 }
-
-fun getMockIncomes(): List<Transaction> {
-    val transactions = generateMockData()
-    val incomeTransactions = transactions.filter { it.category.isIncome }
-    return incomeTransactions
-}
-
 
 @Preview(name = "Light Mode", showSystemUi = true)
 @Composable

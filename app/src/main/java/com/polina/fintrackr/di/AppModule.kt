@@ -5,8 +5,10 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.polina.fintrackr.BuildConfig
 import com.polina.fintrackr.core.data.network.AccountApiService
+import com.polina.fintrackr.core.data.network.NetworkMonitor
 import com.polina.fintrackr.core.data.repositories.AccountRepository
 import com.polina.fintrackr.core.data.repositories.TransactionRepository
+import com.polina.fintrackr.core.data.use_case.AppInitUseCase
 import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
 import com.polina.fintrackr.core.data.use_case.TransactionUseCase
 import dagger.Module
@@ -46,7 +48,7 @@ object AppModule {
     @Provides
     fun provideGetAndSaveAccountUseCase(
         accountRepository: AccountRepository,
-        sharedPreferences: SharedPreferences
+        sharedPreferences: SharedPreferences,
     ): GetAndSaveAccountUseCase {
         return GetAndSaveAccountUseCase(accountRepository, sharedPreferences)
     }
@@ -58,6 +60,15 @@ object AppModule {
     ): TransactionUseCase {
         return TransactionUseCase(transactionRepository, sharedPreferences)
     }
-
-
+    @Provides
+    fun provideNetworkMonitor(@ApplicationContext context: Context): NetworkMonitor {
+        return NetworkMonitor(context)
+    }
+    @Provides
+    fun provideAppUnitCase(
+        accountRepository: AccountRepository,
+        sharedPreferences: SharedPreferences,
+        networkMonitor: NetworkMonitor
+    ): AppInitUseCase {
+        return AppInitUseCase(accountRepository, sharedPreferences, networkMonitor)}
 }

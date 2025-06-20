@@ -1,6 +1,7 @@
 package com.polina.fintrackr.features.count.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,16 +38,32 @@ import com.polina.fintrackr.features.count.domain.CountViewModel
 
 
 @Composable
-fun CountScreen(navController: NavController,
-                viewModel: CountViewModel = hiltViewModel()){
+fun CountScreen(
+    navController: NavController,
+    viewModel: CountViewModel = hiltViewModel()
+) {
+    val error = viewModel.error.value
+    val context = LocalContext.current
+
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearError()
+        }
+    }
+
     AppScaffold(
         navController = navController,
         content = { Content(paddingValues = it, viewModel) },
-        topBar = { AppTopBar(R.string.my_count, R.drawable.addit_icon,) })
+        topBar = { AppTopBar(R.string.my_count, R.drawable.addit_icon) })
 
 }
+
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, viewModel: CountViewModel) {
+fun Content(
+    paddingValues: androidx.compose.foundation.layout.PaddingValues,
+    viewModel: CountViewModel
+) {
     val accountState = viewModel.account.value
     Box(
         modifier = Modifier
@@ -58,17 +75,25 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, vie
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            ListItemUi(ListItem(title = stringResource(R.string.balance),
-                leadingIcon = R.drawable.money_icon,
-                trailingText = accountState.balance + " " + accountState.currency,
-                trailingIcon = Icons.Default.KeyboardArrowRight,),
+            ListItemUi(
+                ListItem(
+                    title = stringResource(R.string.balance),
+                    leadingIcon = R.drawable.money_icon,
+                    trailingText = accountState.balance + " " + accountState.currency,
+                    trailingIcon = Icons.Default.KeyboardArrowRight,
+                ),
                 onClick = {},
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
-            ListItemUi(ListItem(title = stringResource(R.string.currency),
-                trailingText = accountState.currency,
-                trailingIcon = Icons.Default.KeyboardArrowRight,),
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+            )
+            ListItemUi(
+                ListItem(
+                    title = stringResource(R.string.currency),
+                    trailingText = accountState.currency,
+                    trailingIcon = Icons.Default.KeyboardArrowRight,
+                ),
                 onClick = {},
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer))
+                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+            )
         }
 
         FloatingActionButton(

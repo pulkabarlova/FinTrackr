@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
 import com.polina.fintrackr.core.data.mapper.toExpenseModel
 import com.polina.fintrackr.core.data.mapper.toIncomeModel
+import com.polina.fintrackr.core.data.network.AccountNotFoundException
+import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.data.use_case.TransactionUseCase
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,9 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -32,16 +31,29 @@ class TransactionViewModel @Inject constructor(
     private val _transactions = mutableStateOf<List<TransactionResponse>>(emptyList())
     val transactions: State<List<TransactionResponse>> = _transactions
 
+    private val _error = mutableStateOf<String?>(null)
+    val error: State<String?> = _error
 
-    init {
+    fun getTransactions() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val list = useCase.getTransactionsForPeriod()
-                list?.let {
-                    _transactions.value = it
+            try {
+                val list = withContext(Dispatchers.IO) {
+                    useCase.getTransactionsForPeriod()
                 }
+                _transactions.value = list
+                _error.value = null
+            } catch (e: AccountNotFoundException) {
+                _error.value = "Аккаунт не найден"
+            } catch (e: NetworkException) {
+                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
+            } catch (e: Exception) {
+                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
             }
         }
+    }
+
+    init {
+        getTransactions()
     }
 
     private val groupedTransactions: Pair<Pair<List<IncomeModel>, Double>, Pair<List<ExpenseModel>, Double>>
@@ -80,6 +92,10 @@ class TransactionViewModel @Inject constructor(
         } catch (e: Exception) {
             return "" to ""
         }
+    }
+
+    fun clearError() {
+        _error.value = null
     }
 
     val incomes: List<IncomeModel> get() = groupedTransactions.first.first

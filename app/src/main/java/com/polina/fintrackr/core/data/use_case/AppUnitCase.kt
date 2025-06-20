@@ -1,24 +1,32 @@
 package com.polina.fintrackr.core.data.use_case
 
 import android.content.SharedPreferences
+import com.polina.fintrackr.core.data.network.NetworkMonitor
 import com.polina.fintrackr.core.data.repositories.AccountRepository
 import javax.inject.Inject
 
 class AppInitUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val networkMonitor: NetworkMonitor
 ) {
-    suspend fun ensureAccountInitialized(): Int? {
+    suspend fun ensureAccountInitialized(): Result<Int> {
+        if (!networkMonitor.isConnected()) {
+            return Result.failure(Exception("Нет подключения к интернету"))
+        }
+
         if (!sharedPreferences.contains("accountId")) {
             val response = accountRepository.getAccounts()
             if (response.isSuccessful) {
                 response.body()?.firstOrNull()?.let { account ->
                     sharedPreferences.edit().putInt("accountId", account.id).apply()
-                    return account.id
+                    return Result.success(account.id)
                 }
             }
-            return null
+            return Result.failure(Exception("Ошибка при загрузке аккаунта"))
         }
-        return sharedPreferences.getInt("accountId", -1).takeIf { it != -1 }
+
+        val accountId = sharedPreferences.getInt("accountId", -1)
+        return if (accountId != -1) Result.success(accountId) else Result.failure(Exception("accountId не найден"))
     }
 }
