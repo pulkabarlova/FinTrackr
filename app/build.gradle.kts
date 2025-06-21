@@ -1,7 +1,10 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -19,6 +22,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties().apply {
+            load(project.rootProject.file("local.properties").inputStream())
+        }
+        buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+
     }
 
     buildTypes {
@@ -39,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"
@@ -69,7 +80,16 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    //dagger
-    implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
+    //hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    //coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    //splash
+    implementation(libs.androidx.core.splashscreen)
+
 }

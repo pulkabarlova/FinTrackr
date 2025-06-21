@@ -6,11 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.polina.fintrackr.core.navigation.NavRoutes
-import com.polina.fintrackr.core.ui.SplashScreen
+import com.polina.fintrackr.core.ui.navigation.entities.NavRoutes
+import com.polina.fintrackr.features.splash.ui.SplashScreen
 import com.polina.fintrackr.features.articles.ui.ArticlesScreen
 import com.polina.fintrackr.features.count.ui.CountScreen
 import com.polina.fintrackr.features.expenses.ui.ExpensesScreen
+import com.polina.fintrackr.features.history.ui.HistoryExpensesScreen
+import com.polina.fintrackr.features.history.ui.HistoryIncomesScreen
 import com.polina.fintrackr.features.incoms.ui.IncomesScreen
 import com.polina.fintrackr.features.settings.SettingsScreen
 
@@ -40,6 +42,12 @@ fun AppUi() {
             }
             composable(NavRoutes.Settings.route) {
                 SettingsScreen(navController)
+            }
+            composable(NavRoutes.HistoryExpenses.route) {
+                HistoryExpensesScreen(navController)
+            }
+            composable(NavRoutes.HistoryIncomes.route) {
+                HistoryIncomesScreen(navController)
             }
         }
     }

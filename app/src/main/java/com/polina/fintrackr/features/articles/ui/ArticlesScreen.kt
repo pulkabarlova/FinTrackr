@@ -1,5 +1,6 @@
 package com.polina.fintrackr.features.articles.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -11,58 +12,54 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
-import com.polina.fintrackr.core.domain.Category
-import com.polina.fintrackr.core.generateMockData
-import com.polina.fintrackr.core.theme.FinTrackrTheme
-import com.polina.fintrackr.core.ui.AppScaffold
-import com.polina.fintrackr.core.ui.ListItem
-import com.polina.fintrackr.core.ui.ListItemUi
+import com.polina.fintrackr.core.data.dto.model.category.Category
+import com.polina.fintrackr.core.ui.generateMockData
+import com.polina.fintrackr.core.ui.theme.FinTrackrTheme
+import com.polina.fintrackr.core.ui.components.AppScaffold
+import com.polina.fintrackr.core.ui.components.AppTopBar
+import com.polina.fintrackr.core.ui.components.ListItem
+import com.polina.fintrackr.core.ui.components.ListItemUi
+import com.polina.fintrackr.features.articles.domain.ArticlesViewModel
+import com.polina.fintrackr.features.articles.domain.CategoryModel
+import com.polina.fintrackr.features.count.domain.CountViewModel
 
 @Composable
-fun ArticlesScreen(navController: NavController) {
-    val mockArticles = remember { getMockArticles() }
+fun ArticlesScreen(
+    navController: NavController,
+    viewModel: ArticlesViewModel = hiltViewModel()
+) {
+    val countState = viewModel.categories.value
+    val error = viewModel.error.value
+    val context = LocalContext.current
+
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearError()
+        }
+    }
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, mockArticles) },
-        topBar = { TopBar() })
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBar() {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        title = {
-            Text(
-                text = stringResource(id = R.string.my_articles),
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-    )
+        content = { paddingValues -> Content(paddingValues = paddingValues, countState) },
+        topBar = { AppTopBar(R.string.my_articles) })
 }
 
 @Composable
@@ -71,8 +68,10 @@ fun CustomSearchBar() {
         value = "",
         onValueChange = {},
         placeholder = {
-            Text(modifier = Modifier.padding(2.dp), text = stringResource(R.string.find_article)
-            , style = MaterialTheme.typography.labelLarge
+            Text(
+                modifier = Modifier.padding(2.dp),
+                text = stringResource(R.string.find_article),
+                style = MaterialTheme.typography.labelLarge
             )
         },
         trailingIcon = {
@@ -98,7 +97,7 @@ fun CustomSearchBar() {
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    mockArticles: List<Category>
+    countState: List<CategoryModel>
 ) {
     Column(
         modifier = Modifier
@@ -113,7 +112,7 @@ fun Content(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            items(items = mockArticles) { article ->
+            items(items = countState) { article ->
                 ListItemUi(
                     ListItem(
                         title = article.name,
@@ -125,11 +124,6 @@ fun Content(
     }
 }
 
-fun getMockArticles(): List<Category> {
-    val transactions = generateMockData()
-    val article = transactions.filter { !it.category.isIncome }.map { it.category }.distinct()
-    return article
-}
 
 @Preview(name = "Light Mode", showSystemUi = true)
 // @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
