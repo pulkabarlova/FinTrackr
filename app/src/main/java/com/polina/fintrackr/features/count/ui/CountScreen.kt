@@ -65,6 +65,7 @@ fun Content(
     viewModel: CountViewModel
 ) {
     val accountState = viewModel.account.value
+    LaunchedEffect(accountState) {}
     Box(
         modifier = Modifier
             .fillMaxSize()

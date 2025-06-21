@@ -1,53 +1,66 @@
 package com.polina.fintrackr.features.count.domain
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.polina.fintrackr.core.data.dto.model.account.Account
-import com.polina.fintrackr.core.data.mapper.toAccountModel
 import com.polina.fintrackr.core.data.network.AccountNotFoundException
 import com.polina.fintrackr.core.data.network.NetworkException
-import com.polina.fintrackr.core.data.repositories.AccountRepository
+import com.polina.fintrackr.core.data.network.NetworkMonitor
 import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class CountViewModel @Inject constructor(
-    private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase
+    private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase,
+    private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
-    private val _account = mutableStateOf<AccountModel>(AccountModel())
-    var account: State<AccountModel> = _account
+
+    private val _account = mutableStateOf(AccountModel())
+    val account: State<AccountModel> = _account
 
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> = _error
 
-    fun getAccount() {
+    private val _isConnected = mutableStateOf(true)
+    val isConnected: State<Boolean> = _isConnected
+
+    init {
+        monitorNetwork()
+        fetchAccount()
+    }
+
+    private fun monitorNetwork() {
         viewModelScope.launch {
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    getAndSaveAccountUseCase()
+            networkMonitor.networkStatus.collect { connected ->
+                _isConnected.value = connected
+
+                if (!connected) {
+                    _error.value = "Нет подключения к интернету"
+                } else if (_error.value != null) {
+                    _error.value = null
+                    fetchAccount()
                 }
-                _account.value = result
-                _error.value = null
-            } catch (e: AccountNotFoundException) {
-                _error.value = "Аккаунт не найден"
-            } catch (e: NetworkException) {
-                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
-            } catch (e: Exception) {
-                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
             }
         }
     }
 
-    init {
-        getAccount()
+    private fun fetchAccount() {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                getAndSaveAccountUseCase()
+            }
+            result.onSuccess { accountModel ->
+                _account.value = accountModel
+                _error.value = null
+            }.onFailure {
+                _error.value = "Нет подключения к интернету"
+            }
+        }
     }
 
     fun clearError() {

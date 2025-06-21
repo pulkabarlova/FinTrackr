@@ -4,6 +4,7 @@ package com.polina.fintrackr.core.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,7 +50,6 @@ fun ListItemUi(
                 is String -> {
                     Box(
                         modifier = Modifier
-                            //.wrapContentSize()//на случай если овал можно
                             .size(24.dp)
                             .background(
                                 color = MaterialTheme.colorScheme.primaryContainer,
@@ -62,8 +62,7 @@ fun ListItemUi(
                             text = icon,
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 1,
-                            fontSize = 18.sp,//оставлю как в фигме
-                            //modifier = Modifier.padding(4.dp)
+                            fontSize = 18.sp,
                         )
                     }
                 }
@@ -96,12 +95,24 @@ fun ListItemUi(
             }
         }
         // TRAILING TEXT+ICON
-        item.trailingText?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(end = 8.dp)
-            )
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Center
+        ) {
+            item.trailingText?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+
+            item.trailingBottomText?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
 
         item.trailingIcon?.let { icon ->

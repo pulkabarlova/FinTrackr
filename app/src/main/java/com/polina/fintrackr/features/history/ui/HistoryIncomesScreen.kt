@@ -11,10 +11,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,9 +29,12 @@ import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
 import com.polina.fintrackr.core.ui.theme.FinTrackrTheme
-import com.polina.fintrackr.features.expenses.domain.ExpenseModel
 import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
+import com.polina.fintrackr.features.history.components.CustomDatePicker
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @Composable
@@ -41,13 +46,18 @@ fun HistoryIncomesScreen(
     val currency = viewModel.incomes.firstOrNull()?.currency ?: " ₽"
     val beginDt = viewModel.formatDateTime(incomes.firstOrNull()?.createdAt)
     val beginDate = beginDt.first
-    val beginTim = beginDt.second
     val endDt = viewModel.formatDateTime(incomes.lastOrNull()?.createdAt)
     val endDate = endDt.first
-    val endTime = endDt.second
     val sum = viewModel.totalIncomes
     val error = viewModel.error.value
     val context = LocalContext.current
+    val isConnected = viewModel.isConnected.value
+
+    LaunchedEffect(isConnected) {
+        if (isConnected && error != null) {
+            viewModel.getTransactions()
+        }
+    }
 
     LaunchedEffect(error) {
         error?.let {
@@ -62,12 +72,11 @@ fun HistoryIncomesScreen(
             ContentIncomes(
                 paddingValues,
                 beginDate,
-                beginTim,
                 endDate,
-                endTime,
                 sum,
                 incomes,
-                currency
+                currency,
+                viewModel
             )
         },
         topBar = {
@@ -81,13 +90,44 @@ fun HistoryIncomesScreen(
 fun ContentIncomes(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
     beginDate: String,
-    beginTim: String,
     endDate: String,
-    endTime: String,
     sum: Double,
     incomes: List<IncomeModel>,
-    currency: String
+    currency: String,
+    viewModel: TransactionViewModel
 ) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    var isSelectingStartDate by remember { mutableStateOf(true) }
+    var selectedDate by remember { mutableStateOf(System.currentTimeMillis()) }
+
+    val dateFormatter = SimpleDateFormat("dd MMMM", Locale("ru"))
+
+    val formattedStartDate = viewModel.startDate.value?.let {
+        dateFormatter.format(it)
+    } ?: beginDate
+
+    val formattedEndDate = viewModel.endDate.value?.let {
+        dateFormatter.format(it)
+    } ?: endDate
+
+    if (showDatePicker) {
+        CustomDatePicker(
+            selectedDate = selectedDate,
+            onDateSelected = { dateMillis ->
+                dateMillis?.let {
+                    val selected = Date(it)
+                    if (isSelectingStartDate) {
+                        viewModel.setStartDate(selected)
+                    } else {
+                        viewModel.setEndDate(selected)
+                    }
+                }
+                showDatePicker = false
+            },
+            onDismiss = { showDatePicker = false }
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,9 +142,9 @@ fun ContentIncomes(
                 ListItemUi(
                     ListItem(
                         title = stringResource(R.string.start),
-                        trailingText = "$beginDate $beginTim",
+                        trailingText = formattedStartDate,
                     ),
-                    onClick = {},
+                    onClick = { showDatePicker = true },
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
@@ -112,9 +152,13 @@ fun ContentIncomes(
                 ListItemUi(
                     ListItem(
                         title = stringResource(R.string.end),
-                        trailingText = "$endDate $endTime",
+                        trailingText = formattedEndDate,
                     ),
-                    onClick = {},
+                    onClick = {
+                        isSelectingStartDate = true
+                        selectedDate = viewModel.startDate.value?.time ?: System.currentTimeMillis()
+                        showDatePicker = true
+                    },
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
@@ -124,18 +168,24 @@ fun ContentIncomes(
                         title = stringResource(R.string.summ),
                         trailingText = sum.toString() + currency,
                     ),
-                    onClick = {},
+                    onClick = {
+                        isSelectingStartDate = false
+                        selectedDate = viewModel.endDate.value?.time ?: System.currentTimeMillis()
+                        showDatePicker = true
+                    },
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
             if (incomes.isNotEmpty()) {
                 items(items = incomes) { income ->
+                    val dt = viewModel.formatDateTime(income.createdAt)
                     ListItemUi(
                         item = ListItem(
                             title = income.title,
                             leadingIcon = income.emoji,
                             trailingText = income.amount.toString() + income.currency,
-                            trailingIcon = Icons.Default.KeyboardArrowRight
+                            trailingIcon = Icons.Default.KeyboardArrowRight,
+                            trailingBottomText = "${dt.first} ${dt.second}"
                         ),
                         onClick = { }
                     )

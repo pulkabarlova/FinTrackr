@@ -49,8 +49,9 @@ object AppModule {
     fun provideGetAndSaveAccountUseCase(
         accountRepository: AccountRepository,
         sharedPreferences: SharedPreferences,
+        networkMonitor: NetworkMonitor
     ): GetAndSaveAccountUseCase {
-        return GetAndSaveAccountUseCase(accountRepository, sharedPreferences)
+        return GetAndSaveAccountUseCase(accountRepository, sharedPreferences, networkMonitor)
     }
 
     @Provides

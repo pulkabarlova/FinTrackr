@@ -6,6 +6,7 @@ import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
 import com.polina.fintrackr.core.data.network.AccountNotFoundException
 import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.data.repositories.TransactionRepository
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -21,26 +22,37 @@ class TransactionUseCase @Inject constructor(
         timeZone = TimeZone.getTimeZone("UTC")
     }
 
-    private val startDate: Date by lazy {
-        val calendar = Calendar.getInstance()
-        calendar.set(2025, Calendar.JUNE, 0, 0, 0, 0)
-        calendar.time
+    suspend fun getTransactionsForPeriodWithRetries(start: Date?, end: Date?): List<TransactionResponse> {
+        repeat(3) { attempt ->
+            try {
+                return getTransactionsForPeriod(start, end)
+            } catch (e: NetworkException) {
+                if (attempt < 2) delay(5000)
+                else throw e
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+        return emptyList()
     }
 
-    private val endDate: Date get() = Calendar.getInstance().time
-
-    suspend fun getTransactionsForPeriod(): List<TransactionResponse> {
+    private suspend fun getTransactionsForPeriod(start: Date?, end: Date?): List<TransactionResponse> {
         if (!sharedPreferences.contains("accountId")) {
             throw AccountNotFoundException()
         }
+        val fromDate = start ?: Calendar.getInstance().apply {
+            set(2025, Calendar.JUNE, 1, 0, 0, 0)
+        }.time
+
+        val toDate = end ?: Calendar.getInstance().time
 
         val accountId = sharedPreferences.getInt("accountId", -1)
         if (accountId == -1) {
             throw AccountNotFoundException()
         }
 
-        val from = dateFormatter.format(startDate)
-        val to = dateFormatter.format(endDate)
+        val from = dateFormatter.format(fromDate)
+        val to = dateFormatter.format(toDate)
         val response = transactionRepository.getTransacionsForPeriod(accountId, from, to)
 
         if (!response.isSuccessful) {

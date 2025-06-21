@@ -11,6 +11,7 @@ import com.polina.fintrackr.core.data.mapper.toExpenseModel
 import com.polina.fintrackr.core.data.mapper.toIncomeModel
 import com.polina.fintrackr.core.data.network.AccountNotFoundException
 import com.polina.fintrackr.core.data.network.NetworkException
+import com.polina.fintrackr.core.data.network.NetworkMonitor
 import com.polina.fintrackr.core.data.use_case.TransactionUseCase
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionViewModel @Inject constructor(
     private val useCase: TransactionUseCase,
+    private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
     private val _transactions = mutableStateOf<List<TransactionResponse>>(emptyList())
@@ -34,26 +36,79 @@ class TransactionViewModel @Inject constructor(
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> = _error
 
-    fun getTransactions() {
+    private val _isConnected = mutableStateOf(true)
+    val isConnected: State<Boolean> = _isConnected
+
+    private val _startDate = mutableStateOf<Date?>(null)
+    val startDate: State<Date?> = _startDate
+
+    private val _endDate = mutableStateOf<Date?>(null)
+    val endDate: State<Date?> = _endDate
+
+    fun setStartDate(date: Date) {
+        _startDate.value = date
+        reloadTransactions()
+    }
+
+    fun setEndDate(date: Date) {
+        _endDate.value = date
+        reloadTransactions()
+    }
+
+    fun reloadTransactions() {
         viewModelScope.launch {
+            _error.value = null
             try {
                 val list = withContext(Dispatchers.IO) {
-                    useCase.getTransactionsForPeriod()
+                    useCase.getTransactionsForPeriodWithRetries(
+                        _startDate.value,
+                        _endDate.value
+                    )
+                }
+                _transactions.value = list
+            } catch (e: Exception) {
+                _error.value = "Ошибка загрузки данных"
+            }
+        }
+    }
+
+    fun getTransactions() {
+        viewModelScope.launch {
+            _error.value = null
+            try {
+                val list = withContext(Dispatchers.IO) {
+                    useCase.getTransactionsForPeriodWithRetries(_startDate.value, _endDate.value)
                 }
                 _transactions.value = list
                 _error.value = null
             } catch (e: AccountNotFoundException) {
-                _error.value = "Аккаунт не найден"
+                _error.value = "Нет подключения к интернету"
             } catch (e: NetworkException) {
-                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
+                _error.value = "Нет подключения к интернету"
             } catch (e: Exception) {
-                _error.value = "Ошибка при выходе в сеть, проверьте соединение"
+                _error.value = "Нет подключения к интернету"
             }
         }
     }
 
     init {
         getTransactions()
+        monitorNetwork()
+    }
+
+    private fun monitorNetwork() {
+        viewModelScope.launch {
+            networkMonitor.networkStatus.collect { connected ->
+                _isConnected.value = connected
+                if (connected) {
+                    if (_error.value != null || _transactions.value.isEmpty()) {
+                        getTransactions()
+                    }
+                } else {
+                    _error.value = "Нет подключения к интернету"
+                }
+            }
+        }
     }
 
     private val groupedTransactions: Pair<Pair<List<IncomeModel>, Double>, Pair<List<ExpenseModel>, Double>>
@@ -102,5 +157,4 @@ class TransactionViewModel @Inject constructor(
     val expenses: List<ExpenseModel> get() = groupedTransactions.second.first
     val totalIncomes: Double get() = groupedTransactions.first.second
     val totalExpenses: Double get() = groupedTransactions.second.second
-
 }

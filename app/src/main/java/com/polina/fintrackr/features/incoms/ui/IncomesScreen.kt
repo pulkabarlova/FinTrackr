@@ -47,6 +47,13 @@ fun IncomesScreen(navController: NavController, viewModel: TransactionViewModel 
     val currency = incomes.firstOrNull()?.currency ?: " ₽"
     val error = viewModel.error.value
     val context = LocalContext.current
+    val isConnected = viewModel.isConnected.value
+
+    LaunchedEffect(isConnected) {
+        if (isConnected && error != null) {
+            viewModel.getTransactions()
+        }
+    }
 
     LaunchedEffect(error) {
         error?.let {

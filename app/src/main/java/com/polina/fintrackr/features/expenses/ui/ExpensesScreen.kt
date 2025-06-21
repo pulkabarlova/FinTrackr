@@ -45,11 +45,18 @@ fun ExpensesScreen(
     navController: NavController,
     viewModel: TransactionViewModel = hiltViewModel()
 ) {
-    val expenses = viewModel.expenses
-    val totalExpenses = viewModel.totalExpenses
-    val currency = viewModel.expenses.firstOrNull()?.currency ?: " ₽"
+    var expenses = viewModel.expenses
+    var totalExpenses = viewModel.totalExpenses
+    var currency = viewModel.expenses.firstOrNull()?.currency ?: " ₽"
     val error = viewModel.error.value
     val context = LocalContext.current
+    val isConnected = viewModel.isConnected.value
+
+    LaunchedEffect(isConnected) {
+        if (isConnected && error != null) {
+            viewModel.getTransactions()
+        }
+    }
 
     LaunchedEffect(error) {
         error?.let {
