@@ -5,7 +5,7 @@ import android.util.Log
 import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
 import com.polina.fintrackr.core.data.network.AccountNotFoundException
 import com.polina.fintrackr.core.data.network.NetworkException
-import com.polina.fintrackr.core.data.repositories.TransactionRepository
+import com.polina.fintrackr.core.domain.repositories.TransactionRepository
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar

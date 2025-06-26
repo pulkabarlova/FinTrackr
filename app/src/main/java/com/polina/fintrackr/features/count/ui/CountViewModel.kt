@@ -1,13 +1,12 @@
-package com.polina.fintrackr.features.count.domain
+package com.polina.fintrackr.features.count.ui
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.polina.fintrackr.core.data.network.AccountNotFoundException
-import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.data.network.NetworkMonitor
 import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
+import com.polina.fintrackr.features.count.domain.AccountModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

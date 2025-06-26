@@ -1,4 +1,4 @@
-package com.polina.fintrackr.features.splash.domain
+package com.polina.fintrackr.features.splash.ui
 
 
 import androidx.compose.runtime.State

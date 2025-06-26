@@ -2,7 +2,7 @@ package com.polina.fintrackr.core.data.use_case
 
 import android.content.SharedPreferences
 import com.polina.fintrackr.core.data.network.NetworkMonitor
-import com.polina.fintrackr.core.data.repositories.AccountRepository
+import com.polina.fintrackr.core.domain.repositories.AccountRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -26,7 +26,6 @@ class AppInitUseCase @Inject constructor(
                 return result
             }
         }
-
         return Result.failure(Exception())
     }
 

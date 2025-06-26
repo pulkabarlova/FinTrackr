@@ -1,4 +1,4 @@
-package com.polina.fintrackr.features.history.components
+package com.polina.fintrackr.features.history.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -2,21 +2,26 @@ package com.polina.fintrackr.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import com.polina.fintrackr.BuildConfig
 import com.polina.fintrackr.core.data.network.AccountApiService
+import com.polina.fintrackr.core.data.network.CategoryApiService
 import com.polina.fintrackr.core.data.network.NetworkMonitor
-import com.polina.fintrackr.core.data.repositories.AccountRepository
-import com.polina.fintrackr.core.data.repositories.TransactionRepository
+import com.polina.fintrackr.core.data.network.TransactionApiService
+import com.polina.fintrackr.core.data.repositories.AccountRepositoryImpl
+import com.polina.fintrackr.core.data.repositories.CategoryRepositoryImpl
+import com.polina.fintrackr.core.data.repositories.TransactionRepositoryImpl
 import com.polina.fintrackr.core.data.use_case.AppInitUseCase
 import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
+import com.polina.fintrackr.core.data.use_case.GetCategoriesUseCase
 import com.polina.fintrackr.core.data.use_case.TransactionUseCase
+import com.polina.fintrackr.core.domain.repositories.AccountRepository
+import com.polina.fintrackr.core.domain.repositories.CategoryRepository
+import com.polina.fintrackr.core.domain.repositories.TransactionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.util.Properties
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -72,4 +77,35 @@ object AppModule {
         networkMonitor: NetworkMonitor
     ): AppInitUseCase {
         return AppInitUseCase(accountRepository, sharedPreferences, networkMonitor)}
+
+    @Provides
+    @Singleton
+    fun provideAccountRepository(
+        api: AccountApiService
+    ): AccountRepository {
+        return AccountRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryRepository(
+        api: CategoryApiService
+    ): CategoryRepository {
+        return CategoryRepositoryImpl(api)
+    }
+
+    @Provides
+    fun provideGetCategoriesUseCase(
+        categoryRepository: CategoryRepository,
+    ): GetCategoriesUseCase {
+        return GetCategoriesUseCase(categoryRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTransactionRepository(
+        api: TransactionApiService
+    ): TransactionRepository {
+        return TransactionRepositoryImpl(api)
+    }
 }

@@ -17,13 +17,16 @@ import retrofit2.http.Query
 
 interface TransactionApiService {
     @POST("transactions")
-    suspend fun postTransactions(@Body transactions: TransactionRequest ): Response<TransactionResponse>
+    suspend fun postTransactions(@Body transactions: TransactionRequest): Response<TransactionResponse>
 
     @GET("transactions/{id}")
     suspend fun getTransactionById(id: Int): Response<Transaction>
 
     @PUT("transactions/{id}")
-    suspend fun updateTransactionById(id: Int, @Body transactions: TransactionRequest): Response<Transaction>
+    suspend fun updateTransactionById(
+        id: Int,
+        @Body transactions: TransactionRequest
+    ): Response<Transaction>
 
     @PUT("transactions/{id}")
     suspend fun updateTransaction(id: Int, @Body account: Account): Response<AccountResponse>

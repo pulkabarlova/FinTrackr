@@ -1,13 +1,9 @@
-package com.polina.fintrackr.core.data.network
+package com.polina.fintrackr.core.domain.repositories
 
 import com.polina.fintrackr.core.data.dto.model.account.Category
 import retrofit2.Response
-import retrofit2.http.GET
 
-interface CategoryApiService {
-    @GET("categories")
+interface CategoryRepository {
     suspend fun getCategories(): Response<List<Category>>
-
-    @GET("accounts/type/{isIncome}")
     suspend fun getCategoryType(isIncome: Boolean): Response<Category>
 }

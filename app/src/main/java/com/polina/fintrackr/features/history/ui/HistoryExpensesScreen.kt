@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,10 +29,9 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
-import com.polina.fintrackr.core.ui.navigation.entities.NavRoutes
 import com.polina.fintrackr.features.expenses.domain.ExpenseModel
-import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
-import com.polina.fintrackr.features.history.components.CustomDatePicker
+import com.polina.fintrackr.features.expenses.ui.TransactionViewModel
+import com.polina.fintrackr.features.history.ui.components.CustomDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

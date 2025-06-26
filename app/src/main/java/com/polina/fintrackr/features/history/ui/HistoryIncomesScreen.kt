@@ -29,8 +29,8 @@ import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
 import com.polina.fintrackr.core.ui.theme.FinTrackrTheme
-import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
-import com.polina.fintrackr.features.history.components.CustomDatePicker
+import com.polina.fintrackr.features.expenses.ui.TransactionViewModel
+import com.polina.fintrackr.features.history.ui.components.CustomDatePicker
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
 import java.text.SimpleDateFormat
 import java.util.Date

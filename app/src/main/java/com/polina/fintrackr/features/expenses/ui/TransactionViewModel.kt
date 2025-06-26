@@ -1,9 +1,7 @@
-package com.polina.fintrackr.features.expenses.domain
+package com.polina.fintrackr.features.expenses.ui
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
@@ -13,6 +11,7 @@ import com.polina.fintrackr.core.data.network.AccountNotFoundException
 import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.data.network.NetworkMonitor
 import com.polina.fintrackr.core.data.use_case.TransactionUseCase
+import com.polina.fintrackr.features.expenses.domain.ExpenseModel
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,6 @@
 package com.polina.fintrackr.core.data.network
 
-import com.polina.fintrackr.BuildConfig
-import com.polina.fintrackr.core.data.dto.model.account.Category
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,5 +55,4 @@ object NetworkModule {
     fun provideTransactionApiService(retrofit: Retrofit): TransactionApiService {
         return retrofit.create(TransactionApiService::class.java)
     }
-
 }
