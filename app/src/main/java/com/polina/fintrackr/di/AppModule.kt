@@ -3,17 +3,17 @@ package com.polina.fintrackr.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.polina.fintrackr.BuildConfig
-import com.polina.fintrackr.core.data.network.AccountApiService
-import com.polina.fintrackr.core.data.network.CategoryApiService
-import com.polina.fintrackr.core.data.network.NetworkMonitor
-import com.polina.fintrackr.core.data.network.TransactionApiService
+import com.polina.fintrackr.core.data.network.api_service.AccountApiService
+import com.polina.fintrackr.core.data.network.api_service.CategoryApiService
+import com.polina.fintrackr.core.data.network.monitor.NetworkMonitor
+import com.polina.fintrackr.core.data.network.api_service.TransactionApiService
 import com.polina.fintrackr.core.data.repositories.AccountRepositoryImpl
 import com.polina.fintrackr.core.data.repositories.CategoryRepositoryImpl
 import com.polina.fintrackr.core.data.repositories.TransactionRepositoryImpl
-import com.polina.fintrackr.core.data.use_case.AppInitUseCase
-import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
-import com.polina.fintrackr.core.data.use_case.GetCategoriesUseCase
-import com.polina.fintrackr.core.data.use_case.TransactionUseCase
+import com.polina.fintrackr.core.domain.use_case.AppInitUseCase
+import com.polina.fintrackr.core.domain.use_case.GetAndSaveAccountUseCase
+import com.polina.fintrackr.core.domain.use_case.GetCategoriesUseCase
+import com.polina.fintrackr.core.domain.use_case.TransactionUseCase
 import com.polina.fintrackr.core.domain.repositories.AccountRepository
 import com.polina.fintrackr.core.domain.repositories.CategoryRepository
 import com.polina.fintrackr.core.domain.repositories.TransactionRepository
@@ -25,7 +25,9 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
 
-
+/**
+ * Класс для инициализации зависимостей
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -53,10 +55,8 @@ object AppModule {
     @Provides
     fun provideGetAndSaveAccountUseCase(
         accountRepository: AccountRepository,
-        sharedPreferences: SharedPreferences,
-        networkMonitor: NetworkMonitor
     ): GetAndSaveAccountUseCase {
-        return GetAndSaveAccountUseCase(accountRepository, sharedPreferences, networkMonitor)
+        return GetAndSaveAccountUseCase(accountRepository)
     }
 
     @Provides
@@ -73,17 +73,18 @@ object AppModule {
     @Provides
     fun provideAppUnitCase(
         accountRepository: AccountRepository,
-        sharedPreferences: SharedPreferences,
-        networkMonitor: NetworkMonitor
     ): AppInitUseCase {
-        return AppInitUseCase(accountRepository, sharedPreferences, networkMonitor)}
+        return AppInitUseCase(accountRepository)
+    }
 
     @Provides
     @Singleton
     fun provideAccountRepository(
-        api: AccountApiService
+        api: AccountApiService,
+        networkMonitor: NetworkMonitor,
+        sharedPreferences: SharedPreferences
     ): AccountRepository {
-        return AccountRepositoryImpl(api)
+        return AccountRepositoryImpl(api, networkMonitor, sharedPreferences)
     }
 
     @Provides

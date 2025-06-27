@@ -4,15 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.polina.fintrackr.core.data.network.NetworkMonitor
-import com.polina.fintrackr.core.data.use_case.GetAndSaveAccountUseCase
+import com.polina.fintrackr.core.data.network.monitor.NetworkMonitor
+import com.polina.fintrackr.core.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.fintrackr.features.count.domain.AccountModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+/**
+ * Управляет состоянием и логикой отображения экрана аккаунта пользователя.
+ */
 @HiltViewModel
 class CountViewModel @Inject constructor(
     private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase,
@@ -37,7 +37,6 @@ class CountViewModel @Inject constructor(
         viewModelScope.launch {
             networkMonitor.networkStatus.collect { connected ->
                 _isConnected.value = connected
-
                 if (!connected) {
                     _error.value = "Нет подключения к интернету"
                 } else if (_error.value != null) {
@@ -50,9 +49,7 @@ class CountViewModel @Inject constructor(
 
     private fun fetchAccount() {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                getAndSaveAccountUseCase()
-            }
+            val result = getAndSaveAccountUseCase()
             result.onSuccess { accountModel ->
                 _account.value = accountModel
                 _error.value = null

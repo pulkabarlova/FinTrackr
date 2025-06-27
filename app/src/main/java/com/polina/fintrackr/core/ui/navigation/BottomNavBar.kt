@@ -15,7 +15,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.polina.fintrackr.core.ui.navigation.entities.NavBarItems
-
+/**
+ * Реализует навигацию (ui) в приложении
+ */
 @Composable
 fun BottomNavBar(navController: NavController) {
     NavigationBar() {

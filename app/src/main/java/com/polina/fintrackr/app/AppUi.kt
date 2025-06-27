@@ -1,4 +1,4 @@
-package com.polina.fintrackr
+package com.polina.fintrackr.app
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout

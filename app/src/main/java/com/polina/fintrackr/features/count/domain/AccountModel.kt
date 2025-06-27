@@ -1,5 +1,8 @@
 package com.polina.fintrackr.features.count.domain
 
+/**
+ * Класс для отображения в ui
+ */
 data class AccountModel(
     val id: Int=0,
     val userId: Int=0,

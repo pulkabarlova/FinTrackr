@@ -33,15 +33,17 @@ import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
 import com.polina.fintrackr.features.expenses.domain.ExpenseModel
-
+/**
+ * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ */
 @Composable
 fun ExpensesScreen(
     navController: NavController,
-    viewModel: TransactionViewModel = hiltViewModel()
+    viewModel: ExpensesViewModel = hiltViewModel()
 ) {
-    var expenses = viewModel.expenses
-    var totalExpenses = viewModel.totalExpenses
-    var currency = viewModel.expenses.firstOrNull()?.currency ?: " ₽"
+    var expenses = viewModel.expenses.value
+    var totalExpenses = viewModel.totalExpenses.value
+    var currency = viewModel.expenses.value.firstOrNull()?.currency ?: " ₽"
     val error = viewModel.error.value
     val context = LocalContext.current
     val isConnected = viewModel.isConnected.value

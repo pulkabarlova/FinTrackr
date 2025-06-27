@@ -1,6 +1,5 @@
-package com.polina.fintrackr.core.data.network
+package com.polina.fintrackr.core.data.network.api_service
 
-import com.polina.fintrackr.core.data.dto.account.AccountCreateRequest
 import com.polina.fintrackr.core.data.dto.account.AccountResponse
 import com.polina.fintrackr.core.data.dto.model.account.Account
 import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
@@ -15,6 +14,9 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * Интерфейс для работы с транзакциями
+ */
 interface TransactionApiService {
     @POST("transactions")
     suspend fun postTransactions(@Body transactions: TransactionRequest): Response<TransactionResponse>

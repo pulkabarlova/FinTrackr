@@ -32,22 +32,23 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
-import com.polina.fintrackr.features.expenses.ui.TransactionViewModel
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
 
-
+/**
+ * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ */
 @Composable
-fun IncomesScreen(navController: NavController, viewModel: TransactionViewModel = hiltViewModel()) {
-    val incomes = viewModel.incomes
-    val totalIncome = viewModel.totalIncomes
-    val currency = incomes.firstOrNull()?.currency ?: " ₽"
+fun IncomesScreen(navController: NavController, viewModel: IncomesViewModel = hiltViewModel()) {
+    val incomes = viewModel.incomes.value
+    val totalIncome = viewModel.totalIncomes.value
+    val currency = viewModel.incomes.value.firstOrNull()?.currency ?: " ₽"
     val error = viewModel.error.value
     val context = LocalContext.current
     val isConnected = viewModel.isConnected.value
 
     LaunchedEffect(isConnected) {
         if (isConnected && error != null) {
-            viewModel.getTransactions()
+           viewModel.getTransactions()
         }
     }
 

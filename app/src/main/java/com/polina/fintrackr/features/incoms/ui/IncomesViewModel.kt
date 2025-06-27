@@ -1,36 +1,37 @@
-package com.polina.fintrackr.features.expenses.ui
+package com.polina.fintrackr.features.incoms.ui
+
+import com.polina.fintrackr.core.data.network.monitor.NetworkMonitor
+
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
-import com.polina.fintrackr.core.data.mapper.toExpenseModel
-import com.polina.fintrackr.core.data.mapper.toIncomeModel
 import com.polina.fintrackr.core.data.network.AccountNotFoundException
 import com.polina.fintrackr.core.data.network.NetworkException
-import com.polina.fintrackr.core.data.network.NetworkMonitor
-import com.polina.fintrackr.core.data.use_case.TransactionUseCase
-import com.polina.fintrackr.features.expenses.domain.ExpenseModel
+import com.polina.fintrackr.core.domain.use_case.TransactionUseCase
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
-
+/**
+ * Управляет состоянием и логикой отображения экрана доходов пользователя.
+ */
 @HiltViewModel
-class TransactionViewModel @Inject constructor(
+class IncomesViewModel @Inject constructor(
     private val useCase: TransactionUseCase,
     private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
-    private val _transactions = mutableStateOf<List<TransactionResponse>>(emptyList())
-    val transactions: State<List<TransactionResponse>> = _transactions
+    private val _incomes = mutableStateOf<List<IncomeModel>>(emptyList())
+    val incomes: State<List<IncomeModel>> = _incomes
+
+    private val _totalIncomes = mutableStateOf(0.0)
+    val totalIncomes: State<Double> = _totalIncomes
 
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> = _error
@@ -58,13 +59,9 @@ class TransactionViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val list = withContext(Dispatchers.IO) {
-                    useCase.getTransactionsForPeriodWithRetries(
-                        _startDate.value,
-                        _endDate.value
-                    )
-                }
-                _transactions.value = list
+                val data = useCase.getTransactionsDataWithRetries(_startDate.value, _endDate.value)
+                _incomes.value = data.incomes
+                _totalIncomes.value = data.totalIncomes
             } catch (e: Exception) {
                 _error.value = "Ошибка загрузки данных"
             }
@@ -75,10 +72,9 @@ class TransactionViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val list = withContext(Dispatchers.IO) {
-                    useCase.getTransactionsForPeriodWithRetries(_startDate.value, _endDate.value)
-                }
-                _transactions.value = list
+                val data = useCase.getTransactionsDataWithRetries(_startDate.value, _endDate.value)
+                _incomes.value = data.incomes
+                _totalIncomes.value = data.totalIncomes
                 _error.value = null
             } catch (e: AccountNotFoundException) {
                 _error.value = "Нет подключения к интернету"
@@ -100,7 +96,7 @@ class TransactionViewModel @Inject constructor(
             networkMonitor.networkStatus.collect { connected ->
                 _isConnected.value = connected
                 if (connected) {
-                    if (_error.value != null || _transactions.value.isEmpty()) {
+                    if (_error.value != null || _incomes.value.isEmpty()) {
                         getTransactions()
                     }
                 } else {
@@ -109,25 +105,6 @@ class TransactionViewModel @Inject constructor(
             }
         }
     }
-
-    private val groupedTransactions: Pair<Pair<List<IncomeModel>, Double>, Pair<List<ExpenseModel>, Double>>
-        get() {
-            val incomes = mutableListOf<IncomeModel>()
-            val expenses = mutableListOf<ExpenseModel>()
-            var sumIncomes = 0.0
-            var sumExpenses = 0.0
-
-            _transactions.value.forEach { tx ->
-                if (tx.category.isIncome) {
-                    incomes.add(tx.toIncomeModel())
-                    sumIncomes += tx.amount.toFloat()
-                } else {
-                    expenses.add(tx.toExpenseModel())
-                    sumExpenses += tx.amount.toFloat()
-                }
-            }
-            return Pair(Pair(incomes, sumIncomes), Pair(expenses, sumExpenses))
-        }
 
     fun formatDateTime(isoString: String?): Pair<String, String> {
         return try {
@@ -151,9 +128,4 @@ class TransactionViewModel @Inject constructor(
     fun clearError() {
         _error.value = null
     }
-
-    val incomes: List<IncomeModel> get() = groupedTransactions.first.first
-    val expenses: List<ExpenseModel> get() = groupedTransactions.second.first
-    val totalIncomes: Double get() = groupedTransactions.first.second
-    val totalExpenses: Double get() = groupedTransactions.second.second
 }

@@ -25,7 +25,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.fintrackr.R
 import kotlinx.coroutines.delay
-
+/**
+ * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ */
 @Composable
 fun SplashScreen(navController: NavController, viewModel: SplashViewModel = hiltViewModel()) {
     val alpha = remember { Animatable(0f) }

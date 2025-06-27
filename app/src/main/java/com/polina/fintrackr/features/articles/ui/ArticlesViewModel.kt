@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.polina.fintrackr.core.data.mapper.toCategoryModel
 import com.polina.fintrackr.core.data.network.NetworkException
-import com.polina.fintrackr.core.data.use_case.GetCategoriesUseCase
+import com.polina.fintrackr.core.domain.use_case.GetCategoriesUseCase
 import com.polina.fintrackr.core.domain.repositories.CategoryRepository
 import com.polina.fintrackr.features.articles.domain.CategoryModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+/**
+ * Управляет состоянием и логикой отображения экрана статьей пользователя.
+ */
 @HiltViewModel
 class ArticlesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase
@@ -29,10 +31,12 @@ class ArticlesViewModel @Inject constructor(
     fun getCategories() {
         viewModelScope.launch {
             _error.value = null
-            val result = getCategoriesUseCase()
-            result
-                .onSuccess { _categories.value = it }
-                .onFailure { _error.value = "Ошибка при выходе в сеть, проверьте соединение" }
+            try {
+                val result = getCategoriesUseCase()
+                _categories.value = result
+            } catch (e: NetworkException) {
+                _error.value = "Ошибка загрузки данных"
+            }
         }
     }
 

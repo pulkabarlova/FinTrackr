@@ -4,13 +4,15 @@ import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
 import com.polina.fintrackr.core.data.dto.transaction.TransactionRequest
 import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
 import retrofit2.Response
-
+/**
+ * Репозиторий для получения транзакций
+ */
 interface TransactionRepository {
     suspend fun getTransacionsForPeriod(
         accountId: Int,
-        from: String,
-        to: String
-    ): Response<List<TransactionResponse>>
+        from: String? = null,
+        to: String? = null
+    ): List<TransactionResponse>
 
     suspend fun getTransactionById(id: Int): Response<Transaction>
     suspend fun postTransactions(transaction: TransactionRequest): Response<TransactionResponse>

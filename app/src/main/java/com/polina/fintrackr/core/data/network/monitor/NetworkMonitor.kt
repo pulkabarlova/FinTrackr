@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.data.network
+package com.polina.fintrackr.core.data.network.monitor
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
-
+/**
+ * Мониторинг сети
+ */
 @Singleton
 class NetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context
