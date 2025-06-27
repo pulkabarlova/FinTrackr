@@ -1,7 +1,9 @@
 package com.polina.fintrackr.core.data.network
 
-import com.polina.fintrackr.BuildConfig
-import com.polina.fintrackr.core.data.dto.model.account.Category
+
+import com.polina.fintrackr.core.data.network.api_service.AccountApiService
+import com.polina.fintrackr.core.data.network.api_service.CategoryApiService
+import com.polina.fintrackr.core.data.network.api_service.TransactionApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +14,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
+/**
+ * Класс для инициализации Retrofit
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -56,5 +61,4 @@ object NetworkModule {
     fun provideTransactionApiService(retrofit: Retrofit): TransactionApiService {
         return retrofit.create(TransactionApiService::class.java)
     }
-
 }

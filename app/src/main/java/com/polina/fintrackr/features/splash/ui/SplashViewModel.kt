@@ -1,16 +1,18 @@
-package com.polina.fintrackr.features.splash.domain
+package com.polina.fintrackr.features.splash.ui
 
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.polina.fintrackr.core.data.network.NetworkMonitor
-import com.polina.fintrackr.core.data.use_case.AppInitUseCase
+import com.polina.fintrackr.core.data.network.monitor.NetworkMonitor
+import com.polina.fintrackr.core.domain.use_case.AppInitUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+/**
+ * Управляет состоянием и логикой отображения сплэш экрана.
+ */
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val appInitUseCase: AppInitUseCase,

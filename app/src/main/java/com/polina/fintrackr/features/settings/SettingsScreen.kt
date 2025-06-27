@@ -25,7 +25,9 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
-
+/**
+ * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ */
 @Composable
 fun SettingsScreen(navController: NavController) {
     AppScaffold(

@@ -2,7 +2,9 @@ package com.polina.fintrackr.core.data.mapper
 
 import com.polina.fintrackr.core.data.dto.model.account.Account
 import com.polina.fintrackr.features.count.domain.AccountModel
-
+/**
+ * Маппинг из Account (сеть) в AccountModel(ui)
+ */
 fun Account.toAccountModel(): AccountModel {
     return AccountModel(
         id = this.id,

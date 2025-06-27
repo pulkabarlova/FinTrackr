@@ -1,5 +1,8 @@
 package com.polina.fintrackr.features.expenses.domain
 
+/**
+ * Класс для отображения в ui
+ */
 data class ExpenseModel(
     val id: Int=0,
     val title: String="",

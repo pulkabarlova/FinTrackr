@@ -1,4 +1,4 @@
-package com.polina.fintrackr
+package com.polina.fintrackr.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -3,6 +3,9 @@ package com.polina.fintrackr.core.data.mapper
 import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
 import com.polina.fintrackr.features.expenses.domain.ExpenseModel
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
+/**
+ * Маппинг из TransactionResponse (сеть) в IncomeModel(ui)
+ */
 
 fun TransactionResponse.toIncomeModel(): IncomeModel {
     return IncomeModel(

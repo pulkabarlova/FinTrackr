@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,26 +29,27 @@ import com.polina.fintrackr.core.ui.components.AppScaffold
 import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
-import com.polina.fintrackr.core.ui.navigation.entities.NavRoutes
 import com.polina.fintrackr.features.expenses.domain.ExpenseModel
-import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
-import com.polina.fintrackr.features.history.components.CustomDatePicker
+import com.polina.fintrackr.features.expenses.ui.ExpensesViewModel
+import com.polina.fintrackr.features.history.ui.components.CustomDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+/**
+ * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ */
 @Composable
 fun HistoryExpensesScreen(
     navController: NavController,
-    viewModel: TransactionViewModel = hiltViewModel()
+    viewModel: ExpensesViewModel = hiltViewModel()
 ) {
-    val expenses = viewModel.expenses
-    val currency = viewModel.expenses.firstOrNull()?.currency ?: " ₽"
+    val expenses = viewModel.expenses.value
+    val currency = viewModel.expenses.value.firstOrNull()?.currency ?: " ₽"
     val beginDt = viewModel.formatDateTime(expenses.firstOrNull()?.createdAt)
     val beginDate = beginDt.first
     val endDt = viewModel.formatDateTime(expenses.lastOrNull()?.createdAt)
     val endDate = endDt.first
-    val sum = viewModel.totalExpenses
+    val sum = viewModel.totalExpenses.value
     val error = viewModel.error.value
     val context = LocalContext.current
     val isConnected = viewModel.isConnected.value
@@ -84,7 +84,7 @@ fun Content(
     sum: Double,
     expenses: List<ExpenseModel>,
     currency: String,
-    viewModel: TransactionViewModel
+    viewModel: ExpensesViewModel
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     var isSelectingStartDate by remember { mutableStateOf(true) }

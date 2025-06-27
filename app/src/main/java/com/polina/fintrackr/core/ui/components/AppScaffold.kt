@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.polina.fintrackr.core.ui.navigation.BottomNavBar
-
+/**
+ * Настройка scaffold
+ */
 @Composable
 fun AppScaffold(
     navController: NavController,

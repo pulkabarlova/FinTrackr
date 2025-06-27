@@ -1,5 +1,8 @@
 package com.polina.fintrackr.features.incoms.domain
 
+/**
+ * Класс для отображения в ui
+ */
 data class IncomeModel(
     val id: Int=0,
     val title: String="",

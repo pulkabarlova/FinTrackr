@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.data.network
+package com.polina.fintrackr.core.data.network.api_service
 
 import com.polina.fintrackr.core.data.dto.account.AccountCreateRequest
 import com.polina.fintrackr.core.data.dto.account.AccountResponse
@@ -9,6 +9,9 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
+/**
+ * Интерфейс для работы с аккаунтами
+ */
 
 interface AccountApiService {
     @GET("accounts")

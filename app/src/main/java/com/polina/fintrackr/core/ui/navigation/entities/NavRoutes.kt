@@ -1,5 +1,9 @@
 package com.polina.fintrackr.core.ui.navigation.entities
 
+/**
+ * Реализует навигацию (пути) в приложении
+ */
+
 sealed class NavRoutes(
     val route: String
 ) {

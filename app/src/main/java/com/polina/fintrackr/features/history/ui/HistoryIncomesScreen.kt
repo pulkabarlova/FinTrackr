@@ -29,33 +29,35 @@ import com.polina.fintrackr.core.ui.components.AppTopBar
 import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
 import com.polina.fintrackr.core.ui.theme.FinTrackrTheme
-import com.polina.fintrackr.features.expenses.domain.TransactionViewModel
-import com.polina.fintrackr.features.history.components.CustomDatePicker
+import com.polina.fintrackr.features.history.ui.components.CustomDatePicker
 import com.polina.fintrackr.features.incoms.domain.IncomeModel
+import com.polina.fintrackr.features.incoms.ui.IncomesViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
+/**
+ * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ */
 @Composable
 fun HistoryIncomesScreen(
     navController: NavController,
-    viewModel: TransactionViewModel = hiltViewModel()
+    viewModel: IncomesViewModel = hiltViewModel()
 ) {
-    val incomes = viewModel.incomes
-    val currency = viewModel.incomes.firstOrNull()?.currency ?: " ₽"
+    val incomes = viewModel.incomes.value
+    val currency = viewModel.incomes.value.firstOrNull()?.currency ?: " ₽"
     val beginDt = viewModel.formatDateTime(incomes.firstOrNull()?.createdAt)
     val beginDate = beginDt.first
     val endDt = viewModel.formatDateTime(incomes.lastOrNull()?.createdAt)
     val endDate = endDt.first
-    val sum = viewModel.totalIncomes
+    val sum = viewModel.totalIncomes.value
     val error = viewModel.error.value
     val context = LocalContext.current
     val isConnected = viewModel.isConnected.value
 
     LaunchedEffect(isConnected) {
         if (isConnected && error != null) {
-            viewModel.getTransactions()
+           viewModel.getTransactions()
         }
     }
 
@@ -94,7 +96,7 @@ fun ContentIncomes(
     sum: Double,
     incomes: List<IncomeModel>,
     currency: String,
-    viewModel: TransactionViewModel
+    viewModel: IncomesViewModel
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     var isSelectingStartDate by remember { mutableStateOf(true) }
