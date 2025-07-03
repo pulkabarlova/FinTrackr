@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.data.dto.model.account
+package com.polina.fintrackr.core.data.dto.account
 
 data class AccountBrief(
     val id: Int,

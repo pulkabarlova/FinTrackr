@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -33,10 +35,10 @@ import com.polina.fintrackr.core.ui.components.ListItem
 import com.polina.fintrackr.core.ui.components.ListItemUi
 
 /**
- * Отвечает за отображение UI и обработку взаимодействия пользователя.
+ * Отвечает за отображение/редактирование UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun CountScreen(
+fun CountEditScreen(
     navController: NavController,
     viewModel: CountViewModel = hiltViewModel()
 ) {
@@ -52,18 +54,20 @@ fun CountScreen(
 
     AppScaffold(
         navController = navController,
-        content = { Content(paddingValues = it, viewModel) },
+        content = { ContentEdit(paddingValues = it, viewModel) },
         topBar = {
             AppTopBar(
                 R.string.my_count,
-                R.drawable.addit_icon,
-                onTrailingIconClick = { navController.navigate("count_edit") })
+                isLeading = Icons.Default.Close,
+                isTrailing = Icons.Default.Close,
+                onBackIconClick =  { navController.navigate("count") }
+            )
         })
 
 }
 
 @Composable
-fun Content(
+fun ContentEdit(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
     viewModel: CountViewModel
 ) {
@@ -122,7 +126,7 @@ fun Content(
 @Preview(name = "Light Mode", showSystemUi = true)
 // @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
-fun Preview() {
+fun PreviewEdit() {
     FinTrackrTheme {
         CountScreen(navController = NavController(LocalContext.current))
     }

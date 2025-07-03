@@ -1,7 +1,8 @@
 package com.polina.fintrackr.core.data.repositories
 
-import com.polina.fintrackr.core.data.dto.transaction.TransactionRequest
-import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
+import android.util.Log
+import com.polina.fintrackr.core.data.dto.request.TransactionRequest
+import com.polina.fintrackr.core.data.dto.response.TransactionResponse
 import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.data.network.api_service.TransactionApiService
 import com.polina.fintrackr.core.domain.repositories.TransactionRepository
@@ -40,6 +41,7 @@ class TransactionRepositoryImpl @Inject constructor(
         if (!response.isSuccessful) {
             throw NetworkException()
         }
+        Log.d("TransactionRepositoryImpl", "getTransacionsForPeriod: $response")
         return response.body() ?: emptyList()
     }
 

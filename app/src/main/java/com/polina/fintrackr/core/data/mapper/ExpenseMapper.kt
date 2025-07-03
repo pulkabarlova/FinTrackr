@@ -1,7 +1,6 @@
 package com.polina.fintrackr.core.data.mapper
 
-import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
-import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
+import com.polina.fintrackr.core.data.dto.response.TransactionResponse
 import com.polina.fintrackr.features.expenses.domain.ExpenseModel
 /**
  * Маппинг из TransactionResponse (сеть) в ExpenseModel(ui)

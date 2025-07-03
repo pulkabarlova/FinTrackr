@@ -1,8 +1,8 @@
 package com.polina.fintrackr.core.data.network.api_service
 
-import com.polina.fintrackr.core.data.dto.account.AccountCreateRequest
-import com.polina.fintrackr.core.data.dto.account.AccountResponse
-import com.polina.fintrackr.core.data.dto.model.account.Account
+import com.polina.fintrackr.core.data.dto.request.AccountCreateRequest
+import com.polina.fintrackr.core.data.dto.response.AccountResponse
+import com.polina.fintrackr.core.data.dto.account.Account
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

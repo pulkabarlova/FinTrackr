@@ -1,6 +1,6 @@
 package com.polina.fintrackr.core.data.mapper
 
-import com.polina.fintrackr.core.data.dto.model.account.Account
+import com.polina.fintrackr.core.data.dto.account.Account
 import com.polina.fintrackr.features.count.domain.AccountModel
 /**
  * Маппинг из Account (сеть) в AccountModel(ui)

@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.data.dto.account
+package com.polina.fintrackr.core.data.dto.request
 
 data class AccountCreateRequest(
     val name: String,

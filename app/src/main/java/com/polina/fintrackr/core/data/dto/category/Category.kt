@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.data.dto.model.category
+package com.polina.fintrackr.core.data.dto.category
 
 data class Category(
     val id: Int,

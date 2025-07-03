@@ -1,6 +1,6 @@
-package com.polina.fintrackr.core.data.dto.model.transaction
+package com.polina.fintrackr.core.data.dto.transaction
 
-import com.polina.fintrackr.core.data.dto.model.category.Category
+import com.polina.fintrackr.core.data.dto.category.Category
 
 data class Transaction(
     val id: Int,

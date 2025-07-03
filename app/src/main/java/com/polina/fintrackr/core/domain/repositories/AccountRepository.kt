@@ -1,9 +1,8 @@
 package com.polina.fintrackr.core.domain.repositories
 
-import android.content.SharedPreferences
-import com.polina.fintrackr.core.data.dto.account.AccountCreateRequest
-import com.polina.fintrackr.core.data.dto.account.AccountResponse
-import com.polina.fintrackr.core.data.dto.model.account.Account
+import com.polina.fintrackr.core.data.dto.request.AccountCreateRequest
+import com.polina.fintrackr.core.data.dto.response.AccountResponse
+import com.polina.fintrackr.core.data.dto.account.Account
 import com.polina.fintrackr.features.count.domain.AccountModel
 import retrofit2.Response
 /**

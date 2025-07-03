@@ -1,8 +1,8 @@
 package com.polina.fintrackr.core.data.repositories
 
 import android.content.SharedPreferences
-import com.polina.fintrackr.core.data.dto.account.AccountCreateRequest
-import com.polina.fintrackr.core.data.dto.model.account.Account
+import com.polina.fintrackr.core.data.dto.request.AccountCreateRequest
+import com.polina.fintrackr.core.data.dto.account.Account
 import com.polina.fintrackr.core.data.mapper.toAccountModel
 import com.polina.fintrackr.core.data.network.api_service.AccountApiService
 import com.polina.fintrackr.core.data.network.monitor.NetworkMonitor
@@ -11,7 +11,6 @@ import com.polina.fintrackr.features.count.domain.AccountModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import javax.inject.Inject
 /**
  * Репозиторий для получения/создания аккаунта

@@ -19,6 +19,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -38,15 +42,26 @@ import com.polina.fintrackr.features.articles.domain.CategoryModel
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
+
 @Composable
 fun ArticlesScreen(
     navController: NavController,
     viewModel: ArticlesViewModel = hiltViewModel()
 ) {
-    val countState = viewModel.categories.value
+    val categories = viewModel.categories.value
     val error = viewModel.error.value
     val context = LocalContext.current
 
+    var searchQuery by remember { mutableStateOf("") }
+    val filteredItems = remember(searchQuery, categories) {
+        if (searchQuery.isBlank()) {
+            categories
+        } else {
+            categories.filter {
+                it.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }
     LaunchedEffect(error) {
         error?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
@@ -55,15 +70,23 @@ fun ArticlesScreen(
     }
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, countState) },
+        content = { paddingValues ->
+            Content(paddingValues = paddingValues,
+                searchQuery = searchQuery,
+                filteredItems = filteredItems,
+                onSearchQueryChange = { searchQuery = it })
+        },
         topBar = { AppTopBar(R.string.my_articles) })
 }
 
 @Composable
-fun CustomSearchBar() {
+fun CustomSearchBar(
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit
+) {
     TextField(
-        value = "",
-        onValueChange = {},
+        value = searchQuery,
+        onValueChange = {onSearchQueryChange(it)},
         placeholder = {
             Text(
                 modifier = Modifier.padding(2.dp),
@@ -87,14 +110,17 @@ fun CustomSearchBar() {
             cursorColor = MaterialTheme.colorScheme.primary
         ),
         singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
-    )
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+
+        )
 }
 
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    countState: List<CategoryModel>
+    filteredItems: List<CategoryModel>,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -103,13 +129,13 @@ fun Content(
             .padding(paddingValues)
 
     ) {
-        CustomSearchBar()
+        CustomSearchBar(searchQuery, onSearchQueryChange)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            items(items = countState) { article ->
+            items(items = filteredItems) { article ->
                 ListItemUi(
                     ListItem(
                         title = article.name,

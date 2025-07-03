@@ -1,7 +1,7 @@
-package com.polina.fintrackr.core.data.dto.transaction
+package com.polina.fintrackr.core.data.dto.response
 
-import com.polina.fintrackr.core.data.dto.model.account.AccountBrief
-import com.polina.fintrackr.core.data.dto.model.category.Category
+import com.polina.fintrackr.core.data.dto.account.AccountBrief
+import com.polina.fintrackr.core.data.dto.category.Category
 
 data class TransactionResponse(
     val id: Int,

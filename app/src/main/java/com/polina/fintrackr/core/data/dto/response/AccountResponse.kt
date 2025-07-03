@@ -1,6 +1,6 @@
-package com.polina.fintrackr.core.data.dto.account
+package com.polina.fintrackr.core.data.dto.response
 
-import com.polina.fintrackr.core.data.dto.model.account.StatItem
+import com.polina.fintrackr.core.data.dto.account.StatItem
 
 data class AccountResponse(
     val id: Int,
