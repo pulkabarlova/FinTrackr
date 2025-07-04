@@ -1,5 +1,6 @@
 package com.polina.fintrackr.core.data.dto.response
 
+import com.polina.fintrackr.core.data.dto.account.Currency
 import com.polina.fintrackr.core.data.dto.account.StatItem
 
 data class AccountResponse(

@@ -1,8 +1,10 @@
 package com.polina.fintrackr.core.data.repositories
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.polina.fintrackr.core.data.dto.request.AccountCreateRequest
 import com.polina.fintrackr.core.data.dto.account.Account
+import com.polina.fintrackr.core.data.dto.response.AccountResponse
 import com.polina.fintrackr.core.data.mapper.toAccountModel
 import com.polina.fintrackr.core.data.network.api_service.AccountApiService
 import com.polina.fintrackr.core.data.network.monitor.NetworkMonitor
@@ -12,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+
 /**
  * Репозиторий для получения/создания аккаунта
  */
@@ -27,7 +30,23 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun createAccount(account: AccountCreateRequest) = api.createAccount(account)
 
-    override suspend fun updateAccount(id: Int, account: Account) = api.updateAccount(id, account)
+    override suspend fun updateAccount(id: Int, account: AccountCreateRequest): Result<AccountResponse> {
+        if (!networkMonitor.isConnected()) {
+            return Result.failure(Exception("Нет подключения к интернету"))
+        }
+        repeat(3) { attempt ->
+            val response = withContext(Dispatchers.IO) { api.updateAccount(id, account) }
+            if (response.isSuccessful) {
+                return Result.success(response.body()!!)
+            }
+            if (response.code() == 500 && attempt < 2) {
+                delay(2000)
+            } else {
+                return Result.failure(Exception("Нет подключения к интернету"))
+            }
+        }
+        return Result.failure(Exception("Нет подключения к интернету"))
+    }
 
     override suspend fun deleteAccount(id: Int) = api.deleteAccount(id)
 
@@ -51,44 +70,9 @@ class AccountRepositoryImpl @Inject constructor(
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("API error: ${response.code()}"))
+                return Result.failure(Exception("Нет подключения к интернету"))
             }
         }
-        return Result.failure(Exception("Failed after retries"))
-    }
-    suspend fun ensureAccountInitializedWithRetries(): Result<Int> {
-        if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception())
-        }
-        repeat(3) { attempt ->
-            val result = ensureAccountInitialized()
-            if (result.isSuccess) return result
-            val exception = result.exceptionOrNull()
-            if (exception?.message?.contains("500") == true && attempt < 2) {
-                delay(2000)
-            } else {
-                return result
-            }
-        }
-        return Result.failure(Exception())
-    }
-
-    private suspend fun ensureAccountInitialized(): Result<Int> {
-        if (!sharedPreferences.contains("accountId")) {
-            val response = withContext(Dispatchers.IO) { getAccounts() }
-            if (response.isSuccessful) {
-                response.body()?.firstOrNull()?.let { account ->
-                    sharedPreferences.edit().putInt("accountId", account.id).apply()
-                    return Result.success(account.id)
-                }
-            } else if (response.code() == 500) {
-                return Result.failure(Exception())
-            }
-            return Result.failure(Exception())
-        }
-
-        val accountId = sharedPreferences.getInt("accountId", -1)
-        return if (accountId != -1) Result.success(accountId)
-        else Result.failure(Exception())
+        return Result.failure(Exception("Нет подключения к интернету"))
     }
 }

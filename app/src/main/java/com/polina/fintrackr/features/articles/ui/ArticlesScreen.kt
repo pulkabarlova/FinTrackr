@@ -111,7 +111,6 @@ fun CustomSearchBar(
         ),
         singleLine = true,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-
         )
 }
 

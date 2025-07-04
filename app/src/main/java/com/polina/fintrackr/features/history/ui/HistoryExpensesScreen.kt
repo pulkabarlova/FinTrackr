@@ -69,7 +69,8 @@ fun HistoryExpensesScreen(
 
     AppScaffold(
         navController = navController,
-        content = { paddingValues -> Content(paddingValues, beginDate, endDate, sum, expenses,currency, viewModel)},
+        content = { paddingValues -> Content(paddingValues, beginDate, endDate, sum, expenses,
+            currency.toString(), viewModel)},
         topBar = {
             AppTopBar(R.string.history, R.drawable.texthistory,
                 {}, Icons.Default.KeyboardArrowLeft, {navController.popBackStack()})

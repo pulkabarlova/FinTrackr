@@ -12,7 +12,7 @@ interface AccountRepository {
     suspend fun getAccounts(): Response<List<Account>>
     suspend fun getAccountById(id: Int): Response<AccountResponse>
     suspend fun createAccount(account: AccountCreateRequest): Response<AccountResponse>
-    suspend fun updateAccount(id: Int, account: Account): Response<AccountResponse>
+    suspend fun updateAccount(id: Int, account: AccountCreateRequest): Result<AccountResponse>
     suspend fun deleteAccount(id: Int): Response<Boolean>
     suspend fun getAndSavePrimaryAccount(): Result<AccountModel>
 }

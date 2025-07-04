@@ -77,7 +77,7 @@ fun HistoryIncomesScreen(
                 endDate,
                 sum,
                 incomes,
-                currency,
+                currency.toString(),
                 viewModel
             )
         },
