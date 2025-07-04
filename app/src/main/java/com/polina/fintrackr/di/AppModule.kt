@@ -17,6 +17,7 @@ import com.polina.fintrackr.core.domain.use_case.TransactionUseCase
 import com.polina.fintrackr.core.domain.repositories.AccountRepository
 import com.polina.fintrackr.core.domain.repositories.CategoryRepository
 import com.polina.fintrackr.core.domain.repositories.TransactionRepository
+import com.polina.fintrackr.core.domain.use_case.UpdateAccountUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -100,6 +101,13 @@ object AppModule {
         categoryRepository: CategoryRepository,
     ): GetCategoriesUseCase {
         return GetCategoriesUseCase(categoryRepository)
+    }
+
+    @Provides
+    fun provideUpdateAccountUseCase(
+        accountRepository: AccountRepository,
+    ): UpdateAccountUseCase {
+        return UpdateAccountUseCase(accountRepository)
     }
 
     @Provides

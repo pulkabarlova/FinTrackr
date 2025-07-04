@@ -15,4 +15,5 @@ sealed class NavRoutes(
     data object Splash : NavRoutes("splash")
     data object HistoryExpenses : NavRoutes("history_expenses")
     data object HistoryIncomes : NavRoutes("history_incomes")
+    data object CountEdit : NavRoutes ("count_edit")
 }

@@ -1,4 +1,4 @@
-package com.polina.fintrackr.core.data.dto.transaction
+package com.polina.fintrackr.core.data.dto.request
 
 data class TransactionRequest(
     val accountId: Int,

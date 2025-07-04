@@ -1,6 +1,6 @@
 package com.polina.fintrackr.core.domain.repositories
 
-import com.polina.fintrackr.core.data.dto.model.account.Category
+import com.polina.fintrackr.core.data.dto.account.Category
 import com.polina.fintrackr.features.articles.domain.CategoryModel
 import retrofit2.Response
 /**

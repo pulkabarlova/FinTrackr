@@ -53,7 +53,12 @@ fun CountScreen(
     AppScaffold(
         navController = navController,
         content = { Content(paddingValues = it, viewModel) },
-        topBar = { AppTopBar(R.string.my_count, R.drawable.addit_icon) })
+        topBar = {
+            AppTopBar(
+                R.string.my_count,
+                R.drawable.addit_icon,
+                onTrailingIconClick = { navController.navigate("count_edit") })
+        })
 
 }
 

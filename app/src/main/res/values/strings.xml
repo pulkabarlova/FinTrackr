@@ -11,6 +11,7 @@
     <string name="my_incomes">Доходы сегодня</string>
     <string name="my_count">Мой счет</string>
     <string name="my_articles">Мои статьи</string>
+    <string name="edit_screen">Редактировать счет</string>
     <!-- articles screen -->
     <string name="find_article">Найти статью</string>
     <!-- incomes screen -->
@@ -32,4 +33,9 @@
     <string name="synchronization">Синхронизация</string>
     <string name="language">Язык</string>
     <string name="about">О программе</string>
+    <!-- edit count screen -->
+    <string name="ruble">Российский рубль ₽</string>
+    <string name="dollar">Американский доллар $</string>
+    <string name="euro">Евро €</string>
+    <string name="cancel">Отмена</string>
 </resources>

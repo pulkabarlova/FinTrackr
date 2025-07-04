@@ -68,7 +68,7 @@ fun ExpensesScreen(
                 paddingValues = paddingValues,
                 expenses,
                 totalExpenses,
-                currency
+                currency.toString()
             )
         },
         topBar = {

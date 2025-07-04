@@ -66,7 +66,7 @@ fun IncomesScreen(navController: NavController, viewModel: IncomesViewModel = hi
                 paddingValues = paddingValues,
                 incomes,
                 totalIncome,
-                currency
+                currency.toString()
             )
         },
         topBar = {

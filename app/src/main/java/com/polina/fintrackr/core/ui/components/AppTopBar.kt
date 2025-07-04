@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+
 /**
  * Настройка топбара
  */
@@ -24,9 +25,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppTopBar(
     name: Int,
-    isTrailing: Int? = null,
+    isTrailing: Any? = null,
     onTrailingIconClick: () -> Unit = {},
-    isLeading: ImageVector? = null,
+    isLeading: Any? = null,
     onBackIconClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
@@ -46,34 +47,58 @@ fun AppTopBar(
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.align(Alignment.Center)
                 )
-                if (isTrailing != null) {
-                    Icon(
-                        painter = painterResource(isTrailing),
-                        contentDescription = "trailing_icon",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .clickable {
-                                onTrailingIconClick()
-                            }
-                    )
+
+                isTrailing?.let {
+                    when (it) {
+                        is ImageVector -> {
+                            Icon(
+                                imageVector = it,
+                                contentDescription = "trailing_icon",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd)
+                                    .clickable { onTrailingIconClick() }
+                            )
+                        }
+                        is Int -> {
+                            Icon(
+                                painter = painterResource(it),
+                                contentDescription = "trailing_icon",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .align(Alignment.CenterEnd)
+                                    .clickable { onTrailingIconClick() }
+                            )
+                        }
+                    }
                 }
 
-                if (isLeading != null) {
-                    Icon(
-                        imageVector = isLeading,
-                        contentDescription = "leading_icon",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .clickable {
-                                onBackIconClick()
-                            }
-                    )
-                }
 
+                isLeading?.let {
+                    when (it) {
+                        is ImageVector -> {
+                            Icon(
+                                imageVector = it,
+                                contentDescription = "leading_icon",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                                    .clickable { onBackIconClick() }
+                            )
+                        }
+                        is Int -> {
+                            Icon(
+                                painter = painterResource(it),
+                                contentDescription = "leading_icon",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                                    .clickable { onBackIconClick() }
+                            )
+                        }
+                    }
+                }
             }
         }
-
     )
 }

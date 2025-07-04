@@ -1,8 +1,8 @@
 package com.polina.fintrackr.core.domain.repositories
 
-import com.polina.fintrackr.core.data.dto.model.transaction.Transaction
-import com.polina.fintrackr.core.data.dto.transaction.TransactionRequest
-import com.polina.fintrackr.core.data.dto.transaction.TransactionResponse
+import com.polina.fintrackr.core.data.dto.transaction.Transaction
+import com.polina.fintrackr.core.data.dto.request.TransactionRequest
+import com.polina.fintrackr.core.data.dto.response.TransactionResponse
 import retrofit2.Response
 /**
  * Репозиторий для получения транзакций

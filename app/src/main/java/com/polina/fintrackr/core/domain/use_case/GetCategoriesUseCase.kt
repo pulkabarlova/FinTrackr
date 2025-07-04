@@ -1,6 +1,6 @@
 package com.polina.fintrackr.core.domain.use_case
 
-import com.polina.fintrackr.core.data.dto.model.category.Category
+import com.polina.fintrackr.core.data.dto.category.Category
 import com.polina.fintrackr.core.data.mapper.toCategoryModel
 import com.polina.fintrackr.core.data.network.NetworkException
 import com.polina.fintrackr.core.domain.repositories.CategoryRepository
