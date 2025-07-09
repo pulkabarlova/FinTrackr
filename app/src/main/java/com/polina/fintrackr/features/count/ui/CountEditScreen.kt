@@ -24,6 +24,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,11 +57,11 @@ fun CountEditScreen(
     navController: NavController,
     viewModel: CountEditViewModel = hiltViewModel()
 ) {
-    val error = viewModel.error.value
+    val error = viewModel.error.collectAsState().value
     val context = LocalContext.current
-    val accountState = viewModel.account.value
-    var updateBalance by remember { mutableStateOf("") }
-    var selectedCurrency by remember { mutableStateOf(accountState.currency) }
+    val accountState = viewModel.account.collectAsState()
+    var updateBalance by remember { mutableStateOf(accountState.value.balance) }
+    var selectedCurrency by remember { mutableStateOf(accountState.value.currency) }
 
     LaunchedEffect(error) {
         error?.let {
@@ -78,7 +79,7 @@ fun CountEditScreen(
                 onUpdateBalance = { updateBalance = it },
                 selectedCurrency = selectedCurrency,
                 onSelectedCurrency = { selectedCurrency = it },
-                accountState
+                accountState.value
             )
         },
         topBar = {
@@ -138,8 +139,8 @@ fun ContentEdit(
                 },
                 placeholder = {
                     Text(
-                        modifier = Modifier.padding(2.dp),
-                        text = stringResource(R.string.balance),
+                        modifier = Modifier.padding(4.dp),
+                        text = accountState.balance,
                         style = MaterialTheme.typography.labelLarge
                     )
                 },
@@ -157,7 +158,7 @@ fun ContentEdit(
             ListItemUi(
                 ListItem(
                     title = stringResource(R.string.currency),
-                    trailingText = selectedCurrency,
+                    trailingText = if (selectedCurrency.isNullOrBlank()) accountState.currency else selectedCurrency,
                     trailingIcon = Icons.Default.KeyboardArrowRight,
                 ),
                 onClick = {
@@ -166,22 +167,6 @@ fun ContentEdit(
             )
         }
 
-        FloatingActionButton(
-            onClick = {},
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp),
-            shape = CircleShape,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "",
-                tint = Color.White
-            )
-        }
         if (showBottomSheet) {
             CurrencyBottomSheet(
                 onSelectCurrency = { currency ->

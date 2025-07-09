@@ -11,6 +11,9 @@ import com.polina.fintrackr.core.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.fintrackr.core.domain.use_case.UpdateAccountUseCase
 import com.polina.fintrackr.features.count.domain.AccountModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,20 +23,20 @@ class CountEditViewModel @Inject constructor(
     private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase,
     private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
-    private val _account = mutableStateOf(AccountModel())
-    val account: State<AccountModel> = _account
+    private val _account = MutableStateFlow(AccountModel())
+    val account: StateFlow<AccountModel> = _account.asStateFlow()
 
-    private val _error = mutableStateOf<String?>(null)
-    val error: State<String?> = _error
+    private val _error = MutableStateFlow<String?>("")
+    val error: StateFlow<String?> = _error.asStateFlow()
 
-    private val _isConnected = mutableStateOf(true)
-    val isConnected: State<Boolean> = _isConnected
+    private val _isConnected = MutableStateFlow(true)
+    val isConnected: StateFlow<Boolean> = _isConnected.asStateFlow()
 
-    private val _balance = mutableStateOf("")
-    var balance: State<String> = _balance
+    private val _balance = MutableStateFlow<String?>(null)
+    var balance: StateFlow<String?> = _balance.asStateFlow()
 
-    private val _currency = mutableStateOf("")
-    var currency: State<String> = _currency
+    private val _currency = MutableStateFlow<String?>(null)
+    var currency: StateFlow<String?> = _currency.asStateFlow()
 
     init {
         monitorNetwork()
@@ -69,12 +72,12 @@ class CountEditViewModel @Inject constructor(
     fun updateAccount() {
         var accountReq = AccountCreateRequest(
             name = account.value.name,
-            balance = balance.value,
-            currency = currency.value
+            balance = if (balance.value.isNullOrBlank()) account.value.balance else balance.value!!,
+            currency = if (currency.value.isNullOrBlank()) account.value.currency else currency.value!!
         )
         viewModelScope.launch {
             try {
-                val result = updateAccountUseCase.updateAccount(account.value.id, accountReq)
+                updateAccountUseCase.updateAccount(account.value.id, accountReq)
             } catch (e: Exception) {
                 _error.value = "Нет подключения к интернету"
             }
