@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="expenses">Расходы</string>
+    <!-- top bar -->
+    <string name="my_expenses">Расходы сегодня</string>
+    <!-- expenses screen -->
+    <string name="all">Всего</string>
+    <!-- history screen -->
+    <string name="history">Моя история</string>
+    <string name="start">Начало</string>
+    <string name="end">Конец</string>
+    <string name="summ">Сумма</string>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="articles">Статьи</string>
+    <!-- top bar -->
+    <string name="my_articles">Мои статьи</string>
+    <!-- articles screen -->
+    <string name="find_article">Найти статью</string>
+</resources>

@@ -72,6 +72,17 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    //modules
+    implementation(project(":core:domain"))
+    implementation(project(":core:data"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:model"))
+    implementation(project(":features:expenses"))
+    implementation(project(":features:splash"))
+    implementation(project(":features:income"))
+    implementation(project(":features:count"))
+    implementation(project(":features:articles"))
+    implementation(project(":features:settings"))
     //
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -91,5 +102,4 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     //splash
     implementation(libs.androidx.core.splashscreen)
-
 }
