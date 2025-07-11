@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.income.R
 import com.polina.ui.models.IncomeModel
+import com.polina.ui.navigation.entities.NavRoutes
 
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
@@ -109,14 +110,16 @@ fun Content(
                             trailingText = income.amount.toString() + income.currency,
                             trailingIcon = Icons.Default.KeyboardArrowRight
                         ),
-                        onClick = { }
+                        onClick = {
+                            navController.navigate(NavRoutes.ExpensesEdit.withTransactionId(income.id))
+                        }
                     )
                 }
             }
         }
 
         FloatingActionButton(
-            onClick = { navController.navigate("tra") },
+            onClick = {navController.navigate("expenses_add")},
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape,

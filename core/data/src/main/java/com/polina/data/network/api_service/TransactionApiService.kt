@@ -22,19 +22,19 @@ interface TransactionApiService {
     suspend fun postTransactions(@Body transactions: TransactionRequest): Response<TransactionResponse>
 
     @GET("transactions/{id}")
-    suspend fun getTransactionById(id: Int): Response<Transaction>
+    suspend fun getTransactionById(@Path("id") id: Int): Response<TransactionResponse>
 
     @PUT("transactions/{id}")
     suspend fun updateTransactionById(
-        id: Int,
+        @Path("id") id: Int,
         @Body transactions: TransactionRequest
-    ): Response<Transaction>
+    ): Response<TransactionResponse>
 
     @PUT("transactions/{id}")
-    suspend fun updateTransaction(id: Int, @Body account: Account): Response<AccountResponse>
+    suspend fun updateTransaction(@Path("id") id: Int, @Body account: Account): Response<AccountResponse>
 
     @DELETE("transactions/{id}")
-    suspend fun deleteTransaction(id: Int): Response<Boolean>
+    suspend fun deleteTransaction(@Path("id") id: Int): Response<Boolean>
 
     @GET("transactions/account/{accountId}/period")
     suspend fun getTransacionsForPeriod(

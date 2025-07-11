@@ -14,12 +14,12 @@ interface TransactionRepository {
         to: String? = null
     ): List<TransactionResponse>
 
-    suspend fun getTransactionById(id: Int): Response<Transaction>
+    suspend fun getTransactionById(id: Int): Result<TransactionResponse>
     suspend fun postTransactions(transaction: TransactionRequest): Result<TransactionResponse>
     suspend fun updateTransactionById(
         id: Int,
         transaction: TransactionRequest
-    ): Response<Transaction>
+    ): Result<TransactionResponse>
 
-    suspend fun deleteTransaction(id: Int): Response<Boolean>
+    suspend fun deleteTransaction(id: Int): Result<Boolean>
 }

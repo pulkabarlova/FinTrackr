@@ -13,11 +13,14 @@ import com.polina.domain.repositories.AccountRepository
 import com.polina.domain.repositories.CategoryRepository
 import com.polina.domain.repositories.TransactionRepository
 import com.polina.domain.use_case.AppInitUseCase
+import com.polina.domain.use_case.DeleteTransactionByIdUseCase
 import com.polina.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.domain.use_case.GetCategoriesUseCase
+import com.polina.domain.use_case.GetTransactionByIdUseCase
 import com.polina.domain.use_case.PostTransactionUseCase
 import com.polina.domain.use_case.TransactionUseCase
 import com.polina.domain.use_case.UpdateAccountUseCase
+import com.polina.domain.use_case.UpdateTransactionUseCase
 import com.polina.fintrackr.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -130,5 +133,26 @@ object AppModule {
         transactionRepository: TransactionRepository
     ): PostTransactionUseCase {
         return PostTransactionUseCase(transactionRepository)
+    }
+
+    @Provides
+    fun provideGetTransactionByIdUseCase(
+        transactionRepository: TransactionRepository
+    ): GetTransactionByIdUseCase {
+        return GetTransactionByIdUseCase(transactionRepository)
+    }
+
+    @Provides
+    fun provideUpdateTransactionUseCase(
+        transactionRepository: TransactionRepository
+    ): UpdateTransactionUseCase {
+        return UpdateTransactionUseCase(transactionRepository)
+    }
+
+    @Provides
+    fun provideDeleteTransactionByIdUseCase(
+        transactionRepository: TransactionRepository
+    ): DeleteTransactionByIdUseCase {
+        return DeleteTransactionByIdUseCase(transactionRepository)
     }
 }

@@ -3,9 +3,11 @@ package com.polina.fintrackr.app
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.polina.ui.navigation.entities.NavRoutes
 import com.polina.splash.ui.SplashScreen
 import com.polina.articles.ui.ArticlesScreen
@@ -16,7 +18,8 @@ import com.polina.expenses.ui.HistoryExpensesScreen
 import com.polina.income.ui.HistoryIncomesScreen
 import com.polina.income.ui.IncomesScreen
 import com.polina.settings.ui.SettingsScreen
-import com.polina.transaction_action.ui.ExpensesAddScreen
+import com.polina.transaction_action.ui.TransactionAddScreen
+import com.polina.transaction_action.ui.TransactionEditScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -55,7 +58,18 @@ fun AppUi() {
                 CountEditScreen(navController)
             }
             composable(NavRoutes.ExpensesAdd.route) {
-                ExpensesAddScreen(navController)
+                TransactionAddScreen(navController)
+            }
+            composable(
+                NavRoutes.ExpensesEdit.route,
+                arguments = listOf(
+                    navArgument("transactionId") {
+                        type = NavType.IntType
+                    }
+                )
+            ) { backStackEntry ->
+                val transactionId = backStackEntry.arguments?.getInt("transactionId") ?: -1
+                TransactionEditScreen(navController, transactionId)
             }
         }
     }

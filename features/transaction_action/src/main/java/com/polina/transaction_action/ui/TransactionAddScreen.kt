@@ -44,7 +44,7 @@ import java.util.Locale
  * Отвечает за отображение/редактирование UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun ExpensesAddScreen(
+fun TransactionAddScreen(
     navController: NavController,
     viewModel: TransactionAddViewModel = hiltViewModel()
 ) {
@@ -62,11 +62,11 @@ fun ExpensesAddScreen(
                 R.string.add_transaction,
                 isLeading = Icons.Default.Close,
                 isTrailing = Icons.Default.Check,
-                onBackIconClick = { navController.navigate("expenses") },
+                onBackIconClick = { navController.popBackStack() },
                 onTrailingIconClick = {
                     viewModel.postTransaction(
                         onSuccess = {
-                            navController.navigate("expenses")
+                            navController.popBackStack()
                         },
                         onError = { errorMessage ->
                             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
@@ -92,6 +92,7 @@ fun ContentAdd(
     val amount by viewModel.amount.collectAsState()
     val comment by viewModel.comment.collectAsState()
     val categoryId by viewModel.categoryId.collectAsState()
+    val categories by viewModel.categories.collectAsState()
 
     val formattedDate = remember(selectedDate) {
         selectedDate?.let {
@@ -205,7 +206,7 @@ fun ContentAdd(
 
         if (showArticleSheet) {
             com.polina.transaction_action.ui.components.ArticlesBottomSheet(
-                viewModel = viewModel,
+                categories = categories,
                 onCancel = { showArticleSheet = false },
                 onSelect = { article ->
                     selectedArticle = article.name

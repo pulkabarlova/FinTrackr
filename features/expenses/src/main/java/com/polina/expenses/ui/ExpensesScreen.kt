@@ -32,6 +32,8 @@ import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.models.ExpenseModel
+import com.polina.ui.navigation.entities.NavRoutes
+
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
@@ -117,14 +119,16 @@ fun Content(
                             trailingText = expense.amount.toString() + expense.currency,
                             trailingIcon = Icons.Default.KeyboardArrowRight
                         ),
-                        onClick = { }
+                        onClick = {
+                            navController.navigate(NavRoutes.ExpensesEdit.withTransactionId(expense.id))
+                        }
                     )
                 }
             }
         }
 
         FloatingActionButton(
-            onClick = {navController.navigate("expenses_add")},
+            onClick = { navController.navigate("expenses_add") },
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape,

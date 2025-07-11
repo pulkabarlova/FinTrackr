@@ -20,14 +20,13 @@ import com.polina.ui.models.CategoryModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticlesBottomSheet(
-    viewModel: TransactionAddViewModel,
+    categories: List<CategoryModel>,
     onCancel: () -> Unit,
     onSelect: (CategoryModel) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
-    val categories = viewModel.categories.collectAsState().value
 
     ModalBottomSheet(
         onDismissRequest = { onCancel() },

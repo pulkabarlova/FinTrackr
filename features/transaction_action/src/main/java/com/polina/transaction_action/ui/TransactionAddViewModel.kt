@@ -112,7 +112,10 @@ class TransactionAddViewModel @Inject constructor(
                     set(java.util.Calendar.MILLISECOND, 0)
                 }
 
-                val isoDateTime = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault()).apply {
+                val isoDateTime = java.text.SimpleDateFormat(
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                    java.util.Locale.getDefault()
+                ).apply {
                     timeZone = java.util.TimeZone.getTimeZone("UTC")
                 }.format(calendar.time)
 
@@ -130,6 +133,7 @@ class TransactionAddViewModel @Inject constructor(
             }
         }
     }
+
     fun setAmount(value: String) {
         _amount.value = value.toDoubleOrNull()
     }
@@ -141,5 +145,4 @@ class TransactionAddViewModel @Inject constructor(
     fun setCategoryId(id: Int) {
         _categoryId.value = id
     }
-
 }

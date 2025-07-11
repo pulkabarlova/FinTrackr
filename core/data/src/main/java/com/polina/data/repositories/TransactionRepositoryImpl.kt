@@ -7,6 +7,7 @@ import com.polina.data.network.monitor.NetworkMonitor
 import com.polina.domain.repositories.TransactionRepository
 import com.polina.model.dto.request.TransactionRequest
 import com.polina.model.dto.response.TransactionResponse
+import com.polina.model.dto.transaction.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -33,7 +34,7 @@ class TransactionRepositoryImpl @Inject constructor(
         accountId: Int,
         from: String?,
         to: String?
-    ): List<com.polina.model.dto.response.TransactionResponse> {
+    ): List<TransactionResponse> {
         val fromDate = from ?: Calendar.getInstance().apply {
             set(2025, Calendar.JUNE, 1, 0, 0, 0)
         }.time
@@ -68,12 +69,60 @@ class TransactionRepositoryImpl @Inject constructor(
         return Result.failure(Exception("Нет подключения к интернету"))
     }
 
-    override suspend fun getTransactionById(id: Int) =
-        api.getTransactionById(id)
+    override suspend fun getTransactionById(id: Int): Result<TransactionResponse> {
+        if (!networkMonitor.isConnected()) {
+            return Result.failure(Exception("Нет подключения к интернету"))
+        }
 
-    override suspend fun updateTransactionById(id: Int, transaction: TransactionRequest) =
-        api.updateTransactionById(id, transaction)
+        repeat(3) { attempt ->
+            val response = withContext(Dispatchers.IO) { api.getTransactionById(id) }
+            if (response.isSuccessful) {
+                return Result.success(response.body()!!)
+            }
+            if (response.code() == 500 && attempt < 2) {
+                delay(2000)
+            } else {
+                return Result.failure(Exception("Ошибка получения транзакции"))
+            }
+        }
+        return Result.failure(Exception("Ошибка получения транзакции"))
+    }
 
-    override suspend fun deleteTransaction(id: Int) =
-        api.deleteTransaction(id)
+    override suspend fun updateTransactionById(id: Int, transaction: TransactionRequest): Result<TransactionResponse> {
+        if (!networkMonitor.isConnected()) {
+            return Result.failure(Exception("Нет подключения к интернету"))
+        }
+
+        repeat(3) { attempt ->
+            val response = withContext(Dispatchers.IO) { api.updateTransactionById(id, transaction) }
+            if (response.isSuccessful) {
+                return Result.success(response.body()!!)
+            }
+            if (response.code() == 500 && attempt < 2) {
+                delay(2000)
+            } else {
+                return Result.failure(Exception("Ошибка обновления транзакции"))
+            }
+        }
+        return Result.failure(Exception("Ошибка обновления транзакции"))
+    }
+
+    override suspend fun deleteTransaction(id: Int): Result<Boolean>  {
+        if (!networkMonitor.isConnected()) {
+            return Result.failure(Exception("Нет подключения к интернету"))
+        }
+
+        repeat(3) { attempt ->
+            val response = withContext(Dispatchers.IO) { api.deleteTransaction(id) }
+            if (response.isSuccessful) {
+                return Result.success(true)
+            }
+            if (response.code() == 500 && attempt < 2) {
+                delay(2000)
+            } else {
+                return Result.failure(Exception("Ошибка удаления транзакции"))
+            }
+        }
+        return Result.failure(Exception("Ошибка удаления транзакции"))
+    }
 }

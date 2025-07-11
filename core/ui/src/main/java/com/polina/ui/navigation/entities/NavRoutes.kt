@@ -17,5 +17,8 @@ sealed class NavRoutes(
     data object HistoryIncomes : NavRoutes("history_incomes")
     data object CountEdit : NavRoutes("count_edit")
     data object ExpensesAdd : NavRoutes("expenses_add")
-    data object ExpensesEdit : NavRoutes("expenses_edit")
+    data object ExpensesEdit : NavRoutes("expenses_edit/{transactionId}") {
+        fun withTransactionId(transactionId: Int): String =
+            "expenses_edit/$transactionId"
+    }
 }
