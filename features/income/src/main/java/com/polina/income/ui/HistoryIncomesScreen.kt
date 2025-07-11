@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.income.R
-import com.polina.income.ui.components.CustomDatePicker
 import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
+import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.models.IncomeModel

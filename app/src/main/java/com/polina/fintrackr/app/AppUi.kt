@@ -16,6 +16,7 @@ import com.polina.expenses.ui.HistoryExpensesScreen
 import com.polina.income.ui.HistoryIncomesScreen
 import com.polina.income.ui.IncomesScreen
 import com.polina.settings.ui.SettingsScreen
+import com.polina.transaction_action.ui.ExpensesAddScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -30,7 +31,7 @@ fun AppUi() {
                 SplashScreen(navController)
             }
             composable(NavRoutes.Expenses.route) {
-               ExpensesScreen(navController)
+                ExpensesScreen(navController)
             }
             composable(NavRoutes.Income.route) {
                 IncomesScreen(navController)
@@ -52,6 +53,9 @@ fun AppUi() {
             }
             composable(NavRoutes.CountEdit.route) {
                 CountEditScreen(navController)
+            }
+            composable(NavRoutes.ExpensesAdd.route) {
+                ExpensesAddScreen(navController)
             }
         }
     }

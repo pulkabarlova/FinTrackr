@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.expenses.R
+import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
@@ -59,14 +60,15 @@ fun ExpensesScreen(
         }
     }
 
-    com.polina.ui.components.AppScaffold(
+    AppScaffold(
         navController = navController,
         content = { paddingValues ->
             Content(
                 paddingValues = paddingValues,
                 expenses,
                 totalExpenses,
-                currency.toString()
+                currency,
+                navController
             )
         },
         topBar = {
@@ -83,7 +85,8 @@ fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
     expenses: List<ExpenseModel>,
     sumExpenses: Double,
-    currency: String
+    currency: String,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -121,7 +124,7 @@ fun Content(
         }
 
         FloatingActionButton(
-            onClick = {},
+            onClick = {navController.navigate("expenses_add")},
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape,

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.polina.expenses"
+    namespace = "com.polina.transaction_action"
     compileSdk = 34
 
     defaultConfig {

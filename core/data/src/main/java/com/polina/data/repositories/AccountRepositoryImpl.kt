@@ -26,9 +26,9 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun getAccountById(id: Int) = api.getAccountById(id)
 
-    override suspend fun createAccount(account: com.polina.model.dto.request.AccountCreateRequest) = api.createAccount(account)
+    override suspend fun createAccount(account: AccountCreateRequest) = api.createAccount(account)
 
-    override suspend fun updateAccount(id: Int, account: com.polina.model.dto.request.AccountCreateRequest): Result<com.polina.model.dto.response.AccountResponse> {
+    override suspend fun updateAccount(id: Int, account: AccountCreateRequest): Result<AccountResponse> {
         if (!networkMonitor.isConnected()) {
             return Result.failure(Exception("Нет подключения к интернету"))
         }

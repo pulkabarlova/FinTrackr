@@ -15,6 +15,7 @@ import com.polina.domain.repositories.TransactionRepository
 import com.polina.domain.use_case.AppInitUseCase
 import com.polina.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.domain.use_case.GetCategoriesUseCase
+import com.polina.domain.use_case.PostTransactionUseCase
 import com.polina.domain.use_case.TransactionUseCase
 import com.polina.domain.use_case.UpdateAccountUseCase
 import com.polina.fintrackr.BuildConfig
@@ -70,10 +71,12 @@ object AppModule {
             sharedPreferences
         )
     }
+
     @Provides
     fun provideNetworkMonitor(@ApplicationContext context: Context): NetworkMonitor {
         return NetworkMonitor(context)
     }
+
     @Provides
     fun provideAppUnitCase(
         accountRepository: AccountRepository,
@@ -116,8 +119,16 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTransactionRepository(
-        api: TransactionApiService
+        api: TransactionApiService,
+        networkMonitor: NetworkMonitor
     ): TransactionRepository {
-        return TransactionRepositoryImpl(api)
+        return TransactionRepositoryImpl(api, networkMonitor)
+    }
+
+    @Provides
+    fun providePostTransactionUseCase(
+        transactionRepository: TransactionRepository
+    ): PostTransactionUseCase {
+        return PostTransactionUseCase(transactionRepository)
     }
 }

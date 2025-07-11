@@ -53,7 +53,7 @@ class SplashViewModel @Inject constructor(
             result.onSuccess {
                 _accountInitialized.value = true
             }.onFailure {
-                _errorMessage.value = it.message
+                _errorMessage.value = "Нет подключения к интернету"
                 _accountInitialized.value = false
             }
         }

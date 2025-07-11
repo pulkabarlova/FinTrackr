@@ -3,19 +3,26 @@ package com.polina.data.repositories
 import android.util.Log
 import com.polina.model.NetworkException
 import com.polina.data.network.api_service.TransactionApiService
+import com.polina.data.network.monitor.NetworkMonitor
 import com.polina.domain.repositories.TransactionRepository
+import com.polina.model.dto.request.TransactionRequest
+import com.polina.model.dto.response.TransactionResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
+
 /**
  * Репозиторий для получения транзакций
  */
 class TransactionRepositoryImpl @Inject constructor(
-    private val api: TransactionApiService
+    private val api: TransactionApiService,
+    private val networkMonitor: NetworkMonitor
 ) : TransactionRepository {
     private val dateFormatter =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
@@ -43,13 +50,28 @@ class TransactionRepositoryImpl @Inject constructor(
         return response.body() ?: emptyList()
     }
 
-    override suspend fun postTransactions(transaction: com.polina.model.dto.request.TransactionRequest) =
-        api.postTransactions(transaction)
+    override suspend fun postTransactions(transaction: TransactionRequest): Result<TransactionResponse> {
+        if (!networkMonitor.isConnected()) {
+            return Result.failure(Exception("Нет подключения к интернету"))
+        }
+        repeat(3) { attempt ->
+            val response = withContext(Dispatchers.IO) { api.postTransactions(transaction) }
+            if (response.isSuccessful) {
+                return Result.success(response.body()!!)
+            }
+            if (response.code() == 500 && attempt < 2) {
+                delay(2000)
+            } else {
+                return Result.failure(Exception("Нет подключения к интернету"))
+            }
+        }
+        return Result.failure(Exception("Нет подключения к интернету"))
+    }
 
     override suspend fun getTransactionById(id: Int) =
         api.getTransactionById(id)
 
-    override suspend fun updateTransactionById(id: Int, transaction: com.polina.model.dto.request.TransactionRequest) =
+    override suspend fun updateTransactionById(id: Int, transaction: TransactionRequest) =
         api.updateTransactionById(id, transaction)
 
     override suspend fun deleteTransaction(id: Int) =

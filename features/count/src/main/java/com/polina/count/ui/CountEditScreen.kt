@@ -120,7 +120,6 @@ fun ContentEdit(
                                 dotFound = true
                                 true
                             }
-
                             else -> false
                         }
                     }
@@ -142,7 +141,6 @@ fun ContentEdit(
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-
                 )
             ListItemUi(
                 ListItem(

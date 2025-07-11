@@ -1,4 +1,4 @@
-package com.polina.expenses.ui.components
+package com.polina.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

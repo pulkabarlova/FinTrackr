@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/features/income" />
             <option value="$PROJECT_DIR$/features/settings" />
             <option value="$PROJECT_DIR$/features/splash" />
+            <option value="$PROJECT_DIR$/features/transaction_action" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

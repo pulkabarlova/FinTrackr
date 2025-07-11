@@ -61,7 +61,8 @@ fun IncomesScreen(navController: NavController, viewModel: IncomesViewModel = hi
                 paddingValues = paddingValues,
                 incomes,
                 totalIncome,
-                currency.toString()
+                currency,
+                navController
             )
         },
         topBar = {
@@ -77,7 +78,8 @@ fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
     incomes: List<IncomeModel>,
     totalIncome: Double,
-    currency: String
+    currency: String,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -114,7 +116,7 @@ fun Content(
         }
 
         FloatingActionButton(
-            onClick = {},
+            onClick = { navController.navigate("tra") },
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape,

@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.expenses.R
-import com.polina.expenses.ui.components.CustomDatePicker
+import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi

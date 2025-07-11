@@ -11,4 +11,11 @@
     <string name="start">Начало</string>
     <string name="end">Конец</string>
     <string name="summ">Сумма</string>
+    <!-- transaction_add screen -->
+    <string name="add_transaction">Добавить транзакцию</string>
+    <string name="article">Статья</string>
+    <string name="summa">Сумма</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="comment">Комментарий</string>
 </resources>

@@ -15,7 +15,7 @@ interface TransactionRepository {
     ): List<TransactionResponse>
 
     suspend fun getTransactionById(id: Int): Response<Transaction>
-    suspend fun postTransactions(transaction: TransactionRequest): Response<TransactionResponse>
+    suspend fun postTransactions(transaction: TransactionRequest): Result<TransactionResponse>
     suspend fun updateTransactionById(
         id: Int,
         transaction: TransactionRequest

@@ -83,6 +83,7 @@ dependencies {
     implementation(project(":features:count"))
     implementation(project(":features:articles"))
     implementation(project(":features:settings"))
+    implementation(project(":features:transaction_action"))
     //
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
