@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -72,6 +71,19 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    //modules
+    implementation(project(":core:domain"))
+    implementation(project(":core:data"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:model"))
+    implementation(project(":features:expenses"))
+    implementation(project(":features:splash"))
+    implementation(project(":features:income"))
+    implementation(project(":features:count"))
+    implementation(project(":features:articles"))
+    implementation(project(":features:settings"))
+    implementation(project(":features:transaction_action"))
+    implementation(libs.androidx.espresso.core)
     //
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -80,10 +92,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    //hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    //dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
     //retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -91,5 +102,4 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     //splash
     implementation(libs.androidx.core.splashscreen)
-
 }

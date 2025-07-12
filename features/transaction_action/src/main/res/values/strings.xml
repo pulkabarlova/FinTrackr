@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- transaction_add screen -->
+    <string name="add_transaction">Добавить транзакцию</string>
+    <string name="article">Статья</string>
+    <string name="summa">Сумма</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="comment">Комментарий</string>
+    <!-- transaction_edit screen -->
+    <string name="delete">Удалить транзакцию</string>
+    <string name="edit_transaction">Редактировать транзакцию</string>
+</resources>

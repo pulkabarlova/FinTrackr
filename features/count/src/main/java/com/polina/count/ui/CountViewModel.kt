@@ -1,0 +1,66 @@
+package com.polina.count.ui
+
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.polina.data.network.monitor.NetworkMonitor
+import com.polina.domain.use_case.GetAndSaveAccountUseCase
+import com.polina.ui.models.AccountModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+/**
+ * Управляет состоянием и логикой отображения экрана аккаунта пользователя.
+ */
+
+class CountViewModel @Inject constructor(
+    private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase,
+    private val networkMonitor: NetworkMonitor
+) : ViewModel() {
+
+    private val _account = mutableStateOf(AccountModel())
+    val account: State<AccountModel> = _account
+
+    private val _error = mutableStateOf<String?>(null)
+    val error: State<String?> = _error
+
+    private val _isConnected = mutableStateOf(true)
+    val isConnected: State<Boolean> = _isConnected
+
+    private val noInternet = "Нет подключения к интернету"
+
+    init {
+        monitorNetwork()
+        fetchAccount()
+    }
+
+    private fun monitorNetwork() {
+        viewModelScope.launch {
+            networkMonitor.networkStatus.collect { connected ->
+                _isConnected.value = connected
+                if (!connected) {
+                    _error.value = noInternet
+                } else if (_error.value != null) {
+                    _error.value = null
+                    fetchAccount()
+                }
+            }
+        }
+    }
+
+    private fun fetchAccount() {
+        viewModelScope.launch {
+            val result = getAndSaveAccountUseCase()
+            result.onSuccess { accountModel ->
+                _account.value = accountModel
+                _error.value = null
+            }.onFailure {
+                _error.value = noInternet
+            }
+        }
+    }
+
+    fun clearError() {
+        _error.value = null
+    }
+}
