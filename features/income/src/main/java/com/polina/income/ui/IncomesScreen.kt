@@ -24,17 +24,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.income.R
 import com.polina.ui.models.IncomeModel
+import com.polina.ui.navigation.daggerViewModel
 import com.polina.ui.navigation.entities.NavRoutes
 
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun IncomesScreen(navController: NavController, viewModel: IncomesViewModel = hiltViewModel()) {
+fun IncomesScreen(navController: NavController, viewModel: IncomesViewModel = daggerViewModel()) {
     val incomes = viewModel.incomes.value
     val totalIncome = viewModel.totalIncomes.value
     val currency = viewModel.incomes.value.firstOrNull()?.currency ?: " ₽"

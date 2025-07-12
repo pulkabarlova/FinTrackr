@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.expenses.R
 import com.polina.ui.components.AppScaffold
@@ -32,6 +31,7 @@ import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.models.ExpenseModel
+import com.polina.ui.navigation.daggerViewModel
 import com.polina.ui.navigation.entities.NavRoutes
 
 /**
@@ -40,7 +40,7 @@ import com.polina.ui.navigation.entities.NavRoutes
 @Composable
 fun ExpensesScreen(
     navController: NavController,
-    viewModel: ExpensesViewModel = hiltViewModel()
+    viewModel: ExpensesViewModel = daggerViewModel()
 ) {
     var expenses = viewModel.expenses.value
     var totalExpenses = viewModel.totalExpenses.value

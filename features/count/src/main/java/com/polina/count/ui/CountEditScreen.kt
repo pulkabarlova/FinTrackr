@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.count.R
 import com.polina.ui.components.AppScaffold
@@ -37,6 +36,7 @@ import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.models.AccountModel
+import com.polina.ui.navigation.daggerViewModel
 
 /**
  * Отвечает за отображение/редактирование UI и обработку взаимодействия пользователя.
@@ -44,7 +44,7 @@ import com.polina.ui.models.AccountModel
 @Composable
 fun CountEditScreen(
     navController: NavController,
-    viewModel: CountEditViewModel = hiltViewModel()
+    viewModel: CountEditViewModel = daggerViewModel()
 ) {
     val error = viewModel.error.collectAsState().value
     val context = LocalContext.current

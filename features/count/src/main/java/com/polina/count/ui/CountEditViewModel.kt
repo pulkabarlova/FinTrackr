@@ -7,14 +7,12 @@ import com.polina.data.network.monitor.NetworkMonitor
 import com.polina.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.domain.use_case.UpdateAccountUseCase
 import com.polina.ui.models.AccountModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class CountEditViewModel @Inject constructor(
     private val updateAccountUseCase: UpdateAccountUseCase,
     private val getAndSaveAccountUseCase: GetAndSaveAccountUseCase,
@@ -22,6 +20,8 @@ class CountEditViewModel @Inject constructor(
 ) : ViewModel() {
     private val _account = MutableStateFlow(AccountModel())
     val account: StateFlow<AccountModel> = _account.asStateFlow()
+
+    private val noInternet = "Нет подключения к интернету"
 
     private val _error = MutableStateFlow<String?>("")
     val error: StateFlow<String?> = _error.asStateFlow()
@@ -45,7 +45,7 @@ class CountEditViewModel @Inject constructor(
             networkMonitor.networkStatus.collect { connected ->
                 _isConnected.value = connected
                 if (!connected) {
-                    _error.value = "Нет подключения к интернету"
+                    _error.value = noInternet
                 } else if (_error.value != null) {
                     _error.value = null
                     fetchAccount()
@@ -61,7 +61,7 @@ class CountEditViewModel @Inject constructor(
                 _account.value = accountModel
                 _error.value = null
             }.onFailure {
-                _error.value = "Нет подключения к интернету"
+                _error.value = noInternet
             }
         }
     }
@@ -76,7 +76,7 @@ class CountEditViewModel @Inject constructor(
             try {
                 updateAccountUseCase.updateAccount(account.value.id, accountReq)
             } catch (e: Exception) {
-                _error.value = "Нет подключения к интернету"
+                _error.value = noInternet
             }
         }
     }

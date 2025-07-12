@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.transaction_action.R
 import com.polina.ui.components.AppScaffold
@@ -35,6 +34,7 @@ import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
+import com.polina.ui.navigation.daggerViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -46,7 +46,7 @@ import java.util.Locale
 @Composable
 fun TransactionAddScreen(
     navController: NavController,
-    viewModel: TransactionAddViewModel = hiltViewModel()
+    viewModel: TransactionAddViewModel = daggerViewModel()
 ) {
     val context = LocalContext.current
     AppScaffold(

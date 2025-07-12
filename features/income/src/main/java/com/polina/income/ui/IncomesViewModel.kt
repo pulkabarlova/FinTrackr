@@ -8,7 +8,6 @@ import com.polina.data.network.monitor.NetworkMonitor
 import com.polina.model.AccountNotFoundException
 import com.polina.model.NetworkException
 import com.polina.ui.models.IncomeModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -18,7 +17,7 @@ import javax.inject.Inject
 /**
  * Управляет состоянием и логикой отображения экрана доходов пользователя.
  */
-@HiltViewModel
+
 class IncomesViewModel @Inject constructor(
     private val useCase: com.polina.domain.use_case.TransactionUseCase,
     private val networkMonitor: NetworkMonitor
@@ -26,6 +25,9 @@ class IncomesViewModel @Inject constructor(
 
     private val _incomes = mutableStateOf<List<IncomeModel>>(emptyList())
     val incomes: State<List<IncomeModel>> = _incomes
+
+    private val noInternet = "Нет подключения к интернету"
+    private val serverError = "Ошибка загрузки данных"
 
     private val _totalIncomes = mutableStateOf(0.0)
     val totalIncomes: State<Double> = _totalIncomes
@@ -60,7 +62,7 @@ class IncomesViewModel @Inject constructor(
                 _incomes.value = data.incomes
                 _totalIncomes.value = data.totalIncomes
             } catch (e: Exception) {
-                _error.value = "Ошибка загрузки данных"
+                _error.value = serverError
             }
         }
     }
@@ -74,11 +76,11 @@ class IncomesViewModel @Inject constructor(
                 _totalIncomes.value = data.totalIncomes
                 _error.value = null
             } catch (e: AccountNotFoundException) {
-                _error.value = "Нет подключения к интернету"
+                _error.value = noInternet
             } catch (e: NetworkException) {
-                _error.value = "Нет подключения к интернету"
+                _error.value = serverError
             } catch (e: Exception) {
-                _error.value = "Нет подключения к интернету"
+                _error.value = noInternet
             }
         }
     }
@@ -97,7 +99,7 @@ class IncomesViewModel @Inject constructor(
                         getTransactions()
                     }
                 } else {
-                    _error.value = "Нет подключения к интернету"
+                    _error.value = noInternet
                 }
             }
         }

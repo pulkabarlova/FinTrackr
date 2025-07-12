@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.articles.R
 import com.polina.ui.components.AppScaffold
@@ -38,6 +37,7 @@ import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.models.CategoryModel
+import com.polina.ui.navigation.daggerViewModel
 
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
@@ -46,7 +46,7 @@ import com.polina.ui.models.CategoryModel
 @Composable
 fun ArticlesScreen(
     navController: NavController,
-    viewModel: ArticlesViewModel = hiltViewModel()
+    viewModel: ArticlesViewModel = daggerViewModel()
 ) {
     val categories = viewModel.categories.value
     val error = viewModel.error.value

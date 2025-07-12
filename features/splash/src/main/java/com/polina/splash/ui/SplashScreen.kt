@@ -21,15 +21,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.splash.R
+import com.polina.ui.navigation.daggerViewModel
 import kotlinx.coroutines.delay
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun SplashScreen(navController: NavController, viewModel: SplashViewModel = hiltViewModel()) {
+fun SplashScreen(navController: NavController, viewModel: SplashViewModel = daggerViewModel()) {
     val alpha = remember { Animatable(0f) }
     val initialized = viewModel.accountInitialized.value
     val errorMessage = viewModel.errorMessage.value

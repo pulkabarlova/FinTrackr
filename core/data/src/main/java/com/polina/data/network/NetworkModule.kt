@@ -18,12 +18,11 @@ import javax.inject.Singleton
  * Класс для инициализации Retrofit
  */
 @Module
-@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(@Named("token")token: String): OkHttpClient {
+    fun providesOkHttpClient(@Named("token") token: String): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
@@ -36,7 +35,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(@Named("url")baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        @Named("url") baseUrl: String,
+        okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

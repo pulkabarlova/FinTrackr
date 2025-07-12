@@ -9,14 +9,12 @@ import com.polina.domain.use_case.PostTransactionUseCase
 import com.polina.model.NetworkException
 import com.polina.model.dto.request.TransactionRequest
 import com.polina.ui.models.CategoryModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
 class TransactionAddViewModel @Inject constructor(
     private val postTransactionUseCase: PostTransactionUseCase,
     private val networkMonitor: NetworkMonitor,
@@ -26,6 +24,9 @@ class TransactionAddViewModel @Inject constructor(
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
+
+    private val noInternet = "Нет подключения к интернету"
+    private val inputError = "Пожалуйста, заполните все обязательные поля"
 
     private val _isConnected = MutableStateFlow(true)
     val isConnected: StateFlow<Boolean> = _isConnected.asStateFlow()
@@ -61,7 +62,7 @@ class TransactionAddViewModel @Inject constructor(
         viewModelScope.launch {
             networkMonitor.networkStatus.collect { connected ->
                 _isConnected.value = connected
-                _error.value = if (!connected) "Нет подключения к интернету" else null
+                _error.value = if (!connected) noInternet else null
             }
         }
     }
@@ -76,7 +77,7 @@ class TransactionAddViewModel @Inject constructor(
                 _error.value = null
                 _categories.value = getCategoriesUseCase()
             } catch (e: NetworkException) {
-                _error.value = "Нет подключения к интернету"
+                _error.value = noInternet
             }
         }
     }
@@ -100,7 +101,7 @@ class TransactionAddViewModel @Inject constructor(
                 val account = accountId.value
 
                 if (dateMillis == null || time == null || category == null || amountValue == null) {
-                    onError("Пожалуйста, заполните все обязательные поля")
+                    onError(inputError)
                     return@launch
                 }
 

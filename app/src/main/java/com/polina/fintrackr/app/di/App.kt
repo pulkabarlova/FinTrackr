@@ -1,10 +1,20 @@
 package com.polina.fintrackr.app.di
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
 
 /**
- * Класс для инициализации Hilt
+ * Класс для инициализации Dagger
  */
-@HiltAndroidApp
-class App : Application()
+class App : Application() {
+    lateinit var appComponent: AppComponent
+
+    override fun onCreate() {
+        super.onCreate()
+        appComponent = DaggerAppComponent.builder()
+            .application(this)
+            .appModule(AppModule(this, this))
+            .build()
+
+        appComponent.inject(this)
+    }
+}

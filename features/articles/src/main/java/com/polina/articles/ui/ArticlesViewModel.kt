@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.polina.model.NetworkException
 import com.polina.ui.models.CategoryModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 /**
  * Управляет состоянием и логикой отображения экрана статьей пользователя.
  */
-@HiltViewModel
+
 class ArticlesViewModel @Inject constructor(
     private val getCategoriesUseCase: com.polina.domain.use_case.GetCategoriesUseCase
 ) : ViewModel() {

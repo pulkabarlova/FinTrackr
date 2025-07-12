@@ -34,12 +34,13 @@ android {
 }
 
 dependencies {
-    //hilt
+    //modules
     implementation(libs.hilt.android)
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
+    //dagger
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
     //retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

@@ -1,23 +1,17 @@
 package com.polina.transaction_action.ui
 
 import android.content.SharedPreferences
-import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.polina.data.network.monitor.NetworkMonitor
 import com.polina.domain.use_case.DeleteTransactionByIdUseCase
 import com.polina.domain.use_case.GetCategoriesUseCase
 import com.polina.domain.use_case.GetTransactionByIdUseCase
-import com.polina.domain.use_case.PostTransactionUseCase
 import com.polina.domain.use_case.UpdateTransactionUseCase
 import com.polina.model.NetworkException
 import com.polina.model.dto.request.TransactionRequest
 import com.polina.model.dto.response.TransactionResponse
-import com.polina.model.dto.transaction.Transaction
 import com.polina.ui.models.CategoryModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,19 +22,14 @@ import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
 
-@HiltViewModel
 class TransactionEditViewModel @Inject constructor(
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val networkMonitor: NetworkMonitor,
     private val sharedPreferences: SharedPreferences,
-    savedStateHandle: SavedStateHandle,
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
     private val deleteTransactionByIdUseCase: DeleteTransactionByIdUseCase
 ) : ViewModel() {
-
-    val transactionId =
-        savedStateHandle.get<Int>("transactionId") ?: error("transactionId is required")
 
     private val noInternet = "Нет подключения к интернету"
     private val serverError = "Ошибка при обновлении транзакции"
@@ -79,7 +68,6 @@ class TransactionEditViewModel @Inject constructor(
         monitorNetwork()
         fetchAccount()
         getCategories()
-        fetchTransaction(transactionId)
     }
 
     private fun monitorNetwork() {
@@ -95,7 +83,7 @@ class TransactionEditViewModel @Inject constructor(
         _accountId.value = sharedPreferences.getInt("accountId", 13)
     }
 
-    private fun fetchTransaction(id: Int) {
+    fun fetchTransaction(id: Int) {
         viewModelScope.launch {
             val result = getTransactionByIdUseCase.getTransactionById(id)
             result.onSuccess { transaction ->
@@ -147,7 +135,7 @@ class TransactionEditViewModel @Inject constructor(
         }
     }
 
-    fun deleteTransaction() {
+    fun deleteTransaction(transactionId: Int) {
         viewModelScope.launch {
             try {
                 _error.value = null
@@ -158,7 +146,7 @@ class TransactionEditViewModel @Inject constructor(
         }
     }
 
-    fun updateTransactionById(onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun updateTransactionById(transactionId: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
                 val dateMillis = _selectedDate.value ?: System.currentTimeMillis()
@@ -186,7 +174,6 @@ class TransactionEditViewModel @Inject constructor(
                     comment = _comment.value,
                     transactionDate = transactionDate
                 )
-                Log.d("TransactionEditViewModel", request.toString())
                 updateTransactionUseCase.updateTransactionById(transactionId, request)
                 _error.value = null
                 onSuccess()

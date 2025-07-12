@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.income.R
 import com.polina.ui.components.AppScaffold
@@ -29,6 +28,8 @@ import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.models.IncomeModel
+import com.polina.ui.navigation.daggerViewModel
+import com.polina.ui.navigation.entities.NavRoutes
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -39,7 +40,7 @@ import java.util.Locale
 @Composable
 fun HistoryIncomesScreen(
     navController: NavController,
-    viewModel: IncomesViewModel = hiltViewModel()
+    viewModel: IncomesViewModel = daggerViewModel()
 ) {
     val incomes = viewModel.incomes.value
     val currency = viewModel.incomes.value.firstOrNull()?.currency ?: " ₽"
@@ -54,7 +55,7 @@ fun HistoryIncomesScreen(
 
     LaunchedEffect(isConnected) {
         if (isConnected && error != null) {
-           viewModel.getTransactions()
+            viewModel.getTransactions()
         }
     }
 
@@ -75,7 +76,8 @@ fun HistoryIncomesScreen(
                 sum,
                 incomes,
                 currency.toString(),
-                viewModel
+                viewModel,
+                navController
             )
         },
         topBar = {
@@ -94,7 +96,8 @@ fun ContentIncomes(
     sum: Double,
     incomes: List<IncomeModel>,
     currency: String,
-    viewModel: IncomesViewModel
+    viewModel: IncomesViewModel,
+    navController: NavController
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     var isSelectingStartDate by remember { mutableStateOf(true) }
@@ -187,7 +190,9 @@ fun ContentIncomes(
                             trailingIcon = Icons.Default.KeyboardArrowRight,
                             trailingBottomText = "${dt.first} ${dt.second}"
                         ),
-                        onClick = { }
+                        onClick = {
+                            navController.navigate(NavRoutes.ExpensesEdit.withTransactionId(income.id))
+                        }
                     )
                 }
             }

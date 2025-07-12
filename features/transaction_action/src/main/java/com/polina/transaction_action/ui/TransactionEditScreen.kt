@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.transaction_action.R
 import com.polina.transaction_action.ui.components.ArticlesBottomSheet
@@ -38,6 +38,7 @@ import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
+import com.polina.ui.navigation.daggerViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,17 +50,21 @@ import java.util.Locale
 @Composable
 fun TransactionEditScreen(
     navController: NavController,
-    categoryId: Int,
-    viewModel: TransactionEditViewModel = hiltViewModel()
+    transactionId: Int,
+    viewModel: TransactionEditViewModel = daggerViewModel()
 ) {
     val context = LocalContext.current
+    LaunchedEffect(transactionId) {
+        viewModel.fetchTransaction(transactionId)
+    }
     AppScaffold(
         navController = navController,
         content = {
             ContentEdit(
                 paddingValues = it,
                 viewModel,
-                navController
+                navController,
+                transactionId
             )
         },
         topBar = {
@@ -69,7 +74,7 @@ fun TransactionEditScreen(
                 isTrailing = Icons.Default.Check,
                 onBackIconClick = { navController.popBackStack()},
                 onTrailingIconClick = {
-                    viewModel.updateTransactionById(
+                    viewModel.updateTransactionById(transactionId,
                         onSuccess = {
                             navController.popBackStack()
                         },
@@ -86,7 +91,8 @@ fun TransactionEditScreen(
 fun ContentEdit(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
     viewModel: TransactionEditViewModel,
-    navController: NavController
+    navController: NavController,
+    transactionId: Int
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
@@ -192,7 +198,7 @@ fun ContentEdit(
                 ),
                 modifier = Modifier.background(MaterialTheme.colorScheme.error),
                 onClick = {
-                    viewModel.deleteTransaction()
+                    viewModel.deleteTransaction(transactionId)
                     navController.popBackStack()
                 },
             )

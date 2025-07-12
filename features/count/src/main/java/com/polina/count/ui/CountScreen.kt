@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.polina.count.R
 import com.polina.ui.theme.FinTrackrTheme
@@ -31,6 +30,7 @@ import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
+import com.polina.ui.navigation.daggerViewModel
 
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
@@ -38,7 +38,7 @@ import com.polina.ui.components.ListItemUi
 @Composable
 fun CountScreen(
     navController: NavController,
-    viewModel: CountViewModel = hiltViewModel()
+    viewModel: CountViewModel = daggerViewModel()
 ) {
     val error = viewModel.error.value
     val context = LocalContext.current
