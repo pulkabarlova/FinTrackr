@@ -1,17 +1,17 @@
 package com.polina.data.repositories
 
-import android.util.Log
+import com.polina.data.db.TransactionDao
+import com.polina.data.db.mapper.toListTransactionEntity
+import com.polina.data.db.mapper.toListTransactionResponse
 import com.polina.model.NetworkException
 import com.polina.data.network.api_service.TransactionApiService
 import com.polina.data.network.monitor.NetworkMonitor
 import com.polina.domain.repositories.TransactionRepository
 import com.polina.model.dto.request.TransactionRequest
 import com.polina.model.dto.response.TransactionResponse
-import com.polina.model.dto.transaction.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -23,10 +23,11 @@ import javax.inject.Inject
  */
 class TransactionRepositoryImpl @Inject constructor(
     private val api: TransactionApiService,
-    private val networkMonitor: NetworkMonitor
+    private val networkMonitor: NetworkMonitor,
+    private val transactionDao: TransactionDao
 ) : TransactionRepository {
     private val dateFormatter =
-        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
             timeZone = TimeZone.getTimeZone("UTC")
         }
 
@@ -35,25 +36,43 @@ class TransactionRepositoryImpl @Inject constructor(
         from: String?,
         to: String?
     ): List<TransactionResponse> {
-        val fromDate = from ?: Calendar.getInstance().apply {
-            set(2025, Calendar.JUNE, 1, 0, 0, 0)
-        }.time
-        val toDate = to ?: Calendar.getInstance().time
-        val from = dateFormatter.format(fromDate)
-        val to = dateFormatter.format(toDate)
-        val response =
-            withContext(Dispatchers.IO) { api.getTransacionsForPeriod(accountId, from, to) }
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
-        if (!response.isSuccessful) {
-            throw NetworkException()
+        val fromFormatted = from ?: run {
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            calendar.set(Calendar.MINUTE, 0)
+            dateFormatter.format(calendar.time)
         }
-        Log.d("TransactionRepositoryImpl", "getTransacionsForPeriod: $response")
-        return response.body() ?: emptyList()
+
+        val toFormatted = to ?: run {
+            calendar.set(Calendar.HOUR_OF_DAY, 23)
+            calendar.set(Calendar.MINUTE, 59)
+            dateFormatter.format(calendar.time)
+        }
+
+        return if (networkMonitor.isConnected()) {
+            val response = withContext(Dispatchers.IO) {
+                api.getTransacionsForPeriod(accountId, fromFormatted, toFormatted)
+            }
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    transactionDao.insertAll(it.toListTransactionEntity())
+                }
+            } else {
+                throw NetworkException()
+            }
+            response.body() ?: emptyList()
+        } else {
+            transactionDao
+                .getTransactionsForPeriod(accountId, fromFormatted, toFormatted)
+                .toListTransactionResponse()
+        }
     }
+
 
     override suspend fun postTransactions(transaction: TransactionRequest): Result<TransactionResponse> {
         if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception("Нет подключения к интернету"))
+            return Result.failure(NetworkException())
         }
         repeat(3) { attempt ->
             val response = withContext(Dispatchers.IO) { api.postTransactions(transaction) }
@@ -63,15 +82,15 @@ class TransactionRepositoryImpl @Inject constructor(
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("Нет подключения к интернету"))
+                return Result.failure(NetworkException())
             }
         }
-        return Result.failure(Exception("Нет подключения к интернету"))
+        return Result.failure(Exception())
     }
 
     override suspend fun getTransactionById(id: Int): Result<TransactionResponse> {
         if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception("Нет подключения к интернету"))
+            return Result.failure(NetworkException())
         }
 
         repeat(3) { attempt ->
@@ -82,34 +101,38 @@ class TransactionRepositoryImpl @Inject constructor(
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("Ошибка получения транзакции"))
+                return Result.failure(NetworkException())
             }
         }
-        return Result.failure(Exception("Ошибка получения транзакции"))
+        return Result.failure(Exception())
     }
 
-    override suspend fun updateTransactionById(id: Int, transaction: TransactionRequest): Result<TransactionResponse> {
+    override suspend fun updateTransactionById(
+        id: Int,
+        transaction: TransactionRequest
+    ): Result<TransactionResponse> {
         if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception("Нет подключения к интернету"))
+            return Result.failure(NetworkException())
         }
 
         repeat(3) { attempt ->
-            val response = withContext(Dispatchers.IO) { api.updateTransactionById(id, transaction) }
+            val response =
+                withContext(Dispatchers.IO) { api.updateTransactionById(id, transaction) }
             if (response.isSuccessful) {
                 return Result.success(response.body()!!)
             }
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("Ошибка обновления транзакции"))
+                return Result.failure(NetworkException())
             }
         }
-        return Result.failure(Exception("Ошибка обновления транзакции"))
+        return Result.failure(Exception())
     }
 
-    override suspend fun deleteTransaction(id: Int): Result<Boolean>  {
+    override suspend fun deleteTransaction(id: Int): Result<Boolean> {
         if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception("Нет подключения к интернету"))
+            return Result.failure(NetworkException())
         }
 
         repeat(3) { attempt ->
@@ -120,9 +143,9 @@ class TransactionRepositoryImpl @Inject constructor(
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("Ошибка удаления транзакции"))
+                return Result.failure(NetworkException())
             }
         }
-        return Result.failure(Exception("Ошибка удаления транзакции"))
+        return Result.failure(Exception())
     }
 }

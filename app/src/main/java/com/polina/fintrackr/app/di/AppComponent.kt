@@ -1,7 +1,6 @@
 package com.polina.fintrackr.app.di
 
 import android.app.Application
-import androidx.lifecycle.ViewModelProvider
 import com.polina.data.network.NetworkModule
 import com.polina.ui.navigation.ViewModelFactoryProvider
 import dagger.BindsInstance
@@ -21,6 +20,7 @@ import javax.inject.Singleton
         RepositoryModule::class,
         UseCaseModule::class,
         ViewModelModule::class,
+        DatabaseModule::class
     ]
 )
 interface AppComponent {

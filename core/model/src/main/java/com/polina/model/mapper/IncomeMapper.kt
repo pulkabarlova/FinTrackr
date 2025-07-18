@@ -16,7 +16,7 @@ fun TransactionResponse.toIncomeModel(): IncomeModel {
         subtitle = this.account.name,
         createdAt = this.createdAt,
         currency = currencySymbol,
-        trailText = this.amount,
+        trailText = this.amount.toString(),
         emoji = this.category.emoji,
         amount = this.amount.toDouble()
     )

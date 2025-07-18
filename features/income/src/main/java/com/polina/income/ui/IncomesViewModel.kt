@@ -58,7 +58,7 @@ class IncomesViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val data = useCase.getTransactionsDataWithRetries(_startDate.value, _endDate.value)
+                val data = useCase.getTransactionsData(_startDate.value, _endDate.value)
                 _incomes.value = data.incomes
                 _totalIncomes.value = data.totalIncomes
             } catch (e: Exception) {
@@ -71,7 +71,7 @@ class IncomesViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val data = useCase.getTransactionsDataWithRetries(_startDate.value, _endDate.value)
+                val data = useCase.getTransactionsData(_startDate.value, _endDate.value)
                 _incomes.value = data.incomes
                 _totalIncomes.value = data.totalIncomes
                 _error.value = null

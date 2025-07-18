@@ -1,6 +1,7 @@
 package com.polina.expenses.ui
 
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -58,7 +59,8 @@ class ExpensesViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val data = useCase.getTransactionsDataWithRetries(_startDate.value, _endDate.value)
+                val data = useCase.getTransactionsData(_startDate.value, _endDate.value)
+                Log.i("ExpensesViewModel", _startDate.value.toString())
                 _expenses.value = data.expenses
                 _totalExpenses.value = data.totalExpenses
             } catch (e: Exception) {
@@ -71,7 +73,7 @@ class ExpensesViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val data = useCase.getTransactionsDataWithRetries(_startDate.value, _endDate.value)
+                val data = useCase.getTransactionsData(null, null)
                 _expenses.value = data.expenses
                 _totalExpenses.value = data.totalExpenses
                 _error.value = null

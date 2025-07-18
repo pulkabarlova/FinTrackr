@@ -39,7 +39,7 @@ interface TransactionApiService {
     @GET("transactions/account/{accountId}/period")
     suspend fun getTransacionsForPeriod(
         @Path("accountId") accountId: Int,
-        @Query("from") from: String,
-        @Query("to") to: String
+        @Query("startDate") from: String,
+        @Query("endDate") to: String
     ): Response<List<TransactionResponse>>
 }

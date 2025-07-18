@@ -7,7 +7,7 @@ data class TransactionResponse(
     val id: Int,
     val account: AccountBrief,
     val category: Category,
-    val amount: String,
+    val amount: Double,
     val transactionDate: String,
     val comment: String?,
     val createdAt: String,
