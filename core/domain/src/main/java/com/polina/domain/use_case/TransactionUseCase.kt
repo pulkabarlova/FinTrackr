@@ -23,7 +23,7 @@ import javax.inject.Inject
  */
 class TransactionUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) {
 
     private val formatter =
@@ -43,13 +43,11 @@ class TransactionUseCase @Inject constructor(
             throw AccountNotFoundException()
         }
 
-        val from = start?.let { formatter.format(it) }
-        val to = end?.let { formatter.format(it) }
 
         val transactions = transactionRepository.getTransacionsForPeriod(
             accountId = accountId,
-            from = from,
-            to = to
+            from = start,
+            to = end
         )
 
         val incomes = mutableListOf<IncomeModel>()

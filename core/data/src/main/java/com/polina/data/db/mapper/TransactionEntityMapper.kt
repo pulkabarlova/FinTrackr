@@ -3,6 +3,7 @@ package com.polina.data.db.mapper
 import com.polina.data.db.TransactionEntity
 import com.polina.model.dto.account.AccountBrief
 import com.polina.model.dto.account.Category
+import com.polina.model.dto.request.TransactionRequest
 import com.polina.model.dto.response.TransactionResponse
 
 

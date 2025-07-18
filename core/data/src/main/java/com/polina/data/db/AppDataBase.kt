@@ -4,17 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.polina.model.dto.transaction.Transaction
 
 
 @Database(
-    entities = [TransactionEntity::class, CategoryEntity::class],
+    entities = [TransactionEntity::class, CategoryEntity::class, AccountEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun categoryDao(): CategoryDao
+    abstract fun accountDao(): AccountDao
+
 
     companion object {
         @Volatile

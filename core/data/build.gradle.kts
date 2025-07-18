@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":core:model"))
     //dagger
     implementation(libs.dagger)
+    implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.dagger.compiler)
     //retrofit
     implementation(libs.retrofit)

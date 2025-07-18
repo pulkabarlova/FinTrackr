@@ -20,8 +20,16 @@ import dagger.Provides
 class UseCaseModule {
 
     @Provides
-    fun provideAppInitUseCase(accountRepository: AccountRepository) =
-        AppInitUseCase(accountRepository)
+    fun provideAppInitUseCase(
+        accountRepository: AccountRepository,
+        transactionRepository: TransactionRepository,
+        getCategoriesUseCase: GetCategoriesUseCase,
+    ) =
+        AppInitUseCase(
+            accountRepository,
+            transactionRepository,
+            getCategoriesUseCase,
+        )
 
     @Provides
     fun provideGetAndSaveAccountUseCase(accountRepository: AccountRepository) =

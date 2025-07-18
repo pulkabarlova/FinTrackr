@@ -20,5 +20,8 @@ data class TransactionEntity(
     val transactionDate: String,
     val comment: String?,
     val createdAt: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val isAddedLocally:Boolean = false,
+    val isSynced: Boolean = true,
+    val isDeleted: Boolean = false
 )

@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":features:settings"))
     implementation(project(":features:transaction_action"))
     implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.work.runtime.ktx)
     //
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

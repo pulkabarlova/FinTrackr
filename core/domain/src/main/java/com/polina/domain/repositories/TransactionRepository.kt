@@ -4,14 +4,16 @@ import com.polina.model.dto.request.TransactionRequest
 import com.polina.model.dto.response.TransactionResponse
 import com.polina.model.dto.transaction.Transaction
 import retrofit2.Response
+import java.util.Date
+
 /**
  * Репозиторий для получения транзакций
  */
 interface TransactionRepository {
     suspend fun getTransacionsForPeriod(
         accountId: Int,
-        from: String? = null,
-        to: String? = null
+        from: Date? = null,
+        to: Date? = null
     ): List<TransactionResponse>
 
     suspend fun getTransactionById(id: Int): Result<TransactionResponse>
@@ -22,4 +24,5 @@ interface TransactionRepository {
     ): Result<TransactionResponse>
 
     suspend fun deleteTransaction(id: Int): Result<Boolean>
+    suspend fun syncTransactions()
 }

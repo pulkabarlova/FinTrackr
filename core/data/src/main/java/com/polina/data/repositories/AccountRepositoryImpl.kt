@@ -1,6 +1,9 @@
 package com.polina.data.repositories
 
 import android.content.SharedPreferences
+import com.polina.data.db.AccountDao
+import com.polina.data.db.mapper.toAccount
+import com.polina.data.db.mapper.toAccountEntity
 import com.polina.model.dto.request.AccountCreateRequest
 import com.polina.model.dto.response.AccountResponse
 import com.polina.model.mapper.toAccountModel
@@ -20,6 +23,7 @@ class AccountRepositoryImpl @Inject constructor(
     private val api: AccountApiService,
     private val networkMonitor: NetworkMonitor,
     private val sharedPreferences: SharedPreferences,
+    private val accountDao: AccountDao
 ) : AccountRepository {
 
     override suspend fun getAccounts() = api.getAccounts()
@@ -30,7 +34,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun updateAccount(id: Int, account: AccountCreateRequest): Result<AccountResponse> {
         if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception("Нет подключения к интернету"))
+            return Result.failure(Exception())
         }
         repeat(3) { attempt ->
             val response = withContext(Dispatchers.IO) { api.updateAccount(id, account) }
@@ -40,17 +44,22 @@ class AccountRepositoryImpl @Inject constructor(
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("Нет подключения к интернету"))
+                return Result.failure(Exception())
             }
         }
-        return Result.failure(Exception("Нет подключения к интернету"))
+        return Result.failure(Exception())
     }
 
     override suspend fun deleteAccount(id: Int) = api.deleteAccount(id)
 
     override suspend fun getAndSavePrimaryAccount(): Result<AccountModel> {
         if (!networkMonitor.isConnected()) {
-            return Result.failure(Exception("Нет подключения к интернету"))
+            val localAccount = accountDao.getAccount()
+            return if (localAccount != null) {
+                Result.success(localAccount.toAccount().toAccountModel())
+            } else {
+                Result.failure(Exception())
+            }
         }
         repeat(3) { attempt ->
             val response = withContext(Dispatchers.IO) { api.getAccounts() }
@@ -60,17 +69,18 @@ class AccountRepositoryImpl @Inject constructor(
                     sharedPreferences.edit()
                         .putInt("accountId", account.id)
                         .apply()
+                    accountDao.insertAccount(account.toAccountEntity())
                     Result.success(account.toAccountModel())
                 } else {
-                    Result.failure(Exception("Аккаунт не найден"))
+                    Result.failure(Exception())
                 }
             }
             if (response.code() == 500 && attempt < 2) {
                 delay(2000)
             } else {
-                return Result.failure(Exception("Нет подключения к интернету"))
+                return Result.failure(Exception())
             }
         }
-        return Result.failure(Exception("Нет подключения к интернету"))
+        return Result.failure(Exception())
     }
 }
