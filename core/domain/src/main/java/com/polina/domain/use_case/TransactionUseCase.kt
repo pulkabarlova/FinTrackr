@@ -26,11 +26,6 @@ class TransactionUseCase @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) {
 
-    private val formatter =
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
-
     suspend fun getTransactionsData(
         start: Date?,
         end: Date?

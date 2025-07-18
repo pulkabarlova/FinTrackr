@@ -60,7 +60,6 @@ class ExpensesViewModel @Inject constructor(
             _error.value = null
             try {
                 val data = useCase.getTransactionsData(_startDate.value, _endDate.value)
-                Log.i("ExpensesViewModel", _startDate.value.toString())
                 _expenses.value = data.expenses
                 _totalExpenses.value = data.totalExpenses
             } catch (e: Exception) {

@@ -41,11 +41,11 @@ class TransactionRepositoryImpl @Inject constructor(
 ) : TransactionRepository {
     private val dateFormatter =
         SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
+            timeZone = TimeZone.getDefault()
         }
     private val formatter2 =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
+            timeZone = TimeZone.getDefault()
         }
 
     override suspend fun getTransacionsForPeriod(
@@ -53,7 +53,7 @@ class TransactionRepositoryImpl @Inject constructor(
         from: Date?,
         to: Date?
     ): List<TransactionResponse> {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val calendar = Calendar.getInstance(TimeZone.getDefault())
 
         return if (networkMonitor.isConnected()) {
             val fromFormatted = from?.let {
