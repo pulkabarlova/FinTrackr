@@ -83,7 +83,7 @@ fun HistoryIncomesScreen(
         topBar = {
             AppTopBar(
                 R.string.history, R.drawable.texthistory,
-                {}, Icons.Default.KeyboardArrowLeft, { navController.popBackStack() })
+                {navController.navigate("incomes_anal")}, Icons.Default.KeyboardArrowLeft, { navController.popBackStack() })
         })
 }
 
@@ -147,7 +147,11 @@ fun ContentIncomes(
                         title = stringResource(R.string.start),
                         trailingText = formattedStartDate,
                     ),
-                    onClick = { showDatePicker = true },
+                    onClick = {
+                        isSelectingStartDate = true
+                        selectedDate = viewModel.startDate.value?.time ?: System.currentTimeMillis()
+                        showDatePicker = true
+                    },
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
@@ -158,7 +162,7 @@ fun ContentIncomes(
                         trailingText = formattedEndDate,
                     ),
                     onClick = {
-                        isSelectingStartDate = true
+                        isSelectingStartDate = false
                         selectedDate = viewModel.startDate.value?.time ?: System.currentTimeMillis()
                         showDatePicker = true
                     },

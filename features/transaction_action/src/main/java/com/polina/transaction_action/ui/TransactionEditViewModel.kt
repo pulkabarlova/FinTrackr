@@ -100,7 +100,7 @@ class TransactionEditViewModel @Inject constructor(
                             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
                             Locale.getDefault()
                         ).apply {
-                            timeZone = TimeZone.getTimeZone("UTC")
+                            timeZone = TimeZone.getDefault()
                         }
                         val date = formatter.parse(createdAtString)
 
@@ -162,7 +162,7 @@ class TransactionEditViewModel @Inject constructor(
 
                 val iso8601Formatter =
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
-                        timeZone = TimeZone.getTimeZone("UTC")
+                        timeZone = TimeZone.getDefault()
                     }
 
                 val transactionDate = iso8601Formatter.format(calendar.time)

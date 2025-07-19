@@ -4,10 +4,12 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.polina.data.network.monitor.NetworkMonitor
+import com.polina.domain.use_case.AppInitUseCase
 import com.polina.fintrackr.BuildConfig
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
+import javax.inject.Provider
 import javax.inject.Singleton
 
 /**
@@ -43,4 +45,12 @@ class AppModule(private val application: Application, private val context: Conte
     @Provides
     @Singleton
     fun provideNetworkMonitor(): NetworkMonitor = NetworkMonitor(context)
+
+    @Provides
+    @Singleton
+    fun provideWorkerFactory(
+        appInitUseCase: AppInitUseCase
+    ): AppWorkerFactory {
+        return AppWorkerFactory(appInitUseCase)
+    }
 }

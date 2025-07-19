@@ -33,9 +33,9 @@ fun SplashScreen(navController: NavController, viewModel: SplashViewModel = dagg
     val alpha = remember { Animatable(0f) }
     val initialized = viewModel.accountInitialized.value
     val errorMessage = viewModel.errorMessage.value
-
+    val isConnected = viewModel.isConnected.value
     LaunchedEffect(initialized) {
-        if (initialized == true) {
+        if (initialized != null) {
             alpha.animateTo(1f, animationSpec = tween(1000))
             delay(500)
             navController.navigate("expenses") {

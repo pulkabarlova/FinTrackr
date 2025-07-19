@@ -1,6 +1,7 @@
 package com.polina.transaction_action.ui
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.polina.data.network.monitor.NetworkMonitor
@@ -117,7 +118,7 @@ class TransactionAddViewModel @Inject constructor(
                     "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
                     java.util.Locale.getDefault()
                 ).apply {
-                    timeZone = java.util.TimeZone.getTimeZone("UTC")
+                    timeZone = java.util.TimeZone.getDefault()
                 }.format(calendar.time)
 
                 val request = TransactionRequest(
@@ -131,6 +132,7 @@ class TransactionAddViewModel @Inject constructor(
                 onSuccess()
             } catch (e: Exception) {
                 onError("")
+                Log.i("postTransactions", e.toString())
             }
         }
     }

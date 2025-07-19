@@ -26,36 +26,30 @@ class SplashViewModel @Inject constructor(
     private val _isConnected = mutableStateOf(true)
     val isConnected: State<Boolean> = _isConnected
 
-    private val noInternet = "Нет подключения к интернету"
+    private val noInternet = "Оффлайн режим, нет интернета"
+    private val errorData = "Ошибка загрузки данных"
 
     init {
-        monitorNetwork()
-        initializeAccount()
-    }
-
-    private fun monitorNetwork() {
         viewModelScope.launch {
-            networkMonitor.networkStatus.collect { isConnectedNow ->
-                _isConnected.value = isConnectedNow
-                if (!isConnectedNow) {
-                    _errorMessage.value = noInternet
-                } else if (_accountInitialized.value == false && _errorMessage.value != null) {
-                    _errorMessage.value = null
-                    initializeAccount()
+            val connected = networkMonitor.isConnected()
+            _isConnected.value = connected
+
+            if (!connected) {
+                _errorMessage.value = noInternet
+            }
+
+            val result = appInitUseCase.ensureAccountInitializedWithRetries()
+            _accountInitialized.value = result.isSuccess
+            if (connected) {
+                try {
+                    appInitUseCase.loadAllTransactions()
+                    appInitUseCase.loadAllCategories()
+                }
+                catch (e: Exception){
+                    _errorMessage.value = errorData
                 }
             }
         }
     }
-
-    private fun initializeAccount() {
-        viewModelScope.launch {
-            val result = appInitUseCase.ensureAccountInitializedWithRetries()
-            result.onSuccess {
-                _accountInitialized.value = true
-            }.onFailure {
-                _errorMessage.value = noInternet
-                _accountInitialized.value = false
-            }
-        }
-    }
 }
+

@@ -1,6 +1,9 @@
 package com.polina.fintrackr.app.di
 
 import android.content.SharedPreferences
+import com.polina.data.db.AccountDao
+import com.polina.data.db.CategoryDao
+import com.polina.data.db.TransactionDao
 import com.polina.data.network.api_service.AccountApiService
 import com.polina.data.network.api_service.CategoryApiService
 import com.polina.data.network.api_service.TransactionApiService
@@ -25,20 +28,28 @@ internal interface DataSourceModule {
         fun provideAccountRepository(
             api: AccountApiService,
             networkMonitor: NetworkMonitor,
-            sharedPreferences: SharedPreferences
-        ): AccountRepository = AccountRepositoryImpl(api, networkMonitor, sharedPreferences)
+            sharedPreferences: SharedPreferences,
+            accountDao: AccountDao
+        ): AccountRepository =
+            AccountRepositoryImpl(api, networkMonitor, sharedPreferences, accountDao)
 
         @Provides
         @Singleton
         fun provideTransactionRepository(
             api: TransactionApiService,
-            networkMonitor: NetworkMonitor
-        ): TransactionRepository = TransactionRepositoryImpl(api, networkMonitor)
+            networkMonitor: NetworkMonitor,
+            transactionDao: TransactionDao,
+            categoryDao: CategoryDao,
+            accountDao: AccountDao
+        ): TransactionRepository =
+            TransactionRepositoryImpl(api, networkMonitor, transactionDao, categoryDao, accountDao)
 
         @Provides
         @Singleton
         fun provideCategoryRepository(
-            api: CategoryApiService
-        ): CategoryRepository = CategoryRepositoryImpl(api)
+            api: CategoryApiService,
+            categoryDao: CategoryDao,
+            networkMonitor: NetworkMonitor,
+        ): CategoryRepository = CategoryRepositoryImpl(api, categoryDao, networkMonitor)
     }
 }

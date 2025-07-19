@@ -12,7 +12,10 @@ import com.polina.ui.models.IncomeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
 /**
@@ -20,28 +23,10 @@ import javax.inject.Inject
  */
 class TransactionUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) {
-    //тут пока не получилось вынести в репозиторий, но про это помню
-    suspend fun getTransactionsDataWithRetries(
-        start: Date?,
-        end: Date?
-    ): GroupedTransactionsResult {
-        repeat(3) { attempt ->
-            try {
-                return getTransactionsData(start, end)
-            } catch (e: NetworkException) {
-                if (attempt < 2) delay(5000)
-                else throw e
-            } catch (e: Exception) {
-                throw e
-            }
-        }
-        return GroupedTransactionsResult(emptyList(), 0.0, emptyList(),0.0)
-    }
 
-    // функция чтобы один раз проходиться по всем транзакциям
-    private suspend fun getTransactionsData(
+    suspend fun getTransactionsData(
         start: Date?,
         end: Date?
     ): GroupedTransactionsResult = withContext(Dispatchers.IO) {
@@ -52,7 +37,14 @@ class TransactionUseCase @Inject constructor(
         if (accountId == -1) {
             throw AccountNotFoundException()
         }
-        val transactions = transactionRepository.getTransacionsForPeriod(accountId)
+
+
+        val transactions = transactionRepository.getTransacionsForPeriod(
+            accountId = accountId,
+            from = start,
+            to = end
+        )
+
         val incomes = mutableListOf<IncomeModel>()
         val expenses = mutableListOf<ExpenseModel>()
         var sumIncomes = 0.0

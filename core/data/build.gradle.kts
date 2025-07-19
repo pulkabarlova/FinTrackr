@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":core:model"))
     //dagger
     implementation(libs.dagger)
+    implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.dagger.compiler)
     //retrofit
     implementation(libs.retrofit)
@@ -54,5 +55,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
+    //room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }

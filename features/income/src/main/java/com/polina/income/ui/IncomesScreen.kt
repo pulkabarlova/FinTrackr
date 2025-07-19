@@ -44,7 +44,7 @@ fun IncomesScreen(navController: NavController, viewModel: IncomesViewModel = da
 
     LaunchedEffect(isConnected) {
         if (isConnected && error != null) {
-           viewModel.getTransactions()
+            viewModel.getTransactions()
         }
     }
 
@@ -119,7 +119,7 @@ fun Content(
         }
 
         FloatingActionButton(
-            onClick = {navController.navigate("expenses_add")},
+            onClick = { navController.navigate("expenses_add") },
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             shape = CircleShape,

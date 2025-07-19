@@ -18,6 +18,8 @@ import com.polina.expenses.ui.HistoryExpensesScreen
 import com.polina.income.ui.HistoryIncomesScreen
 import com.polina.income.ui.IncomesScreen
 import com.polina.settings.ui.SettingsScreen
+import com.polina.transaction_action.ui.ExpensesAnalysScreen
+import com.polina.transaction_action.ui.IncomesAnalysScreen
 import com.polina.transaction_action.ui.TransactionAddScreen
 import com.polina.transaction_action.ui.TransactionEditScreen
 
@@ -59,6 +61,12 @@ fun AppUi() {
             }
             composable(NavRoutes.ExpensesAdd.route) {
                 TransactionAddScreen(navController)
+            }
+            composable(NavRoutes.ExpensesAnal.route) {
+                ExpensesAnalysScreen(navController)
+            }
+            composable(NavRoutes.IncomesAnal.route) {
+                IncomesAnalysScreen(navController)
             }
             composable(
                 NavRoutes.ExpensesEdit.route,

@@ -1,8 +1,8 @@
 package com.polina.fintrackr.app.di
 
 import android.app.Application
-import androidx.lifecycle.ViewModelProvider
 import com.polina.data.network.NetworkModule
+import com.polina.fintrackr.app.worker.SyncWorker
 import com.polina.ui.navigation.ViewModelFactoryProvider
 import dagger.BindsInstance
 import dagger.Component
@@ -21,6 +21,7 @@ import javax.inject.Singleton
         RepositoryModule::class,
         UseCaseModule::class,
         ViewModelModule::class,
+        DatabaseModule::class
     ]
 )
 interface AppComponent {
@@ -28,6 +29,8 @@ interface AppComponent {
     fun inject(app: App)
 
     fun activityComponent(): ActivityComponent.Factory
+
+    fun injectWorker(syncWorker: SyncWorker)
 
     @Component.Builder
     interface Builder {

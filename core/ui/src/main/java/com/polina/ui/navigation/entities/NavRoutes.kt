@@ -21,4 +21,6 @@ sealed class NavRoutes(
         fun withTransactionId(transactionId: Int): String =
             "expenses_edit/$transactionId"
     }
+    data object ExpensesAnal : NavRoutes("expenses_anal")
+    data object IncomesAnal : NavRoutes("incomes_anal")
 }

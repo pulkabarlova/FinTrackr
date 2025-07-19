@@ -1,4 +1,4 @@
-package com.polina.income.ui
+package com.polina.transaction_action.ui
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -6,32 +6,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.polina.data.network.monitor.NetworkMonitor
+import com.polina.domain.use_case.CategorySummary
+import com.polina.domain.use_case.GetExpensesStat
+import com.polina.domain.use_case.GetIncomesStat
+import com.polina.domain.use_case.IncomeCategorySummary
 import com.polina.model.AccountNotFoundException
 import com.polina.model.NetworkException
-import com.polina.ui.models.IncomeModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
-/**
- * Управляет состоянием и логикой отображения экрана доходов пользователя.
- */
 
-class IncomesViewModel @Inject constructor(
-    private val useCase: com.polina.domain.use_case.TransactionUseCase,
+class IncomesAnalysViewModel @Inject constructor(
+    private val useCase: GetIncomesStat,
     private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
-    private val _incomes = mutableStateOf<List<IncomeModel>>(emptyList())
-    val incomes: State<List<IncomeModel>> = _incomes
+    private val _categoriesSum = mutableStateOf<List<IncomeCategorySummary>>(emptyList())
+    val categoriesSum: State<List<IncomeCategorySummary>> = _categoriesSum
 
     private val noInternet = "Нет подключения к интернету"
     private val serverError = "Ошибка загрузки данных"
+    private val noData = "Нет данных за период"
 
-    private val _totalIncomes = mutableStateOf(0.0)
-    val totalIncomes: State<Double> = _totalIncomes
+    private val _totalSum = mutableStateOf(0.0)
+    val totalSum: State<Double> = _totalSum
 
     private val _error = mutableStateOf<String?>(null)
     val error: State<String?> = _error
@@ -59,10 +60,16 @@ class IncomesViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val data = useCase.getTransactionsData(_startDate.value, _endDate.value)
-                _incomes.value = data.incomes
-                _totalIncomes.value = data.totalIncomes
+                val data = useCase.getCategorizedTransactions(_startDate.value, _endDate.value)
+                _categoriesSum.value = data.categories
+                _totalSum.value = data.totalAmount
+
+                if (data.totalAmount==0.0) {
+                    _error.value = noData
+                }
             } catch (e: Exception) {
+                _categoriesSum.value = emptyList()
+                _totalSum.value = 0.0
                 _error.value = serverError
             }
         }
@@ -72,15 +79,23 @@ class IncomesViewModel @Inject constructor(
         viewModelScope.launch {
             _error.value = null
             try {
-                val data = useCase.getTransactionsData(null, null)
-                _incomes.value = data.incomes
-                _totalIncomes.value = data.totalIncomes
-                _error.value = null
+                val data = useCase.getCategorizedTransactions(null, null)
+                _categoriesSum.value = data.categories
+                _totalSum.value = data.totalAmount
+                if (data.totalAmount==0.0) {
+                    _error.value = noData
+                }
             } catch (e: AccountNotFoundException) {
+                _categoriesSum.value = emptyList()
+                _totalSum.value = 0.0
                 _error.value = noInternet
             } catch (e: NetworkException) {
+                _categoriesSum.value = emptyList()
+                _totalSum.value = 0.0
                 _error.value = serverError
             } catch (e: Exception) {
+                _categoriesSum.value = emptyList()
+                _totalSum.value = 0.0
                 _error.value = noInternet
             }
         }
@@ -96,7 +111,7 @@ class IncomesViewModel @Inject constructor(
             networkMonitor.networkStatus.collect { connected ->
                 _isConnected.value = connected
                 if (connected) {
-                    if (_error.value != null || _incomes.value.isEmpty()) {
+                    if (_error.value != null || _categoriesSum.value.isEmpty()) {
                         getTransactions()
                     }
                 } else {
@@ -109,7 +124,7 @@ class IncomesViewModel @Inject constructor(
     fun formatDateTime(isoString: String?): Pair<String, String> {
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
-            inputFormat.timeZone = TimeZone.getDefault()
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
 
             val date: Date = inputFormat.parse(isoString ?: return "" to "") ?: return "" to ""
 
