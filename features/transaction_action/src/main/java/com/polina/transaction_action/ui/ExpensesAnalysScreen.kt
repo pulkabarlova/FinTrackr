@@ -1,4 +1,4 @@
-package com.polina.expenses.ui
+package com.polina.transaction_action.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -21,33 +21,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.polina.expenses.R
-import com.polina.ui.components.CustomDatePicker
+import com.polina.domain.use_case.CategorySummary
+import com.polina.transaction_action.R
 import com.polina.ui.components.AppTopBar
+import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
-import com.polina.ui.models.ExpenseModel
 import com.polina.ui.navigation.daggerViewModel
-import com.polina.ui.navigation.entities.NavRoutes
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/**
- * Отвечает за отображение UI и обработку взаимодействия пользователя.
- */
 @Composable
-fun HistoryExpensesScreen(
+fun ExpensesAnalysScreen(
     navController: NavController,
-    viewModel: ExpensesViewModel = daggerViewModel()
+    viewModel: ExpensesAnalysViewModel = daggerViewModel()
 ) {
-    val expenses = viewModel.expenses.value
-    val currency = viewModel.expenses.value.firstOrNull()?.currency ?: " ₽"
-    val beginDt = viewModel.formatDateTime(expenses.firstOrNull()?.createdAt)
-    val beginDate = beginDt.first
-    val endDt = viewModel.formatDateTime(expenses.lastOrNull()?.createdAt)
-    val endDate = endDt.first
-    val sum = viewModel.totalExpenses.value
+    val categoriesSum = viewModel.categoriesSum.value
+    val currency = " ₽"
+    val sum = viewModel.totalSum.value
     val error = viewModel.error.value
     val context = LocalContext.current
     val isConnected = viewModel.isConnected.value
@@ -68,28 +60,25 @@ fun HistoryExpensesScreen(
     com.polina.ui.components.AppScaffold(
         navController = navController,
         content = { paddingValues ->
-            Content(
-                paddingValues, beginDate, endDate, sum, expenses,
-                currency.toString(), viewModel, navController
+            ContentExpensesAnalys(
+                paddingValues, sum, categoriesSum,
+                currency.toString(), viewModel
             )
         },
         topBar = {
             AppTopBar(
-                R.string.history, R.drawable.texthistory,
-                {navController.navigate("expenses_anal")}, Icons.Default.KeyboardArrowLeft, { navController.popBackStack() })
+                R.string.analys, null,
+                {}, Icons.Default.KeyboardArrowLeft, { navController.popBackStack() })
         })
 }
 
 @Composable
-fun Content(
+fun ContentExpensesAnalys(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
-    beginDate: String,
-    endDate: String,
     sum: Double,
-    expenses: List<ExpenseModel>,
+    categoriesSum: List<CategorySummary>,
     currency: String,
-    viewModel: ExpensesViewModel,
-    navController: NavController
+    viewModel: ExpensesAnalysViewModel,
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     var isSelectingStartDate by remember { mutableStateOf(true) }
@@ -99,11 +88,11 @@ fun Content(
 
     val formattedStartDate = viewModel.startDate.value?.let {
         dateFormatter.format(it)
-    } ?: beginDate
+    } ?: dateFormatter.format(Date())
 
     val formattedEndDate = viewModel.endDate.value?.let {
         dateFormatter.format(it)
-    } ?: endDate
+    } ?: dateFormatter.format(Date())
 
     if (showDatePicker) {
         CustomDatePicker(
@@ -171,19 +160,17 @@ fun Content(
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
-            if (expenses.isNotEmpty()) {
-                items(items = expenses) { expense ->
-                    val dt = viewModel.formatDateTime(expense.createdAt)
+            if (categoriesSum.isNotEmpty()) {
+                items(items = categoriesSum) { summary ->
                     ListItemUi(
                         item = ListItem(
-                            title = expense.title,
-                            leadingIcon = expense.emoji,
-                            trailingText = expense.amount.toString() + expense.currency,
+                            title = summary.categoryName,
+                            leadingIcon = summary.icon,
+                            trailingText = summary.amount.toString() + currency,
                             trailingIcon = Icons.Default.KeyboardArrowRight,
-                            trailingBottomText = "${dt.first} ${dt.second}"
+                            trailingBottomText = summary.percentage.toString() + "%"
                         ),
                         onClick = {
-                            navController.navigate(NavRoutes.ExpensesEdit.withTransactionId(expense.id))
                         }
                     )
                 }

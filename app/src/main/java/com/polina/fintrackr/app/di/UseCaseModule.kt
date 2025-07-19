@@ -8,6 +8,8 @@ import com.polina.domain.use_case.AppInitUseCase
 import com.polina.domain.use_case.DeleteTransactionByIdUseCase
 import com.polina.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.domain.use_case.GetCategoriesUseCase
+import com.polina.domain.use_case.GetExpensesStat
+import com.polina.domain.use_case.GetIncomesStat
 import com.polina.domain.use_case.GetTransactionByIdUseCase
 import com.polina.domain.use_case.PostTransactionUseCase
 import com.polina.domain.use_case.TransactionUseCase
@@ -64,4 +66,18 @@ class UseCaseModule {
     @Provides
     fun provideDeleteTransactionByIdUseCase(transactionRepository: TransactionRepository) =
         DeleteTransactionByIdUseCase(transactionRepository)
+
+    @Provides
+    fun provideGetExpensesStat(
+        transactionRepository: TransactionRepository,
+        sharedPreferences: SharedPreferences,
+    ) =
+        GetExpensesStat(transactionRepository, sharedPreferences)
+
+    @Provides
+    fun provideGetIncomesStat(
+        transactionRepository: TransactionRepository,
+        sharedPreferences: SharedPreferences,
+    ) =
+        GetIncomesStat(transactionRepository, sharedPreferences)
 }

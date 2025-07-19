@@ -83,7 +83,7 @@ fun HistoryIncomesScreen(
         topBar = {
             AppTopBar(
                 R.string.history, R.drawable.texthistory,
-                {}, Icons.Default.KeyboardArrowLeft, { navController.popBackStack() })
+                {navController.navigate("incomes_anal")}, Icons.Default.KeyboardArrowLeft, { navController.popBackStack() })
         })
 }
 
