@@ -6,6 +6,7 @@ import com.polina.articles.ui.ArticlesViewModel
 import com.polina.count.ui.CountViewModel
 import com.polina.expenses.ui.ExpensesViewModel
 import com.polina.income.ui.IncomesViewModel
+import com.polina.settings.ui.SettingsViewModel
 import com.polina.splash.ui.SplashViewModel
 import com.polina.transaction_action.ui.ExpensesAnalysViewModel
 import com.polina.transaction_action.ui.IncomesAnalysViewModel
@@ -64,6 +65,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(IncomesAnalysViewModel::class)
     fun bindIncomesAnalysViewModel(vm: IncomesAnalysViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    fun bindSettingsViewModel(vm: SettingsViewModel): ViewModel
 
     @Binds
     fun bindFactory(factory: ViewModelProviderFactory): ViewModelProvider.Factory

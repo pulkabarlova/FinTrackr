@@ -1,5 +1,6 @@
 package com.polina.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -20,7 +21,6 @@ val Typography = Typography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        color = Color(0xFF000000)
     ),
     labelLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -39,5 +39,5 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         color = Color(0xFF000000)
-    )
+    ),
 )

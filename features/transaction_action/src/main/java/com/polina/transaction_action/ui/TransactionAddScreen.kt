@@ -127,7 +127,8 @@ fun ContentAdd(
                     Text(
                         modifier = Modifier.padding(4.dp),
                         text = stringResource(R.string.summa),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 },
                 modifier = Modifier
@@ -165,7 +166,8 @@ fun ContentAdd(
                     Text(
                         modifier = Modifier.padding(4.dp),
                         text = stringResource(R.string.comment),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 },
                 modifier = Modifier

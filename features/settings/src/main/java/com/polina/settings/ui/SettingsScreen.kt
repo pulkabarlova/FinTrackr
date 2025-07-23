@@ -12,31 +12,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.polina.settings.R
+import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
+import com.polina.ui.navigation.daggerViewModel
 
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun SettingsScreen(navController: NavController) {
-    com.polina.ui.components.AppScaffold(
+fun SettingsScreen(navController: NavController, viewModel:SettingsViewModel) {
+    AppScaffold(
         topBar = { AppTopBar(R.string.settings) },
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues) })
+        content = { paddingValues -> Content(paddingValues = paddingValues, viewModel) })
 }
 
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
+fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, viewModel: SettingsViewModel) {
     val setItems = listOf(
         R.string.theme, R.string.colour, R.string.sounds,
         R.string.haptiki, R.string.password, R.string.synchronization,
@@ -53,8 +58,7 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
             SettingSwitchItem(
                 title = stringResource(setItems[0]),
                 checked = false,
-                onCheckedChange = { },
-            )
+                viewModel)
         }
 
         for (i in 1..6) {
@@ -72,7 +76,7 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues) {
 }
 
 @Composable
-fun SettingSwitchItem(title: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+fun SettingSwitchItem(title: String, checked: Boolean,  viewModel: SettingsViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,16 +90,8 @@ fun SettingSwitchItem(title: String, checked: Boolean, onCheckedChange: (Boolean
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.weight(1f))
-        Switch(checked = checked, onCheckedChange = onCheckedChange, Modifier.padding(end = 7.dp))
-    }
-}
-
-
-@Preview(name = "Light Mode", showSystemUi = true)
-// @Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
-@Composable
-fun Preview() {
-    com.polina.ui.theme.FinTrackrTheme {
-        SettingsScreen(navController = NavController(LocalContext.current))
+        Switch(checked = viewModel.darkTheme.collectAsState().value == "dark",
+            onCheckedChange = {  viewModel.setTheme() } ,
+            Modifier.padding(end = 7.dp))
     }
 }

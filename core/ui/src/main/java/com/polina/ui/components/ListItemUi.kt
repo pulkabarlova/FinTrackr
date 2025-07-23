@@ -73,7 +73,7 @@ fun ListItemUi(
                     imageVector = icon,
                     contentDescription = null,
                     modifier = iconModifier,
-                    tint = Color.Unspecified,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
                 is Int -> Icon(
                     painter = painterResource(id = icon),
@@ -90,7 +90,7 @@ fun ListItemUi(
             Text(
                 text = item.title,
                 Modifier.padding(8.dp),
-                style = MaterialTheme.typography.bodyLarge,)
+                color = MaterialTheme.colorScheme.onPrimary,)
             item.subtitle?.let {
                 Text(
                     text = it,
@@ -106,6 +106,7 @@ fun ListItemUi(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
 

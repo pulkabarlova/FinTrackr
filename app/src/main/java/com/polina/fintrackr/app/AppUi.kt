@@ -18,6 +18,7 @@ import com.polina.expenses.ui.HistoryExpensesScreen
 import com.polina.income.ui.HistoryIncomesScreen
 import com.polina.income.ui.IncomesScreen
 import com.polina.settings.ui.SettingsScreen
+import com.polina.settings.ui.SettingsViewModel
 import com.polina.transaction_action.ui.ExpensesAnalysScreen
 import com.polina.transaction_action.ui.IncomesAnalysScreen
 import com.polina.transaction_action.ui.TransactionAddScreen
@@ -25,7 +26,7 @@ import com.polina.transaction_action.ui.TransactionEditScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AppUi() {
+fun AppUi(settingsViewModel: SettingsViewModel) {
     val navController = rememberNavController()
     SharedTransitionLayout {
         NavHost(
@@ -48,7 +49,7 @@ fun AppUi() {
                 ArticlesScreen(navController)
             }
             composable(NavRoutes.Settings.route) {
-                SettingsScreen(navController)
+                SettingsScreen(navController, settingsViewModel)
             }
             composable(NavRoutes.HistoryExpenses.route) {
                 HistoryExpensesScreen(navController)
