@@ -10,11 +10,11 @@ import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(private val sharedPreferences: SharedPreferences) :
     ViewModel() {
-    private val _darkTheme = MutableStateFlow<String?>(sharedPreferences.getString("darkTheme", null))
+    private val _darkTheme = MutableStateFlow<String?>(sharedPreferences.getString("darkTheme", "light"))
     val darkTheme: StateFlow<String?> = _darkTheme.asStateFlow()
-    init{
-        Log.i("SettingsViewModel", "created")
-    }
+    private val _colorTheme = MutableStateFlow(sharedPreferences.getString("colorTheme", "green")?: "green")
+    val colorTheme: StateFlow<String> = _colorTheme.asStateFlow()
+
     fun setTheme() {
         val newTheme = when (_darkTheme.value) {
             "dark" -> "light"
@@ -22,6 +22,10 @@ class SettingsViewModel @Inject constructor(private val sharedPreferences: Share
         }
         _darkTheme.value = newTheme
         sharedPreferences.edit().putString("darkTheme", newTheme).apply()
+    }
+    fun setColor(newColor: String){
+        _colorTheme.value = newColor
+        sharedPreferences.edit().putString("colorTheme", newColor).apply()
     }
 
 }

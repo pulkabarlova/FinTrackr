@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">FinTrackr</string>
     <!-- navigation bar -->
-    <string name="expenses">Расходы</string>
-    <string name="incomes">Доходы</string>
-    <string name="count">Счет</string>
-    <string name="articles">Статьи</string>
-    <string name="settings">Настройки</string>
+    <string name="expenses">Expenses</string>
+    <string name="incomes">Income</string>
+    <string name="count">Account</string>
+    <string name="articles">Articles</string>
+    <string name="settings">Settings</string>
     <!-- top bar -->
-    <string name="my_expenses">Расходы сегодня</string>
-    <string name="my_incomes">Доходы сегодня</string>
-    <string name="my_count">Мой счет</string>
-    <string name="my_articles">Мои статьи</string>
-    <string name="edit_screen">Редактировать счет</string>
+    <string name="my_expenses">Today Expenses</string>
+    <string name="my_incomes">Today Income</string>
+    <string name="my_count">My Account</string>
+    <string name="my_articles">My Articles</string>
+    <string name="edit_screen">Edit Account</string>
 </resources>

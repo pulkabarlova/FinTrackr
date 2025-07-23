@@ -13,9 +13,13 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +37,7 @@ import com.polina.ui.navigation.daggerViewModel
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun SettingsScreen(navController: NavController, viewModel:SettingsViewModel) {
+fun SettingsScreen(navController: NavController, viewModel: SettingsViewModel) {
     AppScaffold(
         topBar = { AppTopBar(R.string.settings) },
         navController = navController,
@@ -41,7 +45,11 @@ fun SettingsScreen(navController: NavController, viewModel:SettingsViewModel) {
 }
 
 @Composable
-fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, viewModel: SettingsViewModel) {
+fun Content(
+    paddingValues: androidx.compose.foundation.layout.PaddingValues,
+    viewModel: SettingsViewModel
+) {
+    var showBottomSheet by remember { mutableStateOf(false) }
     val setItems = listOf(
         R.string.theme, R.string.colour, R.string.sounds,
         R.string.haptiki, R.string.password, R.string.synchronization,
@@ -58,7 +66,8 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, vie
             SettingSwitchItem(
                 title = stringResource(setItems[0]),
                 checked = false,
-                viewModel)
+                viewModel
+            )
         }
 
         for (i in 1..6) {
@@ -68,15 +77,22 @@ fun Content(paddingValues: androidx.compose.foundation.layout.PaddingValues, vie
                         title = stringResource(setItems[i]),
                         trailingIcon = R.drawable.arrow_right
                     ),
-                    onClick = { }
+                    onClick = {
+                        if (i == 1) {
+                            showBottomSheet = true
+                        }
+                    }
                 )
             }
         }
     }
+    if (showBottomSheet) {
+        ColorBottomSheet({viewModel.setColor(it)}, { showBottomSheet = false })
+    }
 }
 
 @Composable
-fun SettingSwitchItem(title: String, checked: Boolean,  viewModel: SettingsViewModel) {
+fun SettingSwitchItem(title: String, checked: Boolean, viewModel: SettingsViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,8 +106,10 @@ fun SettingSwitchItem(title: String, checked: Boolean,  viewModel: SettingsViewM
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.weight(1f))
-        Switch(checked = viewModel.darkTheme.collectAsState().value == "dark",
-            onCheckedChange = {  viewModel.setTheme() } ,
-            Modifier.padding(end = 7.dp))
+        Switch(
+            checked = viewModel.darkTheme.collectAsState().value == "dark",
+            onCheckedChange = { viewModel.setTheme() },
+            Modifier.padding(end = 7.dp)
+        )
     }
 }

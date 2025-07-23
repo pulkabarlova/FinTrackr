@@ -44,7 +44,8 @@ class MainActivity : ComponentActivity() {
                 }
             ) {
                 val theme by settingsViewModel.darkTheme.collectAsState()
-                FinTrackrTheme(darkTheme = (theme == "dark")) {
+                val colorTheme by settingsViewModel.colorTheme.collectAsState()
+                FinTrackrTheme(darkTheme = (theme == "dark"), color = colorTheme) {
                     AppUi(settingsViewModel)
                 }
             }
