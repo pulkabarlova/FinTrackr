@@ -14,4 +14,8 @@
     <string name="blue">Blue</string>
     <string name="pink">Pink</string>
     <string name="green">Green</string>
+    <string name="language_en">English</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ge">German</string>
+    <string name="version">Version</string>
 </resources>

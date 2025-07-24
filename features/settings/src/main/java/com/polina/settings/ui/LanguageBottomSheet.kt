@@ -1,6 +1,5 @@
 package com.polina.settings.ui
 
-
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -10,11 +9,10 @@ import com.polina.settings.R
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColorBottomSheet(
-    onSelectTheme: (String) -> Unit,
+fun LanguageBottomSheet(
+    onSelectLanguage: (String) -> Unit,
     onCancel: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -28,29 +26,32 @@ fun ColorBottomSheet(
     ) {
         ListItemUi(
             ListItem(
-                title = stringResource(R.string.green),
-                leadingIcon = "\uD83D\uDFE2"
+                title = stringResource(R.string.language_ru),
+                leadingIcon = "RU"
             ),
             onClick = {
-                onSelectTheme("green")
+                onSelectLanguage("ru")
+                onCancel()
             },
         )
         ListItemUi(
             ListItem(
-                title = stringResource(R.string.pink),
-                leadingIcon = "\uD83D\uDFE3"
+                title = stringResource(R.string.language_en),
+                leadingIcon = "EN"
             ),
             onClick = {
-                onSelectTheme("pink")
+                onSelectLanguage("en")
+                onCancel()
             },
         )
         ListItemUi(
             ListItem(
-                title = stringResource(R.string.blue),
-                leadingIcon = "\uD83D\uDD35"
+                title = stringResource(R.string.language_ge),
+                leadingIcon = "GE"
             ),
             onClick = {
-                onSelectTheme("blue")
+                onSelectLanguage("de")
+                onCancel()
             },
         )
     }

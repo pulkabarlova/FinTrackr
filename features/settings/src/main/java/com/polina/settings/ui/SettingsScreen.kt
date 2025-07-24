@@ -19,19 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.polina.settings.R
 import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
-import com.polina.ui.navigation.daggerViewModel
 
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
@@ -50,6 +45,7 @@ fun Content(
     viewModel: SettingsViewModel
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
+    var showLanguageBottomSheet by remember { mutableStateOf(false) }
     val setItems = listOf(
         R.string.theme, R.string.colour, R.string.sounds,
         R.string.haptiki, R.string.password, R.string.synchronization,
@@ -80,15 +76,30 @@ fun Content(
                     onClick = {
                         if (i == 1) {
                             showBottomSheet = true
+                        } else if (i == 6) {
+                            showLanguageBottomSheet = true
                         }
                     }
                 )
             }
         }
+        item {
+            Text(
+                text = stringResource(R.string.version) + " " + viewModel.version,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp)
+            )
+        }
     }
     if (showBottomSheet) {
-        ColorBottomSheet({viewModel.setColor(it)}, { showBottomSheet = false })
+        ColorBottomSheet({ viewModel.setColor(it) }, { showBottomSheet = false })
     }
+    if (showLanguageBottomSheet) {
+        LanguageBottomSheet({
+            viewModel.setLanguage(it)
+        }, { showLanguageBottomSheet = false })
+    }
+
 }
 
 @Composable
