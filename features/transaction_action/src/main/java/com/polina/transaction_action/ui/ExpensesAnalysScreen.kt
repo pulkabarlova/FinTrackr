@@ -4,6 +4,8 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,13 +22,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.polina.domain.use_case.CategorySummary
+import com.polina.ui.components.PieChart
+import com.polina.ui.components.PieChartData
 import com.polina.transaction_action.R
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.CustomDatePicker
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
+import com.polina.ui.components.generateRandomColor
 import com.polina.ui.navigation.daggerViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -160,6 +166,23 @@ fun ContentExpensesAnalys(
                     modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
+            item {
+                PieChart(
+                    data = categoriesSum.map { category ->
+                        PieChartData(
+                            value = category.percentage.toFloat(),
+                            label = category.categoryName,
+                            color = generateRandomColor()
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(16.dp),
+                    strokeWidth = 20f
+                )
+            }
+
             if (categoriesSum.isNotEmpty()) {
                 items(items = categoriesSum) { summary ->
                     ListItemUi(

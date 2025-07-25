@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":features:articles"))
     implementation(project(":features:settings"))
     implementation(project(":features:transaction_action"))
+    implementation(project(":core:graphics"))
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.appcompat)
