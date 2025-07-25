@@ -23,6 +23,10 @@ class SettingsViewModel @Inject constructor(private val sharedPreferences: Share
         sharedPreferences.getString("language", null)
             ?: getSystemLanguage()
     )
+    private val _sound =
+        MutableStateFlow<String>(sharedPreferences.getString("sound", "true") ?: "true")
+    val sound: StateFlow<String> = _sound.asStateFlow()
+
     val language: StateFlow<String> = _language.asStateFlow()
     var version = ""
     fun setTheme() {
@@ -32,6 +36,15 @@ class SettingsViewModel @Inject constructor(private val sharedPreferences: Share
         }
         _darkTheme.value = newTheme
         sharedPreferences.edit().putString("darkTheme", newTheme).apply()
+    }
+
+    fun setSound() {
+        val newSound = when (sound.value) {
+            "true" -> "false"
+            else -> "true"
+        }
+        _sound.value = newSound
+        sharedPreferences.edit().putString("sound", newSound).apply()
     }
 
     fun setColor(newColor: String) {

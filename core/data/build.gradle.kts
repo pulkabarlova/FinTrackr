@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.converter.gson)
     //coroutines
     implementation(libs.kotlinx.coroutines.android)
+    //prefs
+    implementation(libs.androidx.security.crypto)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

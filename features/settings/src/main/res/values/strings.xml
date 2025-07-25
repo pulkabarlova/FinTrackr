@@ -18,4 +18,12 @@
     <string name="language_ru">Russian</string>
     <string name="language_ge">German</string>
     <string name="version">Version</string>
-</resources>
+    <!-- pin-->
+    <string name="enter_pin">Enter PIN code</string>
+    <string name="new_pin">New PIN code</string>
+    <string name="repeat_pin">Repeat PIN code</string>
+    <string name="incorrect_pin">Incorrect PIN code</string>
+    <string name="continu">Continue</string>
+    <string name="save">Save</string>
+    <string name="login">Login</string>
+    <string name="pin_mismatch">PIN codes do not match</string></resources>

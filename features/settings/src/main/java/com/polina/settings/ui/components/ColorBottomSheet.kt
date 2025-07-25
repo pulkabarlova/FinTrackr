@@ -1,4 +1,4 @@
-package com.polina.settings.ui
+package com.polina.settings.ui.components
 
 
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +20,7 @@ fun ColorBottomSheet(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+
     ModalBottomSheet(
         onDismissRequest = {
             onCancel()

@@ -59,12 +59,13 @@ class MainActivity : ComponentActivity() {
                 val theme by settingsViewModel.darkTheme.collectAsState()
                 val colorTheme by settingsViewModel.colorTheme.collectAsState()
                 val currentLanguage by settingsViewModel.language.collectAsState()
+                val sound by settingsViewModel.sound.collectAsState()
                 settingsViewModel.version = BuildConfig.VERSION_NAME
                 LaunchedEffect(currentLanguage) {
                     updateLocale(currentLanguage)
                 }
                 FinTrackrTheme(darkTheme = (theme == "dark"), color = colorTheme) {
-                    AppUi(settingsViewModel)
+                    AppUi(settingsViewModel, sound)
                 }
             }
         }

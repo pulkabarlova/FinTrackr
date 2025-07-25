@@ -18,4 +18,13 @@
     <string name="language_ru">Russisch</string>
     <string name="language_ge">Deutsch</string>
     <string name="version">Version</string>
+    <!-- pin-->
+    <string name="enter_pin">PIN-Code eingeben</string>
+    <string name="new_pin">Neuer PIN-Code</string>
+    <string name="repeat_pin">PIN-Code wiederholen</string>
+    <string name="incorrect_pin">Falscher PIN-Code</string>
+    <string name="continu">Weiter</string>
+    <string name="save">Speichern</string>
+    <string name="login">Anmelden</string>
+    <string name="pin_mismatch">PIN-Codes stimmen nicht überein</string>
 </resources>

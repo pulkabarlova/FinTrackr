@@ -17,28 +17,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.polina.data.db.CryptoPref
 import com.polina.splash.R
 import com.polina.ui.navigation.daggerViewModel
 import kotlinx.coroutines.delay
+
 /**
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun SplashScreen(navController: NavController, viewModel: SplashViewModel = daggerViewModel()) {
+fun SplashScreen(
+    navController: NavController,
+    cryptoPref: CryptoPref,
+    viewModel: SplashViewModel = daggerViewModel()
+) {
     val alpha = remember { Animatable(0f) }
     val initialized = viewModel.accountInitialized.value
     val errorMessage = viewModel.errorMessage.value
-    val isConnected = viewModel.isConnected.value
+
+    var route = "expenses"
+    val savedPin = cryptoPref.getString("password")
+    if (savedPin.isNotEmpty()) {
+        route = "pin"
+    }
     LaunchedEffect(initialized) {
         if (initialized != null) {
             alpha.animateTo(1f, animationSpec = tween(1000))
             delay(500)
-            navController.navigate("expenses") {
+            navController.navigate(route) {
                 popUpTo("splash") { inclusive = true }
             }
         }
