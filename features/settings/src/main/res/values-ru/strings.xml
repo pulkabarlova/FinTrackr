@@ -27,4 +27,7 @@
     <string name="save">Сохранить</string>
     <string name="login">Войти</string>
     <string name="pin_mismatch">PIN-коды не совпадают</string>
+    <string name="sync_frequency_title">Частота синхронизации</string>
+    <string name="sync_frequency_label">Каждые %1$d ч.</string>
+    <string name="close">Закрыть</string>
 </resources>

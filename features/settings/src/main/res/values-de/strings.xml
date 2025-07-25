@@ -27,4 +27,7 @@
     <string name="save">Speichern</string>
     <string name="login">Anmelden</string>
     <string name="pin_mismatch">PIN-Codes stimmen nicht überein</string>
+    <string name="sync_frequency_title">Synchronisierungshäufigkeit</string>
+    <string name="sync_frequency_label">Alle %1$d Std.</string>
+    <string name="close">Schließen</string>
 </resources>

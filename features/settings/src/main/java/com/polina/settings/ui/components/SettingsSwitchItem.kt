@@ -27,7 +27,9 @@ fun SettingSwitchItem(title: String, checked: Boolean, viewModel: SettingsViewMo
         Text(
             text = title,
             modifier = Modifier.padding(horizontal = 22.dp, vertical = 12.dp),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimary
+
         )
         Spacer(modifier = Modifier.weight(1f))
         Switch(

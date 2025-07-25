@@ -26,9 +26,16 @@ class SettingsViewModel @Inject constructor(private val sharedPreferences: Share
     private val _sound =
         MutableStateFlow<String>(sharedPreferences.getString("sound", "true") ?: "true")
     val sound: StateFlow<String> = _sound.asStateFlow()
-
     val language: StateFlow<String> = _language.asStateFlow()
     var version = ""
+    private val _syncInterval = MutableStateFlow(sharedPreferences.getInt("sync_interval", 1))
+    val syncInterval: StateFlow<Int> = _syncInterval.asStateFlow()
+
+    fun setSyncInterval(hours: Int) {
+        _syncInterval.value = hours
+        sharedPreferences.edit().putInt("sync_interval", hours).apply()
+    }
+
     fun setTheme() {
         val newTheme = when (_darkTheme.value) {
             "dark" -> "light"

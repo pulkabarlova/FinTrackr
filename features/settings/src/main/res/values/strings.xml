@@ -26,4 +26,8 @@
     <string name="continu">Continue</string>
     <string name="save">Save</string>
     <string name="login">Login</string>
-    <string name="pin_mismatch">PIN codes do not match</string></resources>
+    <string name="pin_mismatch">PIN codes do not match</string>
+    <string name="sync_frequency_title">Sync frequency</string>
+    <string name="sync_frequency_label">Every %1$d hr(s)</string>
+    <string name="close">Close</string>
+</resources>

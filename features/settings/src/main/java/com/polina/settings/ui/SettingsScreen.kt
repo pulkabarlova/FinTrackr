@@ -1,15 +1,10 @@
 package com.polina.settings.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -30,6 +24,7 @@ import com.polina.settings.ui.components.LanguageBottomSheet
 import com.polina.settings.ui.components.SetPinScreen
 import com.polina.settings.ui.components.SettingSwitchItem
 import com.polina.settings.ui.components.SoundSwitchItem
+import com.polina.settings.ui.components.SyncSliderBottomSheet
 import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
 import com.polina.ui.components.ListItem
@@ -39,22 +34,27 @@ import com.polina.ui.components.ListItemUi
  * Отвечает за отображение UI и обработку взаимодействия пользователя.
  */
 @Composable
-fun SettingsScreen(navController: NavController, viewModel: SettingsViewModel, sound:String="true") {
+fun SettingsScreen(
+    navController: NavController,
+    viewModel: SettingsViewModel,
+    sound: String = "true"
+) {
     AppScaffold(
         topBar = { AppTopBar(R.string.settings) },
         navController = navController,
-        content = { paddingValues -> Content(paddingValues = paddingValues, viewModel,sound) })
+        content = { paddingValues -> Content(paddingValues = paddingValues, viewModel, sound) })
 }
 
 @Composable
 fun Content(
     paddingValues: androidx.compose.foundation.layout.PaddingValues,
     viewModel: SettingsViewModel,
-    sound:String="true"
+    sound: String = "true"
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var showLanguageBottomSheet by remember { mutableStateOf(false) }
     var showPasswordField by remember { mutableStateOf(false) }
+    var showSyncSlider by remember { mutableStateOf(false) }
     val setItems = listOf(
         R.string.theme, R.string.colour, R.string.sounds,
         R.string.password, R.string.synchronization,
@@ -92,13 +92,15 @@ fun Content(
                             trailingIcon = R.drawable.arrow_right
                         ),
                         onClick = {
+                            if (i == 4) {
+                                showSyncSlider = true
+                            }
                             if (i == 1) {
                                 showBottomSheet = true
                             } else if (i == 5) {
                                 showLanguageBottomSheet = true
                             } else if (i == 3) {
                                 showPasswordField = true
-
                             }
                         }
                     )
@@ -122,7 +124,18 @@ fun Content(
         }, { showLanguageBottomSheet = false })
     }
     if (showPasswordField) {
-        SetPinScreen({ showPasswordField = false }, CryptoPref(LocalContext.current), "settings", sound)
+        SetPinScreen(
+            { showPasswordField = false },
+            CryptoPref(LocalContext.current),
+            "settings",
+            sound
+        )
     }
-
+    if (showSyncSlider) {
+        SyncSliderBottomSheet(
+            current = viewModel.syncInterval.collectAsState().value,
+            onValueChange = { viewModel.setSyncInterval(it) },
+            onDismiss = { showSyncSlider = false }
+        )
+    }
 }
