@@ -1,14 +1,33 @@
 <resources>
     <string name="app_name">FinTrackr</string>
     <!-- navigation bar -->
-    <string name="settings">Настройки</string>
+    <string name="settings">Settings</string>
     <!-- settings screen -->
-    <string name="theme">Тёмная тема</string>
-    <string name="colour">Основной цвет</string>
-    <string name="sounds">Звуки</string>
-    <string name="haptiki">Хаптики</string>
-    <string name="password">Код пароль</string>
-    <string name="synchronization">Синхронизация</string>
-    <string name="language">Язык</string>
-    <string name="about">О программе</string>
+    <string name="theme">Dark theme</string>
+    <string name="colour">Main color</string>
+    <string name="sounds">Sounds</string>
+    <string name="haptiki">Haptics</string>
+    <string name="password">Passcode</string>
+    <string name="synchronization">Synchronization</string>
+    <string name="language">Language</string>
+    <string name="about">About</string>
+    <string name="blue">Blue</string>
+    <string name="pink">Pink</string>
+    <string name="green">Green</string>
+    <string name="language_en">English</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ge">German</string>
+    <string name="version">Version</string>
+    <!-- pin-->
+    <string name="enter_pin">Enter PIN code</string>
+    <string name="new_pin">New PIN code</string>
+    <string name="repeat_pin">Repeat PIN code</string>
+    <string name="incorrect_pin">Incorrect PIN code</string>
+    <string name="continu">Continue</string>
+    <string name="save">Save</string>
+    <string name="login">Login</string>
+    <string name="pin_mismatch">PIN codes do not match</string>
+    <string name="sync_frequency_title">Sync frequency</string>
+    <string name="sync_frequency_label">Every %1$d hr(s)</string>
+    <string name="close">Close</string>
 </resources>

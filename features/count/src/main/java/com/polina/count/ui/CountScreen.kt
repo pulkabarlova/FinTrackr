@@ -1,5 +1,6 @@
 package com.polina.count.ui
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +30,7 @@ import com.polina.count.R
 import com.polina.ui.theme.FinTrackrTheme
 import com.polina.ui.components.AppScaffold
 import com.polina.ui.components.AppTopBar
+import com.polina.ui.components.Histogram
 import com.polina.ui.components.ListItem
 import com.polina.ui.components.ListItemUi
 import com.polina.ui.navigation.daggerViewModel
@@ -98,6 +101,13 @@ fun Content(
                 onClick = {},
                 modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
             )
+            val julyDiff = viewModel.monthlyIncomeMinusExpenses.collectAsState().value
+            Log.i("CountScreen", julyDiff.toString())
+            val realData = listOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, julyDiff, 0.0, 0.0, 0.0, 0.0, 0.0)
+            val mockData = listOf(200.0, -150.0, 300.0, -50.0, 0.0, 180.0)
+            Histogram(values = realData, modifier = Modifier.padding(20.dp))
+            Histogram(values = mockData, modifier = Modifier.padding(20.dp))
+
         }
 
         FloatingActionButton(

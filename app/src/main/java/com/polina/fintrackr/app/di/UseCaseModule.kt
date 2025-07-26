@@ -10,6 +10,7 @@ import com.polina.domain.use_case.GetAndSaveAccountUseCase
 import com.polina.domain.use_case.GetCategoriesUseCase
 import com.polina.domain.use_case.GetExpensesStat
 import com.polina.domain.use_case.GetIncomesStat
+import com.polina.domain.use_case.GetJulyAcountAnalys
 import com.polina.domain.use_case.GetTransactionByIdUseCase
 import com.polina.domain.use_case.PostTransactionUseCase
 import com.polina.domain.use_case.TransactionUseCase
@@ -80,4 +81,11 @@ class UseCaseModule {
         sharedPreferences: SharedPreferences,
     ) =
         GetIncomesStat(transactionRepository, sharedPreferences)
+
+    @Provides
+    fun provideGetJulyAcountAnalys(
+        transactionRepository: TransactionRepository,
+        sharedPreferences: SharedPreferences,
+    ) =
+        GetJulyAcountAnalys(transactionRepository, sharedPreferences)
 }

@@ -3,6 +3,7 @@ package com.polina.fintrackr.app.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.polina.articles.ui.ArticlesViewModel
+import com.polina.count.ui.CountEditViewModel
 import com.polina.count.ui.CountViewModel
 import com.polina.expenses.ui.ExpensesViewModel
 import com.polina.income.ui.IncomesViewModel
@@ -25,6 +26,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(CountViewModel::class)
     fun bindCountViewModel(vm: CountViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CountEditViewModel::class)
+    fun bindCountEditViewModel(vm: CountEditViewModel): ViewModel
 
     @Binds
     @IntoMap

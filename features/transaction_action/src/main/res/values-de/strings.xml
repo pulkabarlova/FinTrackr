@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- transaction_add screen -->
+    <string name="add_transaction">Transaktion hinzufügen</string>
+    <string name="article">Kategorie</string>
+    <string name="summa">Betrag</string>
+    <string name="date">Datum</string>
+    <string name="time">Uhrzeit</string>
+    <string name="comment">Notiz</string>
+    <!-- transaction_edit screen -->
+    <string name="delete">Transaktion löschen</string>
+    <string name="edit_transaction">Transaktion bearbeiten</string>
+    <!-- history screen -->
+    <string name="history">Verlauf</string>
+    <string name="start">Startdatum</string>
+    <string name="end">Enddatum</string>
+    <string name="summ">Betrag</string>
+    <!-- analysis -->
+    <string name="analys">Analyse</string>
+</resources>

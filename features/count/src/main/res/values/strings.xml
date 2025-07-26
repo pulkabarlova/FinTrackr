@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">FinTrackr</string>
     <!-- navigation bar -->
-    <string name="count">Счет</string>
+    <string name="count">Account</string>
     <!-- top bar -->
-    <string name="my_count">Мой счет</string>
-    <string name="edit_screen">Редактировать счет</string>
+    <string name="my_count">My Account</string>
+    <string name="edit_screen">Edit Account</string>
     <!-- count screen -->
-    <string name="balance">Баланс</string>
-    <string name="currency">Валюта</string>
+    <string name="balance">Balance</string>
+    <string name="currency">Currency</string>
     <!-- edit count screen -->
-    <string name="ruble">Российский рубль ₽</string>
-    <string name="dollar">Американский доллар $</string>
-    <string name="euro">Евро €</string>
-    <string name="cancel">Отмена</string>
+    <string name="ruble">Russian Ruble ₽</string>
+    <string name="dollar">US Dollar $</string>
+    <string name="euro">Euro €</string>
+    <string name="cancel">Cancel</string>
 </resources>

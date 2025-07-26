@@ -1,11 +1,8 @@
 package com.polina.fintrackr.app.di
 
 import android.app.Application
-import android.content.Context
-import androidx.work.Configuration
-import androidx.work.Constraints
+import android.content.SharedPreferences
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.polina.fintrackr.app.worker.SyncWorker
@@ -19,6 +16,8 @@ class App : Application() {
 
     lateinit var appComponent: AppComponent
 
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
@@ -29,8 +28,10 @@ class App : Application() {
 
         appComponent.inject(this)
 
+        val syncInterval = sharedPreferences.getInt("sync_interval", 1)
+
         val workerRequest =
-            PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
+            PeriodicWorkRequestBuilder<SyncWorker>(syncInterval.toLong(), TimeUnit.HOURS)
                 .build()
 
         WorkManager.getInstance(this.applicationContext).enqueueUniquePeriodicWork(

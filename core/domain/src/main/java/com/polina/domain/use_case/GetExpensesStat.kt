@@ -20,6 +20,7 @@ data class CategorizedTransactionsResult(
     val categories: List<CategorySummary>
 )
 
+
 class GetExpensesStat @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val sharedPreferences: SharedPreferences,

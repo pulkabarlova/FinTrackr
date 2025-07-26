@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="expenses">Расходы</string>
+    <!-- top bar -->
+    <string name="my_expenses">Расходы сегодня</string>
+    <!-- expenses screen -->
+    <string name="all">Всего</string>
+    <!-- history screen -->
+    <string name="history">Моя история</string>
+    <string name="start">Начало</string>
+    <string name="end">Конец</string>
+    <string name="summ">Сумма</string>
+    <!-- transaction_add screen -->
+    <string name="add_transaction">Добавить транзакцию</string>
+    <string name="article">Статья</string>
+    <string name="summa">Сумма</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="comment">Комментарий</string>
+</resources>

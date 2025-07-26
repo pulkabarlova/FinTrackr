@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="expenses">Ausgaben</string>
+    <string name="incomes">Einnahmen</string>
+    <string name="count">Konto</string>
+    <string name="articles">Artikel</string>
+    <string name="settings">Einstellungen</string>
+    <!-- top bar -->
+    <string name="my_expenses">Heutige Ausgaben</string>
+    <string name="my_incomes">Heutige Einnahmen</string>
+    <string name="my_count">Mein Konto</string>
+    <string name="my_articles">Meine Artikel</string>
+    <string name="edit_screen">Konto bearbeiten</string>
+</resources>

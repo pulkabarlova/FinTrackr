@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="settings">Einstellungen</string>
+    <!-- settings screen -->
+    <string name="theme">Dunkles Thema</string>
+    <string name="colour">Hauptfarbe</string>
+    <string name="sounds">Töne</string>
+    <string name="haptiki">Haptik</string>
+    <string name="password">Passcode</string>
+    <string name="synchronization">Synchronisation</string>
+    <string name="language">Sprache</string>
+    <string name="about">Über</string>
+    <string name="blue">Blau</string>
+    <string name="pink">Rosa</string>
+    <string name="green">Grün</string>
+    <string name="language_en">Englisch</string>
+    <string name="language_ru">Russisch</string>
+    <string name="language_ge">Deutsch</string>
+    <string name="version">Version</string>
+    <!-- pin-->
+    <string name="enter_pin">PIN-Code eingeben</string>
+    <string name="new_pin">Neuer PIN-Code</string>
+    <string name="repeat_pin">PIN-Code wiederholen</string>
+    <string name="incorrect_pin">Falscher PIN-Code</string>
+    <string name="continu">Weiter</string>
+    <string name="save">Speichern</string>
+    <string name="login">Anmelden</string>
+    <string name="pin_mismatch">PIN-Codes stimmen nicht überein</string>
+    <string name="sync_frequency_title">Synchronisierungshäufigkeit</string>
+    <string name="sync_frequency_label">Alle %1$d Std.</string>
+    <string name="close">Schließen</string>
+</resources>

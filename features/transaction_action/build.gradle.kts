@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(project(":features:expenses"))
     implementation(project(":features:income"))
+    implementation(project(":core:graphics"))
     ksp(libs.dagger.compiler)
     //compose
     implementation(libs.androidx.activity.compose)

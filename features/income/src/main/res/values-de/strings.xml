@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">FinTrackr</string>
+    <!-- navigation bar -->
+    <string name="incomes">Einnahmen</string>
+    <!-- top bar -->
+    <string name="my_incomes">Heutige Einnahmen</string>
+    <!-- incomes screen -->
+    <string name="all">Gesamt</string>
+    <!-- history screen -->
+    <string name="history">Mein Verlauf</string>
+    <string name="start">Anfang</string>
+    <string name="end">Ende</string>
+    <string name="summ">Betrag</string>
+</resources>

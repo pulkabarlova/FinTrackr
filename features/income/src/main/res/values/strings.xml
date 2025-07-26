@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">FinTrackr</string>
     <!-- navigation bar -->
-    <string name="incomes">Доходы</string>
+    <string name="incomes">Income</string>
     <!-- top bar -->
-    <string name="my_incomes">Доходы сегодня</string>
+    <string name="my_incomes">Today Income</string>
     <!-- incomes screen -->
-    <string name="all">Всего</string>
+    <string name="all">Total</string>
     <!-- history screen -->
-    <string name="history">Моя история</string>
-    <string name="start">Начало</string>
-    <string name="end">Конец</string>
-    <string name="summ">Сумма</string>
+    <string name="history">My History</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="summ">Amount</string>
 </resources>

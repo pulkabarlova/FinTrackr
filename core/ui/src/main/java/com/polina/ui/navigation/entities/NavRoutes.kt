@@ -23,4 +23,5 @@ sealed class NavRoutes(
     }
     data object ExpensesAnal : NavRoutes("expenses_anal")
     data object IncomesAnal : NavRoutes("incomes_anal")
+    data object SetPinScreen : NavRoutes("pin")
 }

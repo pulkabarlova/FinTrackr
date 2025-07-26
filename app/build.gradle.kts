@@ -16,6 +16,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        resConfigs("en", "ru", "de")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -83,8 +84,10 @@ dependencies {
     implementation(project(":features:articles"))
     implementation(project(":features:settings"))
     implementation(project(":features:transaction_action"))
+    implementation(project(":core:graphics"))
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.appcompat)
     //
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
